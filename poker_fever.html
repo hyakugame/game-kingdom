@@ -489,6 +489,12 @@ function goLobby(){
   document.getElementById('lobby-medals').textContent=user.medals;
   document.getElementById('ctrl').classList.add('hidden');
   show('slobby');updSidebar();
+  // デイリーボーナス自動チェック
+  if(user && user.id) {
+    checkDailyBonus(user.id, user.medals).then(m=>{
+      if(m !== user.medals){ user.medals=m; updSidebar(); document.getElementById('lbm').textContent=m; }
+    });
+  }
 }
 function updLM(){if(user)document.getElementById('lobby-medals').textContent=user.medals;}
 function openJanken(){
