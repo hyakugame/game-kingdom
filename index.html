@@ -41,7 +41,7 @@ body{
 .ctrl-btn{flex:1;max-width:130px;border:none;border-radius:50px;font-family:'Zen Dots',cursive;font-size:13px;padding:13px 8px;cursor:pointer;transition:all .1s;position:relative;overflow:hidden}
 .ctrl-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:43%;background:rgba(255,255,255,.15);border-radius:50px 50px 50% 50%}
 .ctrl-btn:active{transform:translateY(4px)}
-.btn-coin{background:linear-gradient(160deg,#ffcc00,#ff8800);color:#1a0800;box-shadow:0 5px 0 #884400,0 0 16px rgba(255,180,0,.4)}.btn-coin:active{box-shadow:0 1px 0 #884400}
+.btn-lobby{background:linear-gradient(160deg,#FFD700,#FF8C00);color:#0a0e1a;font-weight:bold;box-shadow:0 5px 0 #8B4500,0 0 16px rgba(255,215,0,.4)}.btn-lobby:active{box-shadow:0 1px 0 #8B4500} .btn-coin{background:linear-gradient(160deg,#ffcc00,#ff8800);color:#1a0800;box-shadow:0 5px 0 #884400,0 0 16px rgba(255,180,0,.4)}.btn-coin:active{box-shadow:0 1px 0 #884400}
 .btn-start{background:linear-gradient(160deg,#44ff88,#00cc44);color:#001a08;box-shadow:0 5px 0 #006622,0 0 16px rgba(0,200,80,.4)}.btn-start:active{box-shadow:0 1px 0 #006622}.btn-start:disabled{opacity:.3;cursor:not-allowed}
 .gs{display:none;flex-direction:column;flex:1;position:relative;z-index:1}.gs.active{display:flex}
 @keyframes blk{0%,100%{opacity:1}50%{opacity:0}}
@@ -366,7 +366,7 @@ body{
   </div>
 
   <div class="ctrl" id="ctrl-panel">
-    <button class="ctrl-btn btn-coin" onclick="insertCoin()">🪙 コイン投入</button>
+    <button class="ctrl-btn btn-lobby" onclick="location.href='poker_fever.html'">🏰 ロビーへ</button>     <button class="ctrl-btn btn-coin" onclick="insertCoin()">🪙 コイン投入</button>
     <button class="ctrl-btn btn-start" id="start-btn" onclick="startGame()" disabled>▶ スタート</button>
   </div>
 </div>
