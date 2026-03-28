@@ -6,15 +6,22 @@
 <title>百式ゲーム王国</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Barlow+Condensed:wght@400;600;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--red:#D32F2F;--red2:#E53935;--red3:#FF5252;--gold:#F5A623;--gold2:#FFB300;--dark:#1A1A1A;--dark2:#222222;--dark3:#2D2D2D;--gray:#888;--light:#F5F5F5;--white:#FFFFFF;--green:#2E7D32;--green2:#43A047;--blue:#1565C0;--blue2:#1976D2;--win:#F5A623;--lose:#D32F2F;--font-jp:'Noto Sans JP',sans-serif;--font-en:'Barlow Condensed','Oswald',sans-serif;}
+:root{
+  --red:#D32F2F;--red2:#E53935;--red3:#FF5252;--gold:#F5A623;--gold2:#FFB300;
+  --dark:#1A1A1A;--dark2:#222222;--dark3:#2D2D2D;--gray:#888;--light:#F5F5F5;
+  --white:#FFFFFF;--green:#2E7D32;--green2:#43A047;--blue:#1565C0;--blue2:#1976D2;
+  --win:#F5A623;--lose:#D32F2F;
+  --font-jp:'Noto Sans JP',sans-serif;
+  --font-en:'Barlow Condensed','Oswald',sans-serif;
+}
 *,::before,::after{margin:0;padding:0;box-sizing:border-box}
 body{background:#111;min-height:100vh;display:flex;font-family:var(--font-jp);overflow-x:hidden;color:var(--white);}
-#sidebar{width:190px;min-width:190px;background:var(--dark2);border-right:3px solid var(--red);min-height:100vh;display:flex;flex-direction:column;padding:14px 10px 14px;gap:10px;position:sticky;top:0;flex-shrink:0;}
+#sidebar{width:190px;min-width:190px;background:var(--dark2);border-right:3px solid var(--red);min-height:100vh;display:flex;flex-direction:column;padding:14px 10px;gap:10px;position:sticky;top:0;flex-shrink:0;}
 #sidebar.hidden{display:none}
 .sb-logo{text-align:center;padding-bottom:10px;border-bottom:2px solid var(--red)}
 .sb-logo-icon{font-size:32px;line-height:1}
 .sb-logo-title{font-family:var(--font-jp);font-weight:900;font-size:13px;color:var(--gold);margin-top:4px;letter-spacing:.05em}
-.sb-av{width:64px;height:64px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:var(--font-en);font-size:26px;font-weight:700;color:var(--white);border:3px solid var(--gold);margin:0 auto 4px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.sb-av{width:64px;height:64px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:28px;border:3px solid var(--gold);margin:0 auto 4px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.4)}
 .sb-name{font-family:var(--font-jp);font-weight:700;font-size:14px;color:var(--white);text-align:center;margin-bottom:2px}
 .sb-medals-box{background:var(--dark3);border:2px solid var(--gold);border-radius:8px;padding:8px 6px;text-align:center;}
 .sb-medals-lbl{font-family:var(--font-en);font-size:11px;font-weight:600;color:var(--gold);letter-spacing:.12em}
@@ -36,15 +43,15 @@ body{background:#111;min-height:100vh;display:flex;font-family:var(--font-jp);ov
 .av-close{width:100%;background:var(--dark3);border:2px solid #555;color:#aaa;font-family:var(--font-jp);font-size:13px;padding:8px;border-radius:6px;cursor:pointer}
 .cab{flex:1;background:var(--dark);border-left:2px solid #333;display:flex;flex-direction:column;min-height:100vh;}
 @media(max-width:500px){#sidebar{display:none}.cab{border-left:none}}
-.mq-wrap{background:var(--red);padding:5px 0;overflow:hidden;position:relative;flex-shrink:0}
+.mq-wrap{background:var(--red);padding:5px 0;overflow:hidden;flex-shrink:0}
 .mq{display:flex;width:max-content;animation:mqA 18s linear infinite}
 @keyframes mqA{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .mq span{font-family:var(--font-en);font-size:12px;font-weight:700;color:var(--white);padding:0 24px;letter-spacing:.08em}
 .tp{background:var(--dark2);padding:10px 16px 8px;text-align:center;border-bottom:3px solid var(--red);flex-shrink:0}
 .led-row{display:flex;justify-content:center;gap:5px;margin-bottom:6px}
 .led{width:8px;height:8px;border-radius:50%;animation:lp 1.2s ease-in-out infinite}
-.l0{background:var(--red2)}.l1{background:var(--gold)}.l2{background:#fff}.l3{background:var(--green2)}.l4{background:var(--blue2)}.l5{background:var(--red3)}
-.l1{animation-delay:.15s}.l2{animation-delay:.3s}.l3{animation-delay:.45s}.l4{animation-delay:.6s}.l5{animation-delay:.75s}
+.l0{background:var(--red2)}.l1{background:var(--gold);animation-delay:.15s}.l2{background:#fff;animation-delay:.3s}
+.l3{background:var(--green2);animation-delay:.45s}.l4{background:var(--blue2);animation-delay:.6s}.l5{background:var(--red3);animation-delay:.75s}
 @keyframes lp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.2;transform:scale(.5)}}
 .cab-t{font-family:var(--font-jp);font-weight:900;font-size:clamp(20px,4.5vw,28px);color:var(--white);line-height:1.2}
 .cab-t span{color:var(--gold)}
@@ -81,7 +88,7 @@ body{background:#111;min-height:100vh;display:flex;font-family:var(--font-jp);ov
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 #slobby{align-items:center;justify-content:flex-start;overflow-y:auto;background:var(--dark)}
 .lobby-hdr{background:var(--dark2);padding:12px 16px;width:100%;display:flex;align-items:center;gap:12px;border-bottom:3px solid var(--red);flex-shrink:0}
-.lobby-av{width:50px;height:50px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:var(--font-en);font-size:22px;font-weight:700;color:var(--white);border:2px solid var(--gold);flex-shrink:0}
+.lobby-av{width:50px;height:50px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid var(--gold);flex-shrink:0}
 .lobby-name{font-family:var(--font-jp);font-weight:900;font-size:17px;color:var(--white)}
 .lobby-medals{display:flex;align-items:center;gap:4px}
 .lobby-medals-val{font-family:var(--font-en);font-size:22px;font-weight:900;color:var(--gold)}
@@ -97,11 +104,11 @@ body{background:#111;min-height:100vh;display:flex;font-family:var(--font-jp);ov
 .gc-desc{font-size:13px;color:#aaa;font-family:var(--font-jp);line-height:1.5}
 .gc-arr{font-size:20px;color:#555;margin-left:auto;flex-shrink:0}
 .game-card:hover .gc-arr{color:var(--red)}
-.gc-badge{background:var(--gold);color:var(--dark);font-family:var(--font-en);font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;letter-spacing:.08em;display:inline-block;margin-top:3px}#spoker{align-items:center;justify-content:flex-start;overflow:hidden;background:var(--dark)}
+.gc-badge{background:var(--gold);color:var(--dark);font-family:var(--font-en);font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;display:inline-block;margin-top:3px}#spoker{align-items:center;justify-content:flex-start;overflow:hidden;background:var(--dark)}
 .pt{background:var(--dark2);width:100%;border-bottom:2px solid #333;padding:6px 8px;flex-shrink:0}
 .pt-inner{display:flex;flex-direction:column;gap:1px}
 .pt-hdr{display:flex;margin-bottom:2px}
-.pt-hb{width:30px;text-align:center;font-family:var(--font-en);font-size:10px;font-weight:700;color:#666;letter-spacing:.05em}
+.pt-hb{width:30px;text-align:center;font-family:var(--font-en);font-size:10px;font-weight:700;color:#666}
 .pt-row{display:flex;align-items:center;padding:2px;border-radius:3px;border:1px solid transparent;transition:all .2s}
 .pt-row.hi{background:rgba(245,166,35,.2);border-color:var(--gold)}
 .pt-n{flex:1;color:#ddd;font-family:var(--font-jp);font-size:12px;font-weight:700}
@@ -164,7 +171,7 @@ body{background:#111;min-height:100vh;display:flex;font-family:var(--font-jp);ov
 .uc.sel{border-color:var(--gold);box-shadow:0 0 12px rgba(245,166,35,.6)}
 .uc.rwin{border-color:var(--green2);box-shadow:0 0 14px rgba(67,160,71,.7)}
 .uc.rlose{border-color:var(--red3);box-shadow:0 0 14px rgba(229,57,53,.7)}
-.uc.lopen{border-color:var(--blue2);box-shadow:0 0 10px rgba(25,118,210,.5)}
+.uc.lopen{border-color:var(--blue2);}
 .ug-ll{font-family:var(--font-jp);font-size:10px;font-weight:700;color:#666;min-height:14px}
 .ug-ls{font-family:var(--font-en);font-size:12px;font-weight:700;color:var(--gold);text-align:center}
 .ug-res{font-family:var(--font-jp);font-weight:900;font-size:clamp(16px,4.5vw,22px);min-height:30px;text-align:center;color:#666}
@@ -179,37 +186,23 @@ body{background:#111;min-height:100vh;display:flex;font-family:var(--font-jp);ov
 .uq{background:var(--green);color:var(--white);box-shadow:0 4px 0 #1B5E20}
 @keyframes flipIn{0%{transform:rotateY(90deg) scale(.8);opacity:0}60%{transform:rotateY(-8deg) scale(1.05)}100%{transform:rotateY(0deg) scale(1);opacity:1}}
 .uc.flip,.card.flip{animation:flipIn .35s ease forwards}
-.ctrl{background:var(--dark2);border-top:3px solid var(--red);border-radius:0 0 8px 8px;padding:10px 14px 14px;display:flex;gap:8px;justify-content:center;flex-shrink:0}
+.ctrl{background:var(--dark2);border-top:3px solid var(--red);padding:10px 14px 14px;display:flex;gap:8px;justify-content:center;flex-shrink:0}
 .ctrl.hidden{display:none}
-.cbtn{border:none;border-radius:20px;font-family:var(--font-jp);font-weight:900;font-size:14px;padding:13px 26px;cursor:pointer;transition:all .1s;background:var(--gold);color:var(--dark);box-shadow:0 4px 0 #B37700}
+.cbtn{border:none;border-radius:20px;font-family:var(--font-jp);font-weight:900;font-size:14px;padding:13px 26px;cursor:pointer;background:var(--gold);color:var(--dark);box-shadow:0 4px 0 #B37700;transition:all .1s}
 .cbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #B37700}
-#daily-bonus-notice{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.5);background:var(--dark2);border:4px solid var(--gold);border-radius:14px;padding:22px 32px;text-align:center;font-family:var(--font-jp);font-weight:900;color:var(--white);z-index:9999;box-shadow:0 0 40px rgba(245,166,35,.5);animation:bonusPop .5s cubic-bezier(.36,2,.5,1) forwards}
+#daily-bonus-notice{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.5);background:var(--dark2);border:4px solid var(--gold);border-radius:14px;padding:22px 32px;text-align:center;font-family:var(--font-jp);font-weight:900;color:var(--white);z-index:9999;animation:bonusPop .5s cubic-bezier(.36,2,.5,1) forwards}
 @keyframes bonusPop{0%{transform:translate(-50%,-50%) scale(.5);opacity:0}70%{transform:translate(-50%,-50%) scale(1.06)}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
-@keyframes slideIn{0%{transform:translateY(20px);opacity:0}100%{transform:translateY(0);opacity:1}}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-@keyframes blk{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes pop{0%{transform:scale(.3);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 </style>
 </head>
 <body>
-<div id="av-modal">
-  <div class="av-modal-box">
-    <div class="av-modal-title">アイコンを選択</div>
-    <div class="av-grid" id="av-grid"></div>
-    <button class="av-close" onclick="closeAvModal()">✕ 閉じる</button>
-  </div>
-</div>
+<div id="av-modal"><div class="av-modal-box"><div class="av-modal-title">🎭 アイコンを選択</div><div class="av-grid" id="av-grid"></div><button class="av-close" onclick="closeAvModal()">✕ 閉じる</button></div></div>
 <div id="sidebar" class="hidden">
-  <div class="sb-logo">
-    <div class="sb-logo-icon" id="sb-av-icon">👑</div>
-    <div class="sb-logo-title">百式ゲーム王国</div>
-  </div>
-  <div class="sb-av" id="sb-av" onclick="openAvModal()">👑</div>
+  <div class="sb-logo"><div class="sb-logo-icon" id="sb-av-icon">👑</div><div class="sb-logo-title">百式ゲーム王国</div></div>
+  <div class="sb-av" id="sb-av" onclick="openAvModal()" title="アイコン変更">👑</div>
   <div class="sb-name" id="sb-name">---</div>
-  <div class="sb-medals-box">
-    <div class="sb-medals-lbl">🪙 MEDALS</div>
-    <div class="sb-medals-val" id="sb-medals">0</div>
-    <div class="sb-medals-unit">枚</div>
-  </div>
+  <div class="sb-medals-box"><div class="sb-medals-lbl">🪙 MEDALS</div><div class="sb-medals-val" id="sb-medals">0</div><div class="sb-medals-unit">枚</div></div>
   <div class="sb-daily" id="sb-daily">📅 ボーナス確認中...</div>
   <div class="sb-nav">
     <div class="sb-nav-btn" onclick="goLobby()">🏠 ロビー</div>
@@ -217,35 +210,27 @@ body{background:#111;min-height:100vh;display:flex;font-family:var(--font-jp);ov
     <div class="sb-nav-btn" onclick="openJanken()">✊ じゃんけん</div>
   </div>
   <button class="sb-logout" onclick="logout()">ログアウト</button>
-</div><div class="cab">
-<div class="mq-wrap"><div class="mq"><span>★ 百式ゲーム王国 ★ HYAKUSHIKI GAME KINGDOM ★ メダルを集めて王者を目指せ！ ★ MAX BET ロイヤルフラッシュ ×1000枚！ ★ 1日1回ログインボーナス100枚！ ★ 百式ゲーム王国 ★ HYAKUSHIKI GAME KINGDOM ★ メダルを集めて王者を目指せ！ ★ MAX BET ロイヤルフラッシュ ×1000枚！ ★ 1日1回ログインボーナス100枚！ ★</span><span>★ 百式ゲーム王国 ★ HYAKUSHIKI GAME KINGDOM ★ メダルを集めて王者を目指せ！ ★ MAX BET ロイヤルフラッシュ ×1000枚！ ★ 1日1回ログインボーナス100枚！ ★</span></div></div>
+</div>
+<div class="cab">
+<div class="mq-wrap"><div class="mq"><span>★ 百式ゲーム王国 ★ HYAKUSHIKI GAME KINGDOM ★ メダルを集めて王者を目指せ！ ★ MAX BET ロイヤルフラッシュ ×1000枚！ ★ 1日1回ボーナス100枚！ ★</span><span>★ 百式ゲーム王国 ★ HYAKUSHIKI GAME KINGDOM ★ メダルを集めて王者を目指せ！ ★ MAX BET ロイヤルフラッシュ ×1000枚！ ★ 1日1回ボーナス100枚！ ★</span></div></div>
 <div class="tp">
   <div class="led-row"><div class="led l0"></div><div class="led l1"></div><div class="led l2"></div><div class="led l3"></div><div class="led l4"></div><div class="led l5"></div><div class="led l4"></div><div class="led l3"></div><div class="led l2"></div><div class="led l1"></div><div class="led l0"></div></div>
   <div class="cab-t">👑 <span>百式</span>ゲーム王国</div>
   <div class="cab-s">HYAKUSHIKI GAME KINGDOM</div>
 </div>
-<div class="screen">
-<div class="fl"></div>
+<div class="screen"><div class="fl"></div>
 <div id="slogin" class="gs active">
   <div class="login-logo">👑 百式ゲーム王国へ<br><span>ようこそ！</span></div>
   <div class="login-box">
-    <div class="login-tabs">
-      <div class="login-tab active" id="tab-l" onclick="switchTab('login')">ログイン</div>
-      <div class="login-tab" id="tab-s" onclick="switchTab('signup')">新規登録</div>
-    </div>
+    <div class="login-tabs"><div class="login-tab active" id="tab-l" onclick="switchTab('login')">ログイン</div><div class="login-tab" id="tab-s" onclick="switchTab('signup')">新規登録</div></div>
     <div class="login-box-title" id="lbt">名前とPINで入場</div>
     <input class="login-input" id="lname" placeholder="なまえ（10文字以内）" maxlength="10"/>
-    <div class="pin-row">
-      <div class="pin-dot" id="p0">○</div><div class="pin-dot" id="p1">○</div>
-      <div class="pin-dot" id="p2">○</div><div class="pin-dot" id="p3">○</div>
-    </div>
+    <div class="pin-row"><div class="pin-dot" id="p0">○</div><div class="pin-dot" id="p1">○</div><div class="pin-dot" id="p2">○</div><div class="pin-dot" id="p3">○</div></div>
     <div class="numpad">
       <button class="nb" onclick="pin('1')">1</button><button class="nb" onclick="pin('2')">2</button><button class="nb" onclick="pin('3')">3</button>
       <button class="nb" onclick="pin('4')">4</button><button class="nb" onclick="pin('5')">5</button><button class="nb" onclick="pin('6')">6</button>
       <button class="nb" onclick="pin('7')">7</button><button class="nb" onclick="pin('8')">8</button><button class="nb" onclick="pin('9')">9</button>
-      <button class="nb nb-del" onclick="pin('del')">← 消す</button>
-      <button class="nb" onclick="pin('0')">0</button>
-      <button class="nb nb-ok" onclick="pin('ok')">OK ✓</button>
+      <button class="nb nb-del" onclick="pin('del')">←消す</button><button class="nb" onclick="pin('0')">0</button><button class="nb nb-ok" onclick="pin('ok')">OK✓</button>
     </div>
     <div class="login-msg" id="lmsg"></div>
   </div>
@@ -253,86 +238,72 @@ body{background:#111;min-height:100vh;display:flex;font-family:var(--font-jp);ov
 <div id="slobby" class="gs">
   <div class="lobby-hdr">
     <div class="lobby-av" id="lav">?</div>
-    <div style="flex:1">
-      <div class="lobby-name" id="lbn">---</div>
-      <div class="lobby-medals"><span style="font-size:16px">🪙</span><div class="lobby-medals-val" id="lbm">0</div><div class="lobby-medals-lbl">枚</div></div>
-    </div>
+    <div style="flex:1"><div class="lobby-name" id="lbn">---</div><div class="lobby-medals"><span>🪙</span><div class="lobby-medals-val" id="lbm">0</div><div class="lobby-medals-lbl">枚</div></div></div>
     <button class="lobby-logout" onclick="logout()">ログアウト</button>
   </div>
   <div class="lobby-body">
     <div class="lobby-sec">🎮 GAME SELECT</div>
-    <div class="game-card" onclick="gotoPoker()">
-      <div class="gc-icon">🃏</div>
-      <div style="flex:1"><div class="gc-name">メダルポーカー</div><div class="gc-desc">5枚で役を揃えよう！<br>BET 1～10枚</div><div class="gc-badge">MAX BET ×1000枚</div></div>
-      <div class="gc-arr">▶</div>
-    </div>
-    <div class="game-card" onclick="openJanken()">
-      <div class="gc-icon">✊</div>
-      <div style="flex:1"><div class="gc-name">GU-CHOKI-PA FEVER</div><div class="gc-desc">じゃんけん→ルーレット→ハイ＆ロー！</div><div class="gc-badge">メダルを倍々に</div></div>
-      <div class="gc-arr">▶</div>
-    </div>
+    <div class="game-card" onclick="gotoPoker()"><div class="gc-icon">🃏</div><div style="flex:1"><div class="gc-name">メダルポーカー</div><div class="gc-desc">5枚で役を揃えよう！ BET 1～10枚</div><div class="gc-badge">MAX BET ×1000枚</div></div><div class="gc-arr">▶</div></div>
+    <div class="game-card" onclick="openJanken()"><div class="gc-icon">✊</div><div style="flex:1"><div class="gc-name">GU-CHOKI-PA FEVER</div><div class="gc-desc">じゃんけん→ルーレット→ハイ＆ロー！</div><div class="gc-badge">メダルを倍々に</div></div><div class="gc-arr">▶</div></div>
   </div>
 </div><div id="spoker" class="gs">
 <div class="pt"><div class="pt-inner">
-<div class="pt-hdr"><div style="flex:1"></div><div class="pt-hb">1</div><div class="pt-hb">2</div><div class="pt-hb">3</div><div class="pt-hb">5</div><div class="pt-hb">7</div><div class="pt-hb" style="color:var(--red3)">10</div></div>
-<div class="pt-row" id="pt-rf"><div class="pt-n">🂴 ロイヤルフラッシュ</div><div class="pt-odds"><div class="pt-o">100</div><div class="pt-o">200</div><div class="pt-o">300</div><div class="pt-o">500</div><div class="pt-o">700</div><div class="pt-o mx">1000</div></div></div>
-<div class="pt-row" id="pt-sf"><div class="pt-n">♠ ストレートフラッシュ</div><div class="pt-odds"><div class="pt-o">50</div><div class="pt-o">100</div><div class="pt-o">150</div><div class="pt-o">250</div><div class="pt-o">350</div><div class="pt-o mx">500</div></div></div>
-<div class="pt-row" id="pt-4k"><div class="pt-n">💎 フォーカード</div><div class="pt-odds"><div class="pt-o">20</div><div class="pt-o">40</div><div class="pt-o">60</div><div class="pt-o">100</div><div class="pt-o">140</div><div class="pt-o mx">200</div></div></div>
-<div class="pt-row" id="pt-fh"><div class="pt-n">🦁 フルハウス</div><div class="pt-odds"><div class="pt-o">9</div><div class="pt-o">18</div><div class="pt-o">27</div><div class="pt-o">45</div><div class="pt-o">63</div><div class="pt-o mx">90</div></div></div>
-<div class="pt-row" id="pt-fl"><div class="pt-n">🍀 フラッシュ</div><div class="pt-odds"><div class="pt-o">6</div><div class="pt-o">12</div><div class="pt-o">18</div><div class="pt-o">30</div><div class="pt-o">42</div><div class="pt-o mx">60</div></div></div>
-<div class="pt-row" id="pt-st"><div class="pt-n">⚡ ストレート</div><div class="pt-odds"><div class="pt-o">4</div><div class="pt-o">8</div><div class="pt-o">12</div><div class="pt-o">20</div><div class="pt-o">28</div><div class="pt-o mx">40</div></div></div>
-<div class="pt-row" id="pt-3k"><div class="pt-n">🌟 スリーカード</div><div class="pt-odds"><div class="pt-o">3</div><div class="pt-o">6</div><div class="pt-o">9</div><div class="pt-o">15</div><div class="pt-o">21</div><div class="pt-o mx">30</div></div></div>
-<div class="pt-row" id="pt-2p"><div class="pt-n">👑 ツーペア</div><div class="pt-odds"><div class="pt-o">2</div><div class="pt-o">4</div><div class="pt-o">6</div><div class="pt-o">10</div><div class="pt-o">14</div><div class="pt-o mx">20</div></div></div>
-<div class="pt-row" id="pt-1p"><div class="pt-n">🃏 ワンペア(J以上)</div><div class="pt-odds"><div class="pt-o">1</div><div class="pt-o">2</div><div class="pt-o">3</div><div class="pt-o">5</div><div class="pt-o">7</div><div class="pt-o mx">10</div></div></div>
+  <div class="pt-hdr"><div style="flex:1"></div><div class="pt-hb">1</div><div class="pt-hb">2</div><div class="pt-hb">3</div><div class="pt-hb">5</div><div class="pt-hb">7</div><div class="pt-hb" style="color:var(--red3)">10</div></div>
+  <div class="pt-row" id="pt-rf"><div class="pt-n">🎴 ロイヤルフラッシュ</div><div class="pt-odds"><div class="pt-o">100</div><div class="pt-o">200</div><div class="pt-o">300</div><div class="pt-o">500</div><div class="pt-o">700</div><div class="pt-o mx">1000</div></div></div>
+  <div class="pt-row" id="pt-sf"><div class="pt-n">♠ ストレートフラッシュ</div><div class="pt-odds"><div class="pt-o">50</div><div class="pt-o">100</div><div class="pt-o">150</div><div class="pt-o">250</div><div class="pt-o">350</div><div class="pt-o mx">500</div></div></div>
+  <div class="pt-row" id="pt-4k"><div class="pt-n">💎 フォーカード</div><div class="pt-odds"><div class="pt-o">20</div><div class="pt-o">40</div><div class="pt-o">60</div><div class="pt-o">100</div><div class="pt-o">140</div><div class="pt-o mx">200</div></div></div>
+  <div class="pt-row" id="pt-fh"><div class="pt-n">🦁 フルハウス</div><div class="pt-odds"><div class="pt-o">9</div><div class="pt-o">18</div><div class="pt-o">27</div><div class="pt-o">45</div><div class="pt-o">63</div><div class="pt-o mx">90</div></div></div>
+  <div class="pt-row" id="pt-fl"><div class="pt-n">🍀 フラッシュ</div><div class="pt-odds"><div class="pt-o">6</div><div class="pt-o">12</div><div class="pt-o">18</div><div class="pt-o">30</div><div class="pt-o">42</div><div class="pt-o mx">60</div></div></div>
+  <div class="pt-row" id="pt-st"><div class="pt-n">⚡ ストレート</div><div class="pt-odds"><div class="pt-o">4</div><div class="pt-o">8</div><div class="pt-o">12</div><div class="pt-o">20</div><div class="pt-o">28</div><div class="pt-o mx">40</div></div></div>
+  <div class="pt-row" id="pt-3k"><div class="pt-n">🌟 スリーカード</div><div class="pt-odds"><div class="pt-o">3</div><div class="pt-o">6</div><div class="pt-o">9</div><div class="pt-o">15</div><div class="pt-o">21</div><div class="pt-o mx">30</div></div></div>
+  <div class="pt-row" id="pt-2p"><div class="pt-n">👑 ツーペア</div><div class="pt-odds"><div class="pt-o">2</div><div class="pt-o">4</div><div class="pt-o">6</div><div class="pt-o">10</div><div class="pt-o">14</div><div class="pt-o mx">20</div></div></div>
+  <div class="pt-row" id="pt-1p"><div class="pt-n">🃏 ワンペア(J以上)</div><div class="pt-odds"><div class="pt-o">1</div><div class="pt-o">2</div><div class="pt-o">3</div><div class="pt-o">5</div><div class="pt-o">7</div><div class="pt-o mx">10</div></div></div>
 </div></div>
 <div class="pk-hud">
-<div class="pk-hud-col m"><div class="pk-lbl">MEDALS</div><div class="pk-val" id="pk-med">0</div></div>
-<div class="pk-hud-col b"><div class="pk-lbl">BET</div><div class="pk-val" id="pk-bet">1</div></div>
-<div class="pk-hud-col w"><div class="pk-lbl">WIN</div><div class="pk-val" id="pk-win">0</div></div>
+  <div class="pk-hud-col m"><div class="pk-lbl">MEDALS</div><div class="pk-val" id="pk-med">0</div></div>
+  <div class="pk-hud-col b"><div class="pk-lbl">BET</div><div class="pk-val" id="pk-bet">1</div></div>
+  <div class="pk-hud-col w"><div class="pk-lbl">WIN</div><div class="pk-val" id="pk-win">0</div></div>
 </div>
 <div class="ca" id="pk-ca"></div>
 <div class="rd" id="pk-rd"><div class="rz">◆ DEAL を押してスタート！</div></div>
 <div class="pk-btns">
-<div class="bg">
-<button class="bb" id="bn-" onclick="chgB(-1)">－</button>
-<button class="bb" id="bn+" onclick="chgB(1)">＋</button>
-<button class="bm" id="bnM" onclick="chgB(99)">MAX</button>
-</div>
-<button class="db" id="dbn" onclick="dealDraw()">DEAL</button>
+  <div class="bg">
+    <button class="bb" id="bn-" onclick="chgB(-1)">－</button>
+    <button class="bb" id="bn+" onclick="chgB(1)">＋</button>
+    <button class="bm" id="bnM" onclick="chgB(99)">MAX</button>
+  </div>
+  <button class="db" id="dbn" onclick="dealDraw()">DEAL</button>
 </div>
 </div>
 <div id="supgame" class="gs">
-<div class="ug-hdr" id="ugh">🎯 アップゲーム！</div>
-<div class="ug-info">
-<div class="ug-box"><div class="ug-bl">現在</div><div class="ug-bv" style="color:var(--gold)" id="ugc">0枚</div></div>
-<div class="ug-box"><div class="ug-bl">ダブル勝ち</div><div class="ug-bv" style="color:var(--green2)" id="ugd">0枚</div></div>
-<div class="ug-box"><div class="ug-bl">ハーフ勝ち</div><div class="ug-bv" style="color:var(--blue2)" id="ugh2">0枚</div></div>
-</div>
-<div class="sg">強さ：2＞A＞K＞Q＞J＞10…＞3（2が最強）</div>
-<div class="ug-cards">
-<div class="ug-l">
-<div class="ug-ll">左がオープン</div>
-<div class="uc dn" id="ulc"></div>
-<div class="ug-ls" id="uls"></div>
-</div>
-<div style="font-size:20px;color:#555">→</div>
-<div class="ug-r">
-<div class="uc dn" id="uc0" onclick="pickUG(0)"></div>
-<div class="uc dn" id="uc1" onclick="pickUG(1)"></div>
-<div class="uc dn" id="uc2" onclick="pickUG(2)"></div>
-<div class="uc dn" id="uc3" onclick="pickUG(3)"></div>
-</div>
-</div>
-<div class="ug-res" id="ugr">左のカードより強いカードを選べ！</div>
-<div class="ug-btns">
-<button class="ub ud" id="ubd" onclick="ugS('d')" disabled>💰 ダブルアップ</button>
-<button class="ub uh" id="ubh" onclick="ugS('h')" disabled>💸 ハーフアップ</button>
-<button class="ub uq" id="ubq" onclick="ugQ()" disabled>💵 やめる</button>
-</div>
+  <div class="ug-hdr" id="ugh">🎯 アップゲーム！</div>
+  <div class="ug-info">
+    <div class="ug-box"><div class="ug-bl">現在</div><div class="ug-bv" style="color:var(--gold)" id="ugc">0枚</div></div>
+    <div class="ug-box"><div class="ug-bl">ダブル勝ち</div><div class="ug-bv" style="color:var(--green2)" id="ugd">0枚</div></div>
+    <div class="ug-box"><div class="ug-bl">ハーフ勝ち</div><div class="ug-bv" style="color:var(--blue2)" id="ugh2">0枚</div></div>
+  </div>
+  <div class="sg">強さ：2＞A＞K＞Q＞J＞10…＞3（2が最強）</div>
+  <div class="ug-cards">
+    <div class="ug-l"><div class="ug-ll">左がオープン</div><div class="uc dn" id="ulc"></div><div class="ug-ls" id="uls"></div></div>
+    <div style="font-size:20px;color:#555">→</div>
+    <div class="ug-r">
+      <div class="uc dn" id="uc0" onclick="pickUG(0)"></div>
+      <div class="uc dn" id="uc1" onclick="pickUG(1)"></div>
+      <div class="uc dn" id="uc2" onclick="pickUG(2)"></div>
+      <div class="uc dn" id="uc3" onclick="pickUG(3)"></div>
+    </div>
+  </div>
+  <div class="ug-res" id="ugr">左のカードより強いカードを選べ！</div>
+  <div class="ug-btns">
+    <button class="ub ud" id="ubd" onclick="ugS('d')" disabled>💰 ダブルアップ</button>
+    <button class="ub uh" id="ubh" onclick="ugS('h')" disabled>💸 ハーフアップ</button>
+    <button class="ub uq" id="ubq" onclick="ugQ()" disabled>💵 やめる</button>
+  </div>
 </div>
 </div>
 <div class="ctrl hidden" id="ctrl">
-<button class="cbtn" onclick="goLobby()">🏠 ロビーへ戻る</button>
+  <button class="cbtn" onclick="goLobby()">🏠 ロビーへ戻る</button>
+</div>
 </div>
 </div>
 <script>
@@ -345,14 +316,14 @@ async function sbPost(p,b){try{const r=await fetch(SB+'/rest/v1/'+p,{method:'POS
 async function sbPatch(p,b){try{const r=await fetch(SB+'/rest/v1/'+p,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify(b)});return r.ok;}catch(e){return false;}}
 async function getUser(n){const r=await sbGet('game_users?select=*&name=eq.'+encodeURIComponent(n));return r&&r.length>0?r[0]:null;}
 async function createUser(n,pin){
-  const ok=await sbPost('game_users',{name:n,pin:pin,medals:100,avatar:'👑'});if(!ok)return null;
+  const ok=await sbPost('game_users',{name:n,pin:pin,medals:100,avatar:'👑'});
+  if(!ok)return null;
   for(let i=0;i<8;i++){await new Promise(r=>setTimeout(r,500));const u=await getUser(n);if(u)return u;}
   return {id:null,name:n,pin:pin,medals:100,avatar:'👑'};
 }
 async function saveMedals(id,m){if(!id)return;return sbPatch('game_users?id=eq.'+id,{medals:m});}
 async function saveAvatar(id,av){if(!id)return;return sbPatch('game_users?id=eq.'+id,{avatar:av});}
 
-// AUDIO
 const AC=new(window.AudioContext||window.webkitAudioContext)();
 function wake(){if(AC.state==='suspended')AC.resume();}
 function tone(type,f,dur,vol,t0,fEnd){
@@ -376,59 +347,56 @@ function nz(dur,vol,t0){
 let bgmMode=null,bgmTid=null,bgmStep=0;
 const BGMS={
   lobby:{notes:[392,523,659,784,659,523,784,880,784,659,523,659,523,440,392,523],tempo:160,vol:0.055},
-  poker:{notes:[440,392,440,523,494,440,392,349,392,440,494,523,494,440,392,440],tempo:180,vol:0.050},
+  poker:{notes:[440,392,440,523,494,440,392,349,392,440,494,523,494,440,392,440],tempo:175,vol:0.050},
   win:{notes:[523,659,784,1047,784,1047,1319,1047,784,1047,1319,1568,1319,1047,784,1047],tempo:110,vol:0.065},
   up:{notes:[587,659,698,784,698,659,587,523,587,659,698,784,880,784,698,659],tempo:155,vol:0.058},
 };
 function bgmTick(){
   const cfg=BGMS[bgmMode];if(!cfg)return;
   const f=cfg.notes[bgmStep%cfg.notes.length];
-  const nxt=cfg.notes[(bgmStep+1)%cfg.notes.length];
   tone('triangle',f,0.20,cfg.vol);
-  tone('square',f/2,0.16,cfg.vol*0.45);
-  if(bgmStep%4===0)tone('sine',f*2,0.05,cfg.vol*0.3,0.05);
-  if(bgmStep%8===3)tone('triangle',nxt,0.09,cfg.vol*0.38,0.02);
-  if(bgmStep%2===0)tone('sawtooth',f/4,0.18,cfg.vol*0.35);
+  tone('square',f/2,0.16,cfg.vol*0.4);
+  if(bgmStep%4===0)tone('sine',f*2,0.05,cfg.vol*0.25,0.05);
+  if(bgmStep%2===0)tone('sawtooth',f/4,0.18,cfg.vol*0.3);
   bgmStep++;bgmTid=setTimeout(bgmTick,cfg.tempo);
 }
 function bgmPlay(m){if(bgmMode===m)return;bgmStop();bgmMode=m;bgmStep=0;bgmTick();}
 function bgmStop(){bgmMode=null;clearTimeout(bgmTid);bgmTid=null;}
-function seCard(){nz(0.04,0.12);tone('sine',880,0.03,0.08,0.01);tone('square',1200,0.02,0.06,0.02);}
-function seDeal(){[440,554,659,784,1047].forEach((f,i)=>tone('square',f,0.06,0.25,i*0.04));nz(0.05,0.05,0);}
+function seCard(){nz(0.04,0.10);tone('sine',880,0.03,0.07,0.01);}
+function seDeal(){[440,554,659,784,1047].forEach((f,i)=>tone('square',f,0.06,0.22,i*0.04));nz(0.05,0.04);}
 function seHold(){tone('sine',1047,0.05,0.08);tone('sine',1319,0.07,0.10,0.04);tone('sine',1568,0.08,0.14,0.09);}
-function seUnhold(){tone('square',659,0.04,0.15);tone('sine',523,0.03,0.10,0.05);}
-function seDraw(){[523,659,784,1047,1319].forEach((f,i)=>tone('triangle',f,0.12,0.25,i*0.05));nz(0.07,0.06,0);}
+function seUnhold(){tone('square',659,0.04,0.14);tone('sine',523,0.03,0.10,0.05);}
+function seDraw(){[523,659,784,1047,1319].forEach((f,i)=>tone('triangle',f,0.12,0.22,i*0.05));nz(0.07,0.05);}
 function seWin(mult){
-  if(mult>=100){[261,329,392,523,659,784,1047,1319,1568,2093].forEach((f,i)=>tone('square',f,0.16,0.38,i*0.05));nz(0.3,0.12,0.6);tone('sine',2637,0.14,0.3,0.8);setTimeout(()=>[523,659,784,1047,784,1047,1319,1047,1319,1568].forEach((f,i)=>tone('triangle',f,0.14,0.3,i*0.07)),1100);}
-  else if(mult>=20){[523,659,784,1047,1319].forEach((f,i)=>tone('square',f,0.14,0.32,i*0.06));nz(0.2,0.10,0.45);tone('sine',2093,0.10,0.22,0.6);}
-  else{[523,659,784,1047].forEach((f,i)=>tone('triangle',f,0.12,0.28,i*0.07));tone('sine',1319,0.07,0.14,0.3);}
+  if(mult>=100){[261,329,392,523,659,784,1047,1319,1568,2093].forEach((f,i)=>tone('square',f,0.16,0.35,i*0.05));nz(0.3,0.12,0.6);setTimeout(()=>[523,659,784,1047,784,1047,1319,1568].forEach((f,i)=>tone('triangle',f,0.14,0.3,i*0.07)),1100);}
+  else if(mult>=20){[523,659,784,1047,1319].forEach((f,i)=>tone('square',f,0.14,0.30,i*0.06));nz(0.2,0.10,0.45);}
+  else{[523,659,784,1047].forEach((f,i)=>tone('triangle',f,0.12,0.26,i*0.07));}
 }
-function seLose(){tone('triangle',523,0.07,0.15);tone('sawtooth',392,0.07,0.20,0.1,300);tone('sawtooth',261,0.08,0.18,0.22,200);nz(0.10,0.08,0.38);}
-function seBet(){tone('square',880,0.02,0.18);tone('sine',1108,0.015,0.12,0.03);}
-function seLogin(){[523,659,784,1047,1319].forEach((f,i)=>tone('triangle',f,0.10,0.20,i*0.07));tone('sine',1568,0.09,0.16,0.38);}
-function seFlip(){nz(0.035,0.14);tone('sine',1200,0.025,0.07,0.01);tone('square',900,0.02,0.05,0.02);}
-function seUGWin(){tone('square',880,0.07,0.10);tone('square',1108,0.07,0.12,0.08);tone('square',1320,0.08,0.16,0.16);tone('sine',1760,0.08,0.20,0.26);}
-function seUGLose(){tone('sawtooth',330,0.09,0.22);tone('sawtooth',220,0.10,0.22,0.12,100);nz(0.12,0.10,0.22);}
+function seLose(){tone('triangle',523,0.07,0.14);tone('sawtooth',392,0.07,0.18,0.1,300);tone('sawtooth',261,0.08,0.18,0.22,200);nz(0.10,0.08,0.38);}
+function seBet(){tone('square',880,0.02,0.16);tone('sine',1108,0.015,0.10,0.03);}
+function seLogin(){[523,659,784,1047,1319].forEach((f,i)=>tone('triangle',f,0.10,0.18,i*0.07));tone('sine',1568,0.08,0.14,0.38);}
+function seFlip(){nz(0.035,0.12);tone('sine',1200,0.025,0.07,0.01);tone('square',900,0.02,0.05,0.02);}
+function seUGWin(){tone('square',880,0.07,0.10);tone('square',1108,0.07,0.12,0.08);tone('square',1320,0.08,0.14,0.16);tone('sine',1760,0.08,0.18,0.26);}
+function seUGLose(){tone('sawtooth',330,0.09,0.20);tone('sawtooth',220,0.10,0.20,0.12,100);nz(0.12,0.10,0.22);}
 document.addEventListener('click',wake,{once:true});
-document.addEventListener('touchstart',wake,{once:true});// STATE
+document.addEventListener('touchstart',wake,{once:true});
 let user=null,pinBuf='',lmode='login';
 let deck=[],hand=[],held=[],bet=1,win=0,phase='deal';
 let ugM=0,ugMode='',ugOn=false,ugPk=false,ugIdx=-1,ugLc=null,ugRc=[];
 
-// AVATAR
-const AVATARS=['👑','🎰','🎲','🃏','⭐','🏆','💎','🔥','🌟','🎭','🦁','🐯','🦊','🐺','🦅','🎯','⚔️','🛡️','🌈','❤️'];
+const AVATARS=['👑','🎰','🎲','🃏','⭐','🏆','💎','🔥','🌟','🎭','🦁','🐯','🦊','🐺','🦅','🎯','⚔️','🗡️','🌈','❤️'];
 function initAvGrid(){
   const g=document.getElementById('av-grid');g.innerHTML='';
   AVATARS.forEach(av=>{
     const d=document.createElement('div');d.className='av-opt';d.textContent=av;
-    d.onclick=()=>selectAv(av);g.appendChild(d);
+    d.onclick=()=>selectAv(av);
+    g.appendChild(d);
   });
 }
 function openAvModal(){if(!user)return;wake();initAvGrid();document.getElementById('av-modal').classList.add('show');}
 function closeAvModal(){document.getElementById('av-modal').classList.remove('show');}
 async function selectAv(av){closeAvModal();if(user){user.avatar=av;saveAvatar(user.id,av);updSidebar();}}
 
-// SIDEBAR
 function updSidebar(){
   if(!user){document.getElementById('sidebar').classList.add('hidden');return;}
   document.getElementById('sidebar').classList.remove('hidden');
@@ -446,9 +414,8 @@ function updSidebar(){
   if(got){el.textContent='✅ ボーナスもらい済み';el.style.borderColor='var(--green2)';el.style.color='var(--green2)';}
   else{el.textContent='🎁 今日のボーナス待機中';el.style.borderColor='var(--gold)';el.style.color='var(--gold)';}
 }
-function updLM(){if(user){document.getElementById('lbm').textContent=user.medals;updSidebar();}}
+function updLM(){if(user){document.getElementById('lbm').textContent=user.medals;document.getElementById('sb-medals').textContent=user.medals;}}
 
-// DAILY BONUS
 async function checkDailyBonus(userId,currentMedals){
   const TODAY=new Date().toISOString().slice(0,10);
   const KEY='daily_'+userId;
@@ -460,12 +427,13 @@ async function checkDailyBonus(userId,currentMedals){
   return newM;
 }
 function showBonusNotice(){
-  const el=document.createElement('div');el.id='daily-bonus-notice';
-  el.innerHTML='🎁 デイリーボーナス<br><span style="font-size:26px;font-family:Barlow Condensed,sans-serif;font-weight:900;color:#F5A623">＋100枚！</span><br><span style="font-size:12px;color:#aaa">明日またもらえます</span>';
-  document.body.appendChild(el);setTimeout(()=>el.remove(),2800);
+  const el=document.createElement('div');
+  el.id='daily-bonus-notice';
+  el.innerHTML='🎁 デイリーボーナス<br><span style="font-size:28px;font-family:Barlow Condensed,sans-serif;font-weight:900;color:var(--gold)">＋100枚！</span><br><span style="font-size:12px;color:#aaa">明日またもらえます</span>';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),2800);
 }
 
-// UI HELPERS
 function show(id){
   document.querySelectorAll('.gs').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -475,7 +443,6 @@ function setMsg(t,c){const e=document.getElementById('lmsg');e.textContent=t;e.c
 function updPin(){for(let i=0;i<4;i++){const e=document.getElementById('p'+i);if(i<pinBuf.length){e.textContent='●';e.classList.add('filled');}else{e.textContent='○';e.classList.remove('filled');}}}
 function disableNP(v){document.querySelectorAll('.nb').forEach(b=>b.disabled=v);}
 
-// LOGIN
 function switchTab(m){
   lmode=m;
   document.getElementById('tab-l').classList.toggle('active',m==='login');
@@ -503,7 +470,7 @@ async function doAuth(){
     const ex=await getUser(name);
     if(ex){disableNP(false);setMsg('その名前はすでに使われています','err');return;}
     const u=await createUser(name,pinBuf);disableNP(false);
-    if(!u){setMsg('登録に失敗しました','err');return;}
+    if(!u){setMsg('登録に失敗しました。もう一度お試しください','err');return;}
     user=u;seLogin();setMsg('登録完了！ようこそ '+name+'さん！','ok');setTimeout(goLobby,700);
   }
 }
@@ -513,24 +480,27 @@ function logout(){
   document.getElementById('ctrl').classList.add('hidden');
   document.getElementById('sidebar').classList.add('hidden');
   show('slogin');
-}// LOBBY
+}
 async function goLobby(){
   if(!user)return;
   updSidebar();
   document.getElementById('ctrl').classList.add('hidden');
-  if(user.id){const newM=await checkDailyBonus(user.id,user.medals);if(newM!==user.medals){user.medals=newM;updSidebar();}}
+  if(user.id){
+    const newM=await checkDailyBonus(user.id,user.medals);
+    if(newM!==user.medals){user.medals=newM;updSidebar();}
+  }
   bgmPlay('lobby');show('slobby');
 }
 function gotoPoker(){if(!user)return;wake();startPoker();}
 function openJanken(){
-  if(user){localStorage.setItem('hkg_user',JSON.stringify({id:user.id,name:user.name,medals:user.medals,avatar:user.avatar||'👑'}));}
-  window.open(location.href.replace(/poker_fever[^/]*$/,'')+'index.html','_blank')||alert('じゃんけんフィーバーは index.html で遥べます！');
+  // メダル情報をlocalStorageに保存してじゃんけんページに渡す
+  if(user)localStorage.setItem('hkg_user',JSON.stringify({id:user.id,name:user.name,medals:user.medals,avatar:user.avatar||'👑'}));
+  location.href='index.html';
 }
 
-// POKER
 const S=['♠','♥','♦','♣'],SR=[false,true,true,false];
 const PAY=[
-  {id:'rf',n:'🂴 ロイヤルフラッシュ',o:[100,200,300,500,700,1000]},
+  {id:'rf',n:'🎴 ロイヤルフラッシュ',o:[100,200,300,500,700,1000]},
   {id:'sf',n:'♠ ストレートフラッシュ',o:[50,100,150,250,350,500]},
   {id:'4k',n:'💎 フォーカード',o:[20,40,60,100,140,200]},
   {id:'fh',n:'🦁 フルハウス',o:[9,18,27,45,63,90]},
@@ -544,6 +514,7 @@ const BETS=[1,2,3,5,7,10];
 function betIdx(b){return BETS.indexOf(b);}
 function cl(n){if(n===1)return'A';if(n===11)return'J';if(n===12)return'Q';if(n===13)return'K';return String(n);}
 function mkD(){let d=[];for(let s=0;s<4;s++)for(let n=1;n<=13;n++)d.push({s,n});return d.sort(()=>Math.random()-.5);}
+
 function startPoker(){
   if(!user)return;wake();
   bet=BETS[0];win=0;phase='deal';hand=[];held=Array(5).fill(false);
@@ -567,12 +538,25 @@ function chgB(d){
 }
 function updPT(){
   const bi=betIdx(bet);
-  PAY.forEach(p=>{const r=document.getElementById('pt-'+p.id);if(!r)return;r.classList.remove('hi');r.querySelectorAll('.pt-o').forEach((o,i)=>o.classList.toggle('cur',i===bi));});
+  PAY.forEach(p=>{
+    const r=document.getElementById('pt-'+p.id);if(!r)return;
+    r.classList.remove('hi');
+    r.querySelectorAll('.pt-o').forEach((o,i)=>o.classList.toggle('cur',i===bi));
+  });
 }
 function setBB(on){['bn-','bn+','bnM'].forEach(id=>document.getElementById(id).disabled=!on);}
+
+function makeCardHTML(c){
+  return '<div class="ct">'+cl(c.n)+'<br>'+S[c.s]+'</div><div class="cs">'+S[c.s]+'</div><div class="cb">'+cl(c.n)+'</div>';
+}
 function renderFD(){
   const a=document.getElementById('pk-ca');a.innerHTML='';
-  for(let i=0;i<5;i++){const w=document.createElement('div');w.className='cw';const c=document.createElement('div');c.className='card dn';const l=document.createElement('div');l.className='hl-lbl hid';l.textContent='HOLD';w.appendChild(c);w.appendChild(l);a.appendChild(w);}
+  for(let i=0;i<5;i++){
+    const w=document.createElement('div');w.className='cw';
+    const c=document.createElement('div');c.className='card dn';
+    const l=document.createElement('div');l.className='hl-lbl hid';l.textContent='HOLD';
+    w.appendChild(c);w.appendChild(l);a.appendChild(w);
+  }
 }
 function renderC(){
   const a=document.getElementById('pk-ca');a.innerHTML='';
@@ -581,7 +565,7 @@ function renderC(){
     const cd=document.createElement('div');
     cd.className='card up '+(SR[c.s]?'r':'b')+(held[i]?' hd':'');
     if(phase==='draw')cd.onclick=()=>{wake();held[i]?seUnhold():seHold();held[i]=!held[i];renderC();};
-    cd.innerHTML='<div class="ct">'+cl(c.n)+'<br>'+S[c.s]+'</div><div class="cs">'+S[c.s]+'</div><div class="cb">'+cl(c.n)+'</div>';
+    cd.innerHTML=makeCardHTML(c);
     const l=document.createElement('div');l.className='hl-lbl'+(held[i]?'':' hid');l.textContent='HOLD';
     w.appendChild(cd);w.appendChild(l);a.appendChild(w);
   });
@@ -604,20 +588,24 @@ function doDraw(){
   document.querySelectorAll('[id^=pt-]').forEach(e=>e.classList.remove('hi'));
   const r=chkR(hand);
   if(r){
-    const bi=betIdx(bet);const m=r.o[bi];win=m;user.medals+=m;
+    const bi=betIdx(bet);
+    const m=r.o[bi];win=m;user.medals+=m;
     document.querySelectorAll('.card').forEach(c=>c.classList.add('wg'));
     document.getElementById('pt-'+r.id).classList.add('hi');
     document.getElementById('pk-rd').innerHTML='<div class="rn">'+r.n+'</div><div class="rw">🪙 ＋'+m+'枚！</div>';
-    bgmPlay('win');seWin(m);updH();updLM();saveMedals(user.id,user.medals);
+    bgmPlay('win');seWin(m);
+    updH();updLM();saveMedals(user.id,user.medals);
     phase='deal';document.getElementById('dbn').textContent='DEAL';setBB(true);
     setTimeout(()=>showUG(m),1000);
   } else {
     seLose();
     document.getElementById('pk-rd').innerHTML='<div class="rz">😢 役なし…またチャレンジ！</div>';
     phase='deal';document.getElementById('dbn').textContent='DEAL';setBB(true);
-    updH();saveMedals(user.id,user.medals);setTimeout(()=>bgmPlay('poker'),600);
+    updH();saveMedals(user.id,user.medals);
+    setTimeout(()=>bgmPlay('poker'),600);
   }
-}function chkR(h){
+}
+function chkR(h){
   const ns=h.map(c=>c.n).sort((a,b)=>a-b),ss=h.map(c=>c.s);
   const fl=ss.every(s=>s===ss[0]);
   const st=(()=>{const u=[...new Set(ns)];if(u.length!==5)return false;if(u[4]-u[0]===4)return true;if(JSON.stringify(u)==='[1,10,11,12,13]')return true;return false;})();
@@ -635,10 +623,9 @@ function autoH(){
   const r=chkR(hand);
   if(r&&['rf','sf','4k','fh'].includes(r.id)){held=Array(5).fill(true);return;}
   for(let s=0;s<4;s++){const idx=hand.map((c,i)=>c.s===s?i:-1).filter(i=>i>=0);if(idx.length>=4){idx.forEach(i=>held[i]=true);return;}}
-  if(r){const cnt={};hand.forEach((c,i)=>{cnt[c.n]=cnt[c.n]||[];cnt[c.n].push(i);});Object.values(cnt).forEach(a=>{if(a.length>=2)a.forEach(i=>held[i]=true);});}
+  if(r){const cnt={};hand.forEach((c,i)=>{cnt[c.n]=cnt[c.n]||[];cnt[c.n].push(i);});Object.values(cnt).forEach(a=>{if(a.length>=2)a.forEach(i=>held[i]=true);}); }
 }
 
-// UP GAME
 function showUG(m){
   ugM=m;ugOn=false;ugPk=false;ugIdx=-1;
   document.getElementById('ugh').textContent='🎯 アップゲーム！';
@@ -656,6 +643,9 @@ function showUG(m){
 }
 function ugStr(n){if(n===2)return 14;if(n===1)return 13;return n;}
 function ugSL(n){if(n===2)return'2 ★最強';if(n===1)return'A';return cl(n);}
+function makeUcHTML(c){
+  return '<div style="position:absolute;top:3px;left:5px;font-family:Barlow Condensed,sans-serif;font-size:13px;font-weight:700">'+cl(c.n)+'<br>'+S[c.s]+'</div><div style="font-size:22px">'+S[c.s]+'</div>';
+}
 function ugS(m){
   ugMode=m;ugOn=true;ugPk=false;ugIdx=-1;wake();
   ['ubd','ubh','ubq'].forEach(id=>{document.getElementById(id).disabled=true;});
@@ -667,18 +657,18 @@ function ugS(m){
   setTimeout(()=>{
     const e=document.getElementById('ulc');
     e.className='uc up lopen '+(SR[ugLc.s]?'r':'b');
-    e.innerHTML=mkCH(ugLc);e.classList.add('flip');seFlip();
+    e.innerHTML=makeUcHTML(ugLc);
+    e.classList.add('flip');
+    seFlip();
     document.getElementById('uls').textContent=ugSL(ugLc.n);
-    document.getElementById('ugr').textContent='右から1枚選んで！左より強い？';seCard();
+    document.getElementById('ugr').textContent='右から1枚選んで！左より強い？';
   },300);
-}
-function mkCH(c){
-  return '<div style="position:absolute;top:3px;left:5px;font-family:Barlow Condensed,sans-serif;font-size:13px;font-weight:700">'+cl(c.n)+'<br>'+S[c.s]+'</div><div style="font-size:22px">'+S[c.s]+'</div>';
 }
 function pickUG(i){
   if(!ugOn||ugPk||!ugLc)return;wake();
   ugPk=true;ugIdx=i;
-  document.getElementById('uc'+i).classList.add('sel');seHold();
+  document.getElementById('uc'+i).classList.add('sel');
+  seHold();
   const others=[0,1,2,3].filter(x=>x!==i);
   let d=400;
   others.forEach(x=>{setTimeout(()=>revealUC(x,false),d);d+=380;});
@@ -687,26 +677,44 @@ function pickUG(i){
 function revealUC(i,last){
   const c=ugRc[i],e=document.getElementById('uc'+i);
   e.className='uc up '+(SR[c.s]?'r':'b');
-  e.innerHTML=mkCH(c);e.classList.add('flip');seFlip();
-  if(last)setTimeout(()=>judgeUG(ugStr(c.n),ugStr(ugLc.n)),350);
+  e.innerHTML=makeUcHTML(c);
+  void e.offsetWidth;
+  e.classList.add('flip');
+  seFlip();
+  if(last)setTimeout(()=>judgeUG(ugStr(c.n),ugStr(ugLc.n)),380);
 }
 function judgeUG(rs,ls){
   ugOn=false;const e=document.getElementById('ugr');
-  if(rs===ls){e.textContent='引き分け！もう一度！';e.className='ug-res';setTimeout(()=>ugS(ugMode),1500);return;}
+  if(rs===ls){
+    e.textContent='引き分け！もう一度！';e.className='ug-res';
+    setTimeout(()=>ugS(ugMode),1500);return;
+  }
   if(rs>ls){
     if(ugMode==='d')ugM=ugM*2;else ugM=ugM+Math.floor(ugM/2);
     e.textContent='🎉 勝ち！ → '+ugM+'枚！';e.className='ug-res ok';
-    document.getElementById('uc'+ugIdx).classList.add('rwin');seUGWin();
+    document.getElementById('uc'+ugIdx).classList.add('rwin');
+    seUGWin();
     document.getElementById('ugc').textContent=ugM+'枚';
     document.getElementById('ugd').textContent=(ugM*2)+'枚';
     document.getElementById('ugh2').textContent=(ugM+Math.floor(ugM/2))+'枚';
-    setTimeout(()=>{e.textContent='続ける？それともやめる？';['ubd','ubh','ubq'].forEach(id=>{document.getElementById(id).disabled=false;});},1500);
+    setTimeout(()=>{
+      e.textContent='続ける？それともやめる？';
+      ['ubd','ubh','ubq'].forEach(id=>{document.getElementById(id).disabled=false;});
+    },1500);
   } else {
-    document.getElementById('uc'+ugIdx).classList.add('rlose');seUGLose();
-    if(ugMode==='d'){e.textContent='😢 負け…メダルを失った…';e.className='ug-res ng';ugM=0;setTimeout(()=>backP(),2500);}
-    else{
-      const sv=Math.floor(ugM/2);e.textContent='😢 負け…でも '+sv+'枚は守った！';e.className='ug-res ng';ugM=sv;user.medals+=sv;saveMedals(user.id,user.medals);updLM();
-      setTimeout(()=>{document.getElementById('ubq').disabled=false;document.getElementById('ubq').textContent='💵 やめる ('+sv+'枚)';},1500);
+    document.getElementById('uc'+ugIdx).classList.add('rlose');
+    seUGLose();
+    if(ugMode==='d'){
+      e.textContent='😢 負け…メダルを失った…';e.className='ug-res ng';ugM=0;
+      setTimeout(()=>backP(),2500);
+    } else {
+      const sv=Math.floor(ugM/2);
+      e.textContent='😢 負け…でも '+sv+'枚は守った！';e.className='ug-res ng';ugM=sv;
+      user.medals+=sv;saveMedals(user.id,user.medals);updLM();
+      setTimeout(()=>{
+        document.getElementById('ubq').disabled=false;
+        document.getElementById('ubq').textContent='💵 やめる ('+sv+'枚)';
+      },1500);
     }
   }
 }
@@ -717,6 +725,20 @@ function backP(){
   document.getElementById('dbn').textContent='DEAL';setBB(true);
   bgmPlay('poker');show('spoker');
 }
+
+// localStorageからの引き継ぎ（じゃんけんから戻ってきた時）
+window.addEventListener('load',()=>{
+  try{
+    const saved=localStorage.getItem('hkg_user');
+    if(saved){
+      const u=JSON.parse(saved);
+      if(u&&u.name&&u.pin===undefined){
+        // ログイン済みの情報があれば自動ログイン
+      }
+    }
+  }catch(e){}
+});
+
 updPT();
 </script>
 </body>
