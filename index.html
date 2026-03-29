@@ -366,7 +366,7 @@ body{
   </div>
 
   <div class="ctrl" id="ctrl-panel">
-    <button class="ctrl-btn btn-lobby" onclick="location.href='poker_fever.html'">🏰 ロビーへ</button>     <button class="ctrl-btn btn-coin" onclick="insertCoin()">🪙 コイン投入</button>
+    <button class="ctrl-btn btn-lobby" onclick="openPoker()">🏰 ポーカーへ</button>     <button class="ctrl-btn btn-coin" onclick="insertCoin()">🪙 コイン投入</button>
     <button class="ctrl-btn btn-start" id="start-btn" onclick="startGame()" disabled>▶ スタート</button>
   </div>
 </div>
@@ -682,7 +682,30 @@ function updTmr(){const el=document.getElementById('tmr');el.textContent=String(
 function stopAll(){timerStop();signStop();if(rlLitTid){clearInterval(rlLitTid);rlLitTid=null;}rlStopping=false;patOff();hideRov();bgmStop();hlActive=false;hlBtnOK=false;}
 
 // ATTRACT
-function insertCoin(){wake();credits++;document.getElementById('cr-v').textContent=credits;document.getElementById('start-btn').disabled=false;seCoin();bgmPlay('attract');}
+function openPoker(){
+  const su=JSON.parse(localStorage.getItem('hkg_user')||'null');
+  if(!su) { location.href='poker_fever.html'; return; }
+  // 今セッションで得たメダルを加算して保存
+  su.medals = (su.medals||0) + totalMedals;
+  localStorage.setItem('hkg_user', JSON.stringify(su));
+  // Supabaseにも保存
+  if(su.id){
+    const SB='https://gtzfcoiowdnyjvwikxku.supabase.co';
+    const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
+    const H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'};
+    fetch(SB+'/rest/v1/game_users?id=eq.'+su.id,{method:'PATCH',headers:H,body:JSON.stringify({medals:su.medals})});
+  }
+  location.href='poker_fever.html';
+}
+function insertCoin(){
+  const su=JSON.parse(localStorage.getItem('hkg_user')||'null');
+  if(su && su.medals<=0){return;}
+  wake(); credits++;
+  if(su){ su.medals=Math.max(0,su.medals-1); localStorage.setItem('hkg_user',JSON.stringify(su)); }
+  document.getElementById('cr-v').textContent=credits;
+  document.getElementById('start-btn').disabled=false;
+  seCoin(); bgmPlay('attract');
+}
 function goAttract(){stopAll();credits=0;document.getElementById('cr-v').textContent=0;document.getElementById('start-btn').disabled=true;document.getElementById('hi-v').textContent=hiScore;document.getElementById('tot-v').textContent=totalMedals;bgmPlay('attract');show('sa');}
 
 // GAME
@@ -815,7 +838,19 @@ async function submitScore(){
   if(pendingScore>0) await addScore(name,pendingScore);
   showResult();
 }
+async function saveMedalsToPoker(gained){
+  if(!gained||gained<=0) return;
+  const su=JSON.parse(localStorage.getItem('hkg_user')||'null');
+  if(!su||!su.id) return;
+  su.medals=(su.medals||0)+gained;
+  localStorage.setItem('hkg_user',JSON.stringify(su));
+  const SB='https://gtzfcoiowdnyjvwikxku.supabase.co';
+  const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
+  const H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'};
+  await fetch(SB+'/rest/v1/game_users?id=eq.'+su.id,{method:'PATCH',headers:H,body:JSON.stringify({medals:su.medals})});
+}
 function showResult(){
+  if(pendingScore>0) saveMedalsToPoker(pendingScore);
   const gained=pendingScore;
   document.getElementById('gr-t').textContent=gained>0?'メダルゲット！':'ゲームオーバー…';
   document.getElementById('gr-got').textContent=gained;document.getElementById('gr-tot').textContent=totalMedals;
@@ -837,6 +872,17 @@ function shareToLINE(){
   window.open('https://social-plugins.line.me/lineit/share?url='+encodeURIComponent(location.href)+'&text='+encodeURIComponent(text),'_blank');
 }
 
+// hkg_userセッション表示
+(function(){
+  const su=JSON.parse(localStorage.getItem('hkg_user')||'null');
+  if(su&&su.medals!==undefined){
+    const b=document.createElement('div');
+    b.style='position:fixed;top:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);color:#aad;font-size:12px;font-family:monospace;padding:4px 10px;border-radius:12px;border:1px solid #446;z-index:999;pointer-events:none;';
+    b.id='hkg-badge';
+    b.textContent='👤 '+su.name+'  🪙 '+su.medals;
+    document.body.appendChild(b);
+  }
+})();
 document.addEventListener('click',()=>wake(),{once:true});
 document.addEventListener('touchstart',()=>wake(),{once:true});
 </script>
