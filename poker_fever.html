@@ -389,7 +389,23 @@ body{display:block !important}
   z-index:0;
 }
 </style>
-</head>
+<script>
+// HKG: ロビーからの認証チェック
+(function(){
+  try{
+    var u=JSON.parse(localStorage.getItem('hkg_user')||'null');
+    if(u&&u.name){
+      // ログイン済み: グローバルにセット
+      window.__hkgUser=u;
+      // ポーカーゲームが使う変数を上書き
+      Object.defineProperty(window,'_skipLogin',{value:true,writable:false});
+    } else {
+      // 未ログイン: ロビーへ
+      location.href='index.html';
+    }
+  }catch(e){}
+})();
+</script></head>
 <body>
 <div id="screen-flash"></div>
 <div id="av-modal"><div class="av-modal-box"><div class="av-modal-title">🎭 アイコンを選択</div><div class="av-grid" id="av-grid"></div><button class="av-close" onclick="closeAvModal()">✕ 閉じる</button></div></div>
