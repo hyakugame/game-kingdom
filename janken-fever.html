@@ -65,22 +65,22 @@ body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans
 .hud-lbl{font-size:10px;color:#888;letter-spacing:.1em}
 .hud-val{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--green)}
 .hud-time{color:var(--red)}
-.arena{display:flex;flex-direction:column;flex:1;padding:8px 12px;gap:6px}
+.arena{display:flex;flex-direction:column;flex:1;padding:8px 12px;gap:6px;justify-content:space-between}
 .fighter{display:flex;align-items:center;gap:10px}
 .fighter-lbl{font-size:11px;color:#888;letter-spacing:.1em;width:32px;flex-shrink:0}
-.fighter-hand{font-size:56px;line-height:1;flex:0 0 auto}
+.fighter-hand{font-size:52px;line-height:1;flex:0 0 auto}
 .fighter-hp-wrap{flex:1}
 .hp-bar{height:8px;background:#1a2a1a;border-radius:4px;overflow:hidden;border:1px solid rgba(0,200,60,.2)}
 .hp-fill{height:100%;background:linear-gradient(90deg,#00cc44,#00FF41);border-radius:4px;transition:.3s}
 .vs-row{display:flex;align-items:center;justify-content:center;gap:10px}
 .vs-text{font-family:'Oswald',sans-serif;font-size:18px;color:#444;font-weight:700}
-.sign-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 16px;text-align:center;flex:1}
-.vbox{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--gold);text-align:center;padding:6px 0;min-height:36px}
+.sign-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:6px 12px;text-align:center;flex:1}
+.vbox{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--gold);text-align:center;padding:4px 0;min-height:36px}
 .jk-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:8px 12px 12px}
 .jk-btn{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:10px 4px;cursor:pointer;text-align:center;transition:.12s;font-size:40px;line-height:1}
 .jk-btn:active{transform:scale(.93);background:rgba(0,200,60,.15);border-color:var(--green)}
 .jk-btn-lbl{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;color:var(--green);margin-top:4px}
-.rlbl{font-size:13px;color:#666;text-align:center;padding:4px 0;flex-shrink:0}
+.rlbl{display:none}
 /* ===== #sr ルーレット ===== */
 #sr{align-items:center}
 .rl-hdr{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--gold);text-align:center;padding:12px 16px;text-shadow:0 0 20px rgba(255,215,0,.5);flex-shrink:0}
@@ -211,7 +211,7 @@ body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans
       <div class="vs-row">
         <div class="sign-box">
           <div style="font-size:13px;color:#888;margin-bottom:2px">CPU</div>
-          <div class="sign" id="sign"><span style="font-size:44px;line-height:1" id="sh">❓</span><div style="font-size:12px;color:#888;margin-top:2px" id="sl">？？？</div></div>
+          <div class="sign" id="sign"><span style="font-size:56px;line-height:1" id="sh">❓</span><div style="font-size:12px;color:#888;margin-top:2px" id="sl">？？？</div></div>
           <div class="hp-bar" style="margin-top:6px"><div class="hp-fill" id="e-hp" style="width:100%;background:linear-gradient(90deg,#ff4444,#ff8888)"></div></div>
         </div>
       </div>
