@@ -152,7 +152,7 @@ body{background:linear-gradient(160deg,#1a0533,#0a0018 50%,#001030);min-height:1
 .ctrl.hidden{display:none}
 .cbtn{border:none;border-radius:50px;font-family:'Zen Dots',cursive;font-size:12px;padding:11px 22px;cursor:pointer;transition:all .1s;position:relative;overflow:hidden;background:linear-gradient(160deg,#8844ff,#5511cc);color:#fff;box-shadow:0 4px 0 #330088}
 .cbtn:active{transform:translateY(3px);box-shadow:0 1px 0 #330088}
-</style>
+#slogin{display:none!important;visibility:hidden!important}#sidebar{display:none!important}</style>
 <script>
 (function(){
 var u=null;
@@ -455,7 +455,7 @@ async function createUser(n,pin){
 }
 async function saveMedals(id,m){if(!id)return;return sbPatch('game_users?id=eq.'+id,{medals:m});}
 
-let user=null,pinBuf='',lmode='login';
+let user=(function(){try{var u=JSON.parse(localStorage.getItem('hkg_user')||'null');if(u&&u.name){if(!u.id)u.id='hkg-'+u.name;return u;}return null;}catch(e){return null;}})(),pinBuf='',lmode='login';
 let deck=[],hand=[],held=[],bet=1,win=0,phase='deal';
 let ugM=0,ugMode='',ugOn=false,ugPk=false,ugIdx=-1,ugLc=null,ugRc=[];
 
@@ -494,7 +494,7 @@ async function doAuth(){
   }
 }
 
-function logout(){user=null;pinBuf='';updPin();document.getElementById('lname').value='';setMsg('','');document.getElementById('ctrl').classList.add('hidden');show('slogin');}
+function logout(){user=null;pinBuf='';updPin();document.getElementById('lname').value='';setMsg('','');document.getElementById('ctrl').classList.add('hidden');show('spoker');}
 
 function goLobby(){
   if(!user)return;
@@ -675,5 +675,17 @@ function judgeUG(rs,ls){
 function ugQ(){user.medals+=ugM;saveMedals(user.id,user.medals);updLM();backP();}
 function backP(){phase='deal';win=0;hand=[];held=Array(5).fill(false);updH();renderFD();document.getElementById('pk-rd').innerHTML='<div class="rz">DEAL を押してスタート</div>';document.getElementById('dbn').textContent='DEAL';setBB(true);show('spoker');}
 </script>
-</body>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  if(!localStorage.getItem('hkg_user')){location.href='index.html';return;}
+  var b=document.createElement('button');
+  b.textContent='← ロビー';
+  b.style.cssText='position:fixed;top:8px;left:8px;z-index:9999;background:rgba(0,0,0,.85);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:7px 16px;font-size:14px;cursor:pointer;';
+  b.onclick=function(){
+    try{localStorage.setItem('hkg_user',JSON.stringify(user));}catch(e){}
+    location.href='index.html';
+  };
+  document.body.appendChild(b);
+});
+</script></body>
 </html>
