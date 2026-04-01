@@ -407,56 +407,50 @@ body{display:block !important}
 })();
 </script><script id="hkg-auth-inject">
 (function(){
-  // hkg_userを取得
   var u=null;
   try{u=JSON.parse(localStorage.getItem('hkg_user')||'null');}catch(e){}
   if(!u||!u.name){location.href='index.html';return;}
-
-  // ポーカーゲームのPINチェックをパスするためidをセット
-  if(!u.id) u.id='hkg-'+Date.now();
+  if(!u.id)u.id='hkg-'+Date.now();
   window.__hkgUser=u;
-
-  // show()関数をオーバーライドしてsloginを封鎖
-  // ゲームのJSが読み込まれるまで監視してオーバーライド
-  var overrideInterval=setInterval(function(){
+  var _iv=setInterval(function(){
     if(typeof show==='function'){
-      clearInterval(overrideInterval);
+      clearInterval(_iv);
       var _orig=show;
       window.show=show=function(id){
-        if(id==='slogin')return; // sloginは絶対に表示しない
+        if(id==='slogin'||id==='slobby')return;
         return _orig(id);
       };
     }
   },10);
-
   document.addEventListener('DOMContentLoaded',function(){
     var u=window.__hkgUser;
-
-    // sloginを非表示
-    var sl=document.getElementById('slogin');
-    if(sl){sl.classList.remove('active');sl.style.display='none';}
-
-    // userグローバル変数をセット（ゲームのJSが使う変数）
+    ['slogin','slobby'].forEach(function(id){
+      var el=document.getElementById(id);
+      if(el){el.classList.remove('active');el.style.display='none';}
+    });
+    var sb=document.getElementById('sidebar');
+    if(sb)sb.style.display='none';
     try{user=u;}catch(e){}
-
-    // 少し遅らせてゲームが初期化されてからログイン完了を呼ぶ
     setTimeout(function(){
-      // userを再セット（ゲームの初期化で上書きされる可能性があるため）
       try{user=u;}catch(e){}
-
-      // sloginを再度確実に非表示
-      var sl2=document.getElementById('slogin');
-      if(sl2){sl2.classList.remove('active');sl2.style.display='none';}
-
-      // ゲームのログイン完了処理を呼ぶ
-      try{if(typeof seLogin==='function')seLogin();}catch(e){lg_debug('seLogin error:'+e);}
-      try{if(typeof goLobby==='function')goLobby();}catch(e){lg_debug('goLobby error:'+e);}
-
-    },500);
+      try{show('spoker');}catch(e){}
+      var sb2=document.getElementById('sidebar');
+      if(sb2)sb2.style.display='none';
+      if(!document.getElementById('hkg-back')){
+        var btn=document.createElement('button');
+        btn.id='hkg-back';
+        btn.textContent='\u2190 \u30ed\u30d3\u30fc\u3078';
+        btn.style.cssText='position:fixed;top:8px;left:8px;z-index:9999;background:rgba(0,0,0,.75);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;font-family:sans-serif;backdrop-filter:blur(4px)';
+        btn.onclick=function(){
+          try{localStorage.setItem('hkg_user',JSON.stringify(user||u));}catch(e){}
+          location.href='index.html';
+        };
+        document.body.appendChild(btn);
+      }
+    },400);
   });
 })();
-function lg_debug(m){} // デバッグ用（本番では空）
-</script></head>
+</scr'+'ipt></head>
 <body>
 <div id="screen-flash"></div>
 <div id="av-modal"><div class="av-modal-box"><div class="av-modal-title">🎭 アイコンを選択</div><div class="av-grid" id="av-grid"></div><button class="av-close" onclick="closeAvModal()">✕ 閉じる</button></div></div>
