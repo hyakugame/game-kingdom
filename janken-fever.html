@@ -65,10 +65,10 @@ body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans
 .hud-lbl{font-size:10px;color:#888;letter-spacing:.1em}
 .hud-val{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--green)}
 .hud-time{color:var(--red)}
-.arena{display:flex;flex-direction:column;flex:1;padding:8px 12px;gap:6px;justify-content:space-between}
-.fighter{display:flex;align-items:center;gap:10px}
+.arena{display:flex;flex-direction:column;flex:1;padding:8px 12px;gap:0;justify-content:center}
+.fighter{display:flex;align-items:center;gap:10px;padding:4px 0}
 .fighter-lbl{font-size:11px;color:#888;letter-spacing:.1em;width:32px;flex-shrink:0}
-.fighter-hand{font-size:52px;line-height:1;flex:0 0 auto}
+.fighter-hand{font-size:60px;line-height:1;flex:0 0 auto}
 .fighter-hp-wrap{flex:1}
 .hp-bar{height:8px;background:#1a2a1a;border-radius:4px;overflow:hidden;border:1px solid rgba(0,200,60,.2)}
 .hp-fill{height:100%;background:linear-gradient(90deg,#00cc44,#00FF41);border-radius:4px;transition:.3s}
@@ -203,20 +203,30 @@ body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans
       <div class="hud-block"><div class="hud-lbl">TIME</div><div class="hud-val hud-time" id="tmr">05</div></div>
     </div>
     <div class="arena">
-      <div class="fighter">
-        <div class="fighter-lbl">YOU</div>
-        <div class="fighter-hand" id="p-hand">✊</div>
-        <div class="fighter-hp-wrap"><div class="hp-bar"><div class="hp-fill" id="p-hp" style="width:100%"></div></div></div>
-      </div>
-      <div class="vs-row">
-        <div class="sign-box">
-          <div style="font-size:13px;color:#888;margin-bottom:2px">CPU</div>
-          <div class="sign" id="sign"><span style="font-size:56px;line-height:1" id="sh">❓</span><div style="font-size:12px;color:#888;margin-top:2px" id="sl">？？？</div></div>
-          <div class="hp-bar" style="margin-top:6px"><div class="hp-fill" id="e-hp" style="width:100%;background:linear-gradient(90deg,#ff4444,#ff8888)"></div></div>
+      <!-- バトルゾーン：YOUとCPUを横並び -->
+      <div style="display:flex;align-items:center;justify-content:space-around;padding:16px 8px;flex:0 0 auto">
+        <!-- YOU -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1">
+          <div style="font-size:11px;color:#888;letter-spacing:.1em">YOU</div>
+          <div id="p-hand" class="p-hand" style="font-size:72px;line-height:1">✊</div>
+          <div class="hp-bar" style="width:100%;margin-top:2px"><div class="hp-fill" id="p-hp" style="width:100%"></div></div>
+        </div>
+        <!-- VS -->
+        <div style="font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:#444;flex:0 0 36px;text-align:center">VS</div>
+        <!-- CPU -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1">
+          <div style="font-size:11px;color:#888;letter-spacing:.1em">CPU</div>
+          <div class="sign" id="sign" style="text-align:center">
+            <span style="font-size:72px;line-height:1" id="sh">❓</span>
+            <div style="font-size:12px;color:#888;margin-top:2px" id="sl">？？？</div>
+          </div>
+          <div class="hp-bar" style="width:100%;margin-top:2px"><div class="hp-fill" id="e-hp" style="width:100%;background:linear-gradient(90deg,#ff4444,#ff8888)"></div></div>
         </div>
       </div>
-      <div class="vbox" id="vbox">じゃーん　けーん</div>
-      <div class="rlbl">勝ったらルーレット！</div>
+      <!-- メッセージ -->
+      <div style="background:rgba(0,0,0,.35);border:1px solid rgba(0,200,60,.2);border-radius:10px;padding:12px 16px;margin:0 4px;text-align:center">
+        <div class="vbox" id="vbox" style="font-size:24px;margin:0;min-height:32px">グー・チョキ・パーを選ぼう！</div>
+      </div>
     </div>
     <div class="jk-btns">
       <button class="jk-btn" id="b-r" onclick="pick('rock')">✊<div class="jk-btn-lbl">グー</div></button>
