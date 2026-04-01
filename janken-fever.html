@@ -48,7 +48,7 @@ body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans
 .jk-title{font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;color:var(--gold);text-align:center;text-shadow:0 0 20px rgba(255,215,0,.4);line-height:1.1}
 .lobby-medals{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 32px;text-align:center;width:100%}
 .lobby-med-lbl{font-size:12px;color:#888;letter-spacing:.1em}
-.lobby-med-val{font-family:'Oswald',sans-serif;font-size:52px;font-weight:700;color:var(--green);line-height:1}
+.lobby-med-val{font-family:'Oswald',sans-serif;font-size:64px;font-weight:700;color:var(--green);line-height:1}
 .scores-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
 .score-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center}
 .score-lbl{font-size:11px;color:#888;letter-spacing:.08em}
@@ -60,10 +60,10 @@ body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans
 .rov-main{font-family:'Oswald',sans-serif;font-size:64px;font-weight:900;color:var(--gold);text-shadow:0 0 30px rgba(255,215,0,.8);text-align:center;position:relative;z-index:1;animation:rov-pulse 0.6s ease-in-out infinite alternate}
 @keyframes rov-pulse{from{transform:scale(1)}to{transform:scale(1.05)}}
 .rov-sub{font-family:'Oswald',sans-serif;font-size:22px;color:var(--green);text-align:center;position:relative;z-index:1}
-.sb-hud{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(0,0,0,.4);border-bottom:1px solid var(--border);flex-shrink:0}
+.sb-hud{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(0,0,0,.4);border-bottom:1px solid var(--border);flex-shrink:0}
 .hud-block{text-align:center}
 .hud-lbl{font-size:10px;color:#888;letter-spacing:.1em}
-.hud-val{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--green)}
+.hud-val{font-family:'Oswald',sans-serif;font-size:36px;font-weight:700;color:var(--green)}
 .hud-time{color:var(--red)}
 .arena{display:flex;flex-direction:column;flex:1;padding:8px 12px;gap:8px;justify-content:center}
 .fighter{display:flex;align-items:center;gap:10px;padding:4px 0}
@@ -77,9 +77,9 @@ body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans
 .sign-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:6px 12px;text-align:center;flex:1}
 .vbox{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--gold);text-align:center;padding:4px 0;min-height:36px}
 .jk-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:8px 12px 12px}
-.jk-btn{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:10px 4px;cursor:pointer;text-align:center;transition:.12s;font-size:40px;line-height:1}
+.jk-btn{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:14px 6px;cursor:pointer;text-align:center;transition:.12s;font-size:52px;line-height:1;box-shadow:0 4px 12px rgba(0,0,0,.4)}
 .jk-btn:active{transform:scale(.93);background:rgba(0,200,60,.15);border-color:var(--green)}
-.jk-btn-lbl{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;color:var(--green);margin-top:4px}
+.jk-btn-lbl{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:var(--green);margin-top:6px}
 .rlbl{display:none}
 /* ===== #sr ルーレット ===== */
 #sr{align-items:center}
@@ -250,24 +250,43 @@ body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans
 
   <!-- ハイ&ロー -->
   <div id="shl" class="gs">
-    <div class="screen-pad">
-      <div class="hl-hdr">🃏 ハイ＆ロー 🃏</div>
-      <div class="hl-stats">
-        <div class="hl-stat"><div class="hl-stat-lbl">現在</div><div class="hl-stat-val" id="hl-med">0枚</div></div>
-        <div class="hl-stat" style="border-color:rgba(255,215,0,.4)"><div class="hl-stat-lbl">当たれば</div><div class="hl-stat-val" style="color:var(--green)" id="hl-nxt">0枚</div></div>
+    <div style="display:flex;flex-direction:column;flex:1;padding:12px;gap:10px">
+      <!-- タイトル -->
+      <div style="font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:#FFD700;text-align:center;padding:10px;background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(0,0,0,.5));border:2px solid rgba(255,215,0,.5);border-radius:12px;text-shadow:0 0 15px rgba(255,215,0,.6)">🃏 ハイ＆ロー 🃏</div>
+      <!-- メダル情報 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:rgba(0,0,0,.5);border:1px solid rgba(0,200,60,.4);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:12px;color:#888;letter-spacing:.08em">現在</div>
+          <div style="font-family:'Oswald',sans-serif;font-size:40px;font-weight:700;color:#FFD700;line-height:1" id="hl-med">0枚</div>
+        </div>
+        <div style="background:rgba(0,0,0,.5);border:2px solid rgba(0,255,65,.5);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:12px;color:#888;letter-spacing:.08em">当たれば</div>
+          <div style="font-family:'Oswald',sans-serif;font-size:40px;font-weight:700;color:#00FF41;line-height:1" id="hl-nxt">0枚</div>
+        </div>
       </div>
-      <div class="card-area">
-        <div class="card-slot" id="prev-card"><div class="card-num" id="prev-num">?</div><div class="card-suit" id="prev-suit">?</div></div>
-        <div class="card-arrow">→</div>
-        <div class="card-slot mystery" id="next-card"><div class="card-num" id="next-num">?</div><div class="card-suit" id="next-suit">?</div></div>
+      <!-- カード表示 -->
+      <div style="display:flex;justify-content:center;align-items:center;gap:20px;padding:8px 0">
+        <div id="prev-card" class="card-slot" style="background:#fff;border-radius:12px;width:90px;height:126px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(0,0,0,.6);position:relative">
+          <div style="font-family:'Oswald',sans-serif;font-size:28px;font-weight:900" id="prev-num">?</div>
+          <div style="font-size:42px;line-height:1" id="prev-suit">?</div>
+        </div>
+        <div style="font-size:32px;color:#555">→</div>
+        <div id="next-card" class="card-slot" style="background:#fff;border-radius:12px;width:90px;height:126px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(255,215,0,.5);border:3px solid #FFD700;position:relative;opacity:.5">
+          <div style="font-family:'Oswald',sans-serif;font-size:28px;font-weight:900" id="next-num">?</div>
+          <div style="font-size:42px;line-height:1" id="next-suit">?</div>
+        </div>
       </div>
-      <div class="hl-result" id="hl-res"></div>
-      <div class="hl-q">HIGH か LOW か？</div>
-      <div class="hl-btn-row">
-        <button class="btn btn-red" id="btn-hi" onclick="pickHL('hi')">⬆ HIGH<br><span style="font-size:13px;font-weight:400">次が高い</span></button>
-        <button class="btn btn-blue" id="btn-lo" onclick="pickHL('lo')">⬇ LOW<br><span style="font-size:13px;font-weight:400">次が低い</span></button>
+      <!-- 結果 -->
+      <div style="font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;text-align:center;min-height:40px;padding:6px" id="hl-res"></div>
+      <!-- HIGHかLOWか -->
+      <div style="font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;text-align:center;color:#aaa">HIGH か LOW か？</div>
+      <!-- ボタン -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;flex:1">
+        <button id="btn-hi" onclick="pickHL('hi')" style="background:linear-gradient(180deg,#ff3333,#cc0000);color:#fff;border:none;border-radius:12px;padding:20px 10px;font-family:'Oswald',sans-serif;font-size:28px;font-weight:900;cursor:pointer;box-shadow:0 4px 20px rgba(255,0,0,.4);line-height:1.2">⬆<br>HIGH<br><span style="font-size:14px;font-weight:400;opacity:.8">次が高い</span></button>
+        <button id="btn-lo" onclick="pickHL('lo')" style="background:linear-gradient(180deg,#4488ff,#0055cc);color:#fff;border:none;border-radius:12px;padding:20px 10px;font-family:'Oswald',sans-serif;font-size:28px;font-weight:900;cursor:pointer;box-shadow:0 4px 20px rgba(0,100,255,.4);line-height:1.2">⬇<br>LOW<br><span style="font-size:14px;font-weight:400;opacity:.8">次が低い</span></button>
       </div>
-      <button class="hl-quit" id="hl-quit" onclick="quitHL()">💰 やめてメダルをもらう</button>
+      <!-- やめるボタン -->
+      <button id="hl-quit" onclick="quitHL()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#aaa;padding:14px;font-size:16px;border-radius:10px;cursor:pointer;font-family:'Oswald',sans-serif;width:100%">💰 やめてメダルをもらう</button>
     </div>
   </div>
 
@@ -366,9 +385,9 @@ function nz(dur,vol,t0){vol=vol||0.10;t0=t0||0;const b=AC.createBuffer(1,AC.samp
 // BGM 3種
 let bgmMode=null,bgmTid=null,bgmStep=0;
 const BGMS={
-  attract:{notes:[523,659,784,880,784,659,523,440,523,659,784,1047,880,784,659,523,440,523,659,784,659,523,440,392],tempo:210,vol:0.055},
+  attract:{notes:[784,1047,880,784,659,523,659,784,1047,1319,1047,880,784,1047,1319,1568,1319,1047,784,1047,880,659,784,523],tempo:180,vol:0.060},
   roulette:{notes:[784,880,1047,880,784,659,784,880,1047,1175,1047,880,784,880,1047,784],tempo:155,vol:0.065},
-  hl:{notes:[440,494,523,494,440,415,440,494,523,587,523,494,440,392,440,523],tempo:275,vol:0.050}
+  hl:{notes:[523,784,1047,784,523,659,880,1047,880,659,523,659,784,1047,784,523],tempo:220,vol:0.055}
 };
 function bgmTick(){const c=BGMS[bgmMode];if(!c)return;const f=c.notes[bgmStep%c.notes.length];tone('triangle',f,0.18,c.vol);tone('square',f/2,0.22,c.vol*0.6);bgmStep++;bgmTid=setTimeout(bgmTick,c.tempo);}
 function bgmPlay(mode){if(bgmMode===mode)return;bgmStop();bgmMode=mode;bgmStep=0;bgmTick();}
@@ -675,6 +694,62 @@ function loadSaRank(){
         '</div>').join('');
       }).catch(()=>{el.textContent='(取得失敗)';});
   }catch(e){el.textContent='(エラー)';}
+}
+
+// ===== ハイ&ロー 操作関数 =====
+function pickHL(dir){
+  if(!hlActive||!hlBtnOK)return;
+  wake(); hlBtnOK=false; setHLBtns(false);
+  seHLPick();
+  const nc=document.getElementById('next-card');
+  const nn=Math.floor(Math.random()*13)+1,ns=Math.floor(Math.random()*4);
+  const prevNum=parseInt(document.getElementById('prev-card').dataset.num||'7');
+  // 次のカードをめくる
+  document.getElementById('next-num').textContent=cLabel(nn);
+  document.getElementById('next-suit').textContent=SUITS[ns];
+  nc.className='card-slot '+(SUIT_RED[ns]?'hl-red':'hl-blk');
+  nc.dataset.num=nn;
+  const isHi=nn>prevNum,isLo=nn<prevNum,draw=nn===prevNum;
+  const res=document.getElementById('hl-res');
+  if(draw){
+    res.textContent='✨ あいこ！もう一度！';
+    res.style.color='#FFD700';
+    seAiko();
+    setTimeout(()=>{dealNewCards();updateHLInfo();setHLBtns(true);hlBtnOK=true;},1400);
+  }else if((dir==='hi'&&isHi)||(dir==='lo'&&isLo)){
+    hlMedals=hlMedals*2;
+    res.textContent='🎉 正解！ '+hlMedals+'枚！';
+    res.style.color='#00FF41';
+    seHLWin();
+    updateHLInfo();
+    setTimeout(()=>{dealNewCards();updateHLInfo();setHLBtns(true);hlBtnOK=true;},1600);
+  }else{
+    res.textContent='❌ ハズレ…メダルを失った！';
+    res.style.color='#FF4444';
+    hlActive=false;
+    seHLLose();
+    setTimeout(()=>{finishGame(0);},1800);
+  }
+}
+function quitHL(){
+  if(!hlActive)return;
+  wake(); hlActive=false;
+  seWin();
+  finishGame(hlMedals);
+}
+// ピコピコSE
+function seHLPick(){
+  tone('square',880,0.05,0.25);
+  tone('square',1320,0.05,0.18,0.06);
+}
+function seHLWin(){
+  [523,659,784,1047,1319,2093].forEach((f,i)=>tone('square',f,0.08,0.18,i*0.06));
+  tone('square',2637,0.1,0.2,0.42);
+}
+function seHLLose(){
+  tone('square',400,0.1,0.2);
+  tone('square',300,0.12,0.22,0.12,200);
+  tone('sawtooth',150,0.15,0.3,0.28,80);
 }
 function goBackLobby(){stopAll();var su=JSON.parse(localStorage.getItem('hkg_user')||'null');if(su){su.medals=(su.medals||0)+totalMedals;localStorage.setItem('hkg_user',JSON.stringify(su));}location.href='index.html';}
 function openPoker(){
