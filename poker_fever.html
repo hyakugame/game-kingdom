@@ -389,7 +389,16 @@ body{display:block !important}
   z-index:0;
 }
 </style>
-<style>#slogin{display:none!important}</style></head>
+<style></style><style>#slogin{display:none!important}</style>
+<script>
+(function(){
+  var u=null;
+  try{u=JSON.parse(localStorage.getItem("hkg_user")||"null");}catch(e){}
+  if(!u||!u.name){return;}
+  // idを追加（ポーカーのauto-loginに必要）
+  if(!u.id){u.id="hkg-"+u.name;localStorage.setItem("hkg_user",JSON.stringify(u));}
+})();
+<\/script></head>
 <body>
 <div id="screen-flash"></div>
 <div id="av-modal"><div class="av-modal-box"><div class="av-modal-title">🎭 アイコンを選択</div><div class="av-grid" id="av-grid"></div><button class="av-close" onclick="closeAvModal()">✕ 閉じる</button></div></div>
@@ -1893,5 +1902,34 @@ if(tri)tri.click();}
 var side=document.getElementById('sidebar');
 if(side)side.style.display='none';
 },1000);},300);},300);});
-})()<\/script></body>
+})()<\/script><script>
+document.addEventListener("DOMContentLoaded",function(){
+  var u=null;
+  try{u=JSON.parse(localStorage.getItem("hkg_user")||"null");}catch(e){}
+  if(!u||!u.name){location.href="index.html";return;}
+  // slobbyがactiveになったらspokerへ切り替え
+  var obs=new MutationObserver(function(ms){
+    ms.forEach(function(m){
+      if(m.target.id==="slobby"&&m.target.classList.contains("active")){
+        setTimeout(function(){
+          var els=Array.from(document.querySelectorAll("#slobby *"));
+          var tri=els.find(function(x){return (x.textContent||"").trim()==="\u25b6";});
+          if(tri)tri.click();
+          var side=document.getElementById("sidebar");
+          if(side)side.style.display="none";
+        },300);
+      }
+    });
+  });
+  document.querySelectorAll(".gs").forEach(function(el){
+    obs.observe(el,{attributes:true,attributeFilter:["class"]});
+  });
+  // ロビーへ戻るボタン
+  var b=document.createElement("button");
+  b.textContent="\u2190 \u30ed\u30d3\u30fc";
+  b.style.cssText="position:fixed;top:8px;left:8px;z-index:99999;background:rgba(0,0,0,.9);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:7px 16px;font-size:14px;cursor:pointer;";
+  b.onclick=function(){try{localStorage.setItem("hkg_user",JSON.stringify(user));}catch(e){}location.href="index.html";};
+  document.body.appendChild(b);
+});
+<\/script></body>
 </html>
