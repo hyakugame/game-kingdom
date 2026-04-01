@@ -407,53 +407,55 @@ body{display:block !important}
 })();
 </script><script id="hkg-auth-inject">
 (function(){
-  // hkg_userをlocalStorageから取得
+  // hkg_userを取得
   var u=null;
   try{u=JSON.parse(localStorage.getItem('hkg_user')||'null');}catch(e){}
-  
-  // 未ログインならロビーへ
   if(!u||!u.name){location.href='index.html';return;}
-  
+
+  // ポーカーゲームのPINチェックをパスするためidをセット
+  if(!u.id) u.id='hkg-'+Date.now();
   window.__hkgUser=u;
 
-  // DOMが準備できたら実行
+  // show()関数をオーバーライドしてsloginを封鎖
+  // ゲームのJSが読み込まれるまで監視してオーバーライド
+  var overrideInterval=setInterval(function(){
+    if(typeof show==='function'){
+      clearInterval(overrideInterval);
+      var _orig=show;
+      window.show=show=function(id){
+        if(id==='slogin')return; // sloginは絶対に表示しない
+        return _orig(id);
+      };
+    }
+  },10);
+
   document.addEventListener('DOMContentLoaded',function(){
     var u=window.__hkgUser;
-    
-    // ログイン画面を非表示
+
+    // sloginを非表示
     var sl=document.getElementById('slogin');
-    if(sl){sl.style.display='none';sl.style.visibility='hidden';}
-    
-    // ゲーム内のuser変数をセット（ポーカーゲームが使う変数名を試す）
-    try{if(typeof user!=='undefined')user=u;}catch(e){}
-    try{if(typeof window.currentUser!=='undefined')window.currentUser=u;}catch(e){}
-    
-    // sidebar/gameエリアの hidden クラスを除去して表示
-    var sidebar=document.getElementById('sidebar');
-    if(sidebar){sidebar.classList.remove('hidden');sidebar.style.display='';}
-    
-    var game=document.getElementById('game');
-    if(game&&game.style.display==='none'){game.style.display='';}
-    
-    // メダル表示を更新
-    var selectors=['#medals','#medal','#medalCount','#mcount','.medal-count'];
-    selectors.forEach(function(s){
-      var el=document.querySelector(s);
-      if(el)el.textContent=String(u.medals||0).padStart(5,'0');
-    });
-    
-    // ポーカーゲームのinit関数を呼ぶ（存在すれば）
+    if(sl){sl.classList.remove('active');sl.style.display='none';}
+
+    // userグローバル変数をセット（ゲームのJSが使う変数）
+    try{user=u;}catch(e){}
+
+    // 少し遅らせてゲームが初期化されてからログイン完了を呼ぶ
     setTimeout(function(){
-      if(typeof initGame==='function')try{initGame();}catch(e){}
-      if(typeof startApp==='function')try{startApp();}catch(e){}
-      if(typeof onLogin==='function')try{onLogin(u);}catch(e){}
-      if(typeof afterLogin==='function')try{afterLogin(u);}catch(e){}
-      // ログイン画面を再度確実に非表示
+      // userを再セット（ゲームの初期化で上書きされる可能性があるため）
+      try{user=u;}catch(e){}
+
+      // sloginを再度確実に非表示
       var sl2=document.getElementById('slogin');
-      if(sl2){sl2.style.display='none';sl2.style.visibility='hidden';}
-    },300);
+      if(sl2){sl2.classList.remove('active');sl2.style.display='none';}
+
+      // ゲームのログイン完了処理を呼ぶ
+      try{if(typeof seLogin==='function')seLogin();}catch(e){lg_debug('seLogin error:'+e);}
+      try{if(typeof goLobby==='function')goLobby();}catch(e){lg_debug('goLobby error:'+e);}
+
+    },500);
   });
 })();
+function lg_debug(m){} // デバッグ用（本番では空）
 </script></head>
 <body>
 <div id="screen-flash"></div>
