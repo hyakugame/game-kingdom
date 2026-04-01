@@ -11,7 +11,7 @@ html,body{height:100%;overflow:hidden}
 body{
   background:#050810;
   font-family:'Barlow Condensed',sans-serif;
-  display:flex;flex-direction:column;align-items:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   min-height:100vh;overflow-y:auto;
 }
 .bg{position:fixed;inset:0;pointer-events:none;z-index:0;
@@ -28,7 +28,7 @@ body{
   position:relative;z-index:10;
   width:100%;max-width:380px;
   padding:24px 20px;
-  display:flex;flex-direction:column;align-items:center;
+  display:flex;flex-direction:column;align-items:center;gap:0;
 }
 .logo-en{font-family:'Russo One',sans-serif;font-size:11px;letter-spacing:.3em;color:rgba(0,200,255,.5);margin-bottom:4px}
 .logo-jp{
@@ -48,9 +48,8 @@ body{
 }
 .login-title{
   font-family:'Russo One',sans-serif;font-size:14px;
-  color:#88ddff;letter-spacing:.08em;text-align:center;margin-bottom:6px;
+  color:#88ddff;letter-spacing:.08em;text-align:center;margin-bottom:18px;
 }
-.login-hint{font-size:11px;color:rgba(255,255,255,.25);text-align:center;letter-spacing:.05em;margin-bottom:16px}
 .name-field{
   width:100%;background:rgba(0,0,0,.4);
   border:1px solid rgba(255,255,255,.1);border-radius:8px;
@@ -61,45 +60,40 @@ body{
 .name-field:focus{border-color:rgba(0,200,255,.4);box-shadow:0 0 12px rgba(0,200,255,.1)}
 .name-field::placeholder{color:rgba(255,255,255,.2)}
 
+/* 4桁PIN表示 */
 .pin-dots{display:flex;justify-content:center;gap:14px;margin-bottom:16px}
 .pin-dot{
   width:44px;height:44px;border-radius:50%;
   border:2px solid rgba(255,255,255,.2);
   background:rgba(0,0,0,.3);
   display:flex;align-items:center;justify-content:center;
-  font-size:22px;color:#fff;transition:.15s;
+  font-size:24px;color:#fff;transition:.15s;
 }
 .pin-dot.filled{border-color:#00ccff;background:rgba(0,200,255,.15);box-shadow:0 0 10px rgba(0,200,255,.3)}
 
+/* テンキー */
 .numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
 .numpad-btn{
   height:52px;border:none;border-radius:10px;cursor:pointer;
-  background:rgba(255,255,255,.07);
+  background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.05));
   color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;
   border:1px solid rgba(255,255,255,.1);transition:.1s;
+  display:flex;align-items:center;justify-content:center;
 }
 .numpad-btn:active{transform:scale(.94);background:rgba(255,255,255,.15)}
-.numpad-btn.del{font-size:15px;color:rgba(255,255,255,.5)}
+.numpad-btn.del{font-size:16px;color:rgba(255,255,255,.5)}
 .numpad-btn.ok{
   background:linear-gradient(135deg,#0088cc,#0055aa);
-  color:#fff;font-family:'Russo One',sans-serif;font-size:16px;
+  color:#fff;font-family:'Russo One',sans-serif;font-size:17px;
   border-color:rgba(0,180,255,.3);
   box-shadow:0 3px 0 #003366;
 }
 .numpad-btn.ok:active{transform:translateY(2px);box-shadow:0 1px 0 #003366}
-.numpad-btn.ok:disabled{background:rgba(50,60,80,.5);cursor:not-allowed;box-shadow:none;color:rgba(255,255,255,.3)}
+.numpad-btn.ok:disabled{background:linear-gradient(180deg,#446,#334);cursor:not-allowed;box-shadow:none}
 
-.login-msg{text-align:center;font-size:12px;font-weight:700;letter-spacing:.05em;min-height:20px}
+.login-msg{text-align:center;font-size:12px;font-weight:700;letter-spacing:.05em;min-height:20px;margin-top:4px}
 .login-msg.err{color:#ff6666}
 .login-msg.ok{color:#44ff88}
-
-.guest-btn{
-  width:100%;padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:8px;
-  background:transparent;cursor:pointer;margin-top:12px;
-  font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;
-  color:rgba(255,255,255,.4);letter-spacing:.08em;transition:.15s;
-}
-.guest-btn:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.6)}
 
 /* ===== ロビー画面 ===== */
 #lobbyScreen{display:none;width:100%;max-width:420px;position:relative;z-index:10}
@@ -112,6 +106,7 @@ body{
 }
 .medal-info{display:flex;align-items:center;gap:8px}
 .medal-icon{font-size:18px}
+.medal-wrap{}
 .medal-lbl{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.1em}
 .medal-count{font-family:'Press Start 2P',monospace;font-size:13px;color:#ffcc00;text-shadow:0 0 8px rgba(255,200,0,.5)}
 .user-wrap{display:flex;align-items:center;gap:8px}
@@ -159,6 +154,7 @@ body{
 
 .footer{width:100%;padding:12px 16px;text-align:center;font-size:10px;color:rgba(255,255,255,.12);letter-spacing:.1em}
 
+/* トースト */
 .toast{
   position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(8px);
   background:rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.15);border-radius:8px;
@@ -180,7 +176,6 @@ body{
 
   <div class="login-box">
     <div class="login-title">🎮 プレイヤー認証</div>
-    <div class="login-hint">初回は自動で新規登録されます</div>
     <input class="name-field" type="text" id="nameField" placeholder="なまえ（10文字以内）" maxlength="10" autocomplete="off">
     <div class="pin-dots">
       <div class="pin-dot" id="d0"></div>
@@ -203,7 +198,6 @@ body{
       <button class="numpad-btn ok" id="okBtn" onclick="doLogin()" disabled>OK✓</button>
     </div>
     <div class="login-msg" id="loginMsg"></div>
-    <button class="guest-btn" onclick="playAsGuest()">🎲 ゲストでプレイ（200枚からスタート）</button>
   </div>
 </div>
 
@@ -212,7 +206,7 @@ body{
   <div class="medal-bar">
     <div class="medal-info">
       <span class="medal-icon">🪙</span>
-      <div>
+      <div class="medal-wrap">
         <div class="medal-lbl">MEDALS</div>
         <div class="medal-count" id="medalCount">00000</div>
       </div>
@@ -258,6 +252,7 @@ body{
       <span class="game-badge badge-hot">HOT</span>
     </a>
   </div>
+
   <div class="footer">© 2025 百式ゲーム王国 · メダルはゲーム間で共通です</div>
 </div>
 
@@ -265,147 +260,111 @@ body{
 
 <script>
 'use strict';
+const SB='https://gtzfcoiowdnyjvwikxku.supabase.co';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
+const SH={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
 
-// ============================================================
-// Supabase（メダル永続化のみ。PINはlocalStorageで管理）
-// ============================================================
-var SB='https://gtzfcoiowdnyjvwikxku.supabase.co';
-var KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
-var SH={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
+let pin='';
+let user=null;
 
-var pin='';
-var user=null;
+// 起動時: localStorage確認
+try{
+  const saved=JSON.parse(localStorage.getItem('hkg_user')||'null');
+  if(saved&&saved.name&&saved.pin){
+    user=saved;
+    showLobby();
+  }
+}catch(e){}
 
-// ============================================================
-// 起動時: localStorageをチェック → ログイン済みならロビーへ
-// ============================================================
-(function(){
-  try{
-    var saved=JSON.parse(localStorage.getItem('hkg_user')||'null');
-    if(saved && saved.name){
-      user=saved;
-      showLobby();
-    }
-  }catch(e){}
-})();
-
-// ============================================================
 // PIN入力
-// ============================================================
 function pinInput(n){
-  if(pin.length>=4) return;
+  if(pin.length>=4)return;
   pin+=n;
   updateDots();
-  if(pin.length===4) document.getElementById('okBtn').disabled=false;
+  if(pin.length===4)document.getElementById('okBtn').disabled=false;
 }
 function pinDel(){
-  if(pin.length===0) return;
   pin=pin.slice(0,-1);
   updateDots();
   document.getElementById('okBtn').disabled=true;
 }
 function updateDots(){
-  for(var i=0;i<4;i++){
-    var d=document.getElementById('d'+i);
-    if(i<pin.length){d.textContent='●';d.classList.add('filled');}
-    else{d.textContent='';d.classList.remove('filled');}
+  for(let i=0;i<4;i++){
+    const d=document.getElementById('d'+i);
+    if(i<pin.length){d.textContent='●';d.classList.add('filled')}
+    else{d.textContent='';d.classList.remove('filled')}
   }
 }
 
-// ============================================================
-// ログイン処理
-// ============================================================
-function doLogin(){
-  var name=document.getElementById('nameField').value.trim();
+async function doLogin(){
+  const name=document.getElementById('nameField').value.trim();
   if(!name){setMsg('なまえを入力してください','err');return;}
   if(pin.length<4){setMsg('4桁のPINを入力してください','err');return;}
+  setMsg('認証中...','');
 
-  // localStorageにユーザーDBを持つ
-  var db=getDB();
-  if(db[name]){
-    // 既存ユーザー
-    if(db[name].pin===pin){
-      // ログイン成功
-      user={name:name, medals:db[name].medals, pin:pin};
-      setMsg('ログイン成功！','ok');
-      saveUser();
-      setTimeout(showLobby,400);
-    }else{
-      setMsg('PINが違います','err');
-    }
-  }else{
-    // 新規登録
-    db[name]={pin:pin, medals:200};
-    saveDB(db);
-    user={name:name, medals:200, pin:pin};
-    setMsg('新規登録完了！','ok');
-    saveUser();
-    // Supabaseにも保存を試みる（失敗しても続行）
-    syncToSupabase(name, 200);
-    setTimeout(showLobby,400);
-  }
-}
-
-// ゲストプレイ
-function playAsGuest(){
-  user={name:'GUEST', medals:200, pin:null};
-  saveUser();
-  showLobby();
-}
-
-// ============================================================
-// ローカルDB（name→{pin,medals}のマップ）
-// ============================================================
-function getDB(){
-  try{return JSON.parse(localStorage.getItem('hkg_db')||'{}');}
-  catch(e){return {};}
-}
-function saveDB(db){
-  try{localStorage.setItem('hkg_db',JSON.stringify(db));}catch(e){}
-}
-
-// ============================================================
-// ユーザー保存（hkg_user = 現在ログイン中のユーザー）
-// ============================================================
-function saveUser(){
-  try{localStorage.setItem('hkg_user',JSON.stringify(user));}catch(e){}
-  // DBにもメダル数を反映
-  if(user && user.name && user.name!=='GUEST'){
-    var db=getDB();
-    if(db[user.name]){
-      db[user.name].medals=user.medals;
-      saveDB(db);
-    }
-  }
-}
-
-// ============================================================
-// Supabase同期（メダルのバックアップ。失敗しても無視）
-// ============================================================
-async function syncToSupabase(name, medals){
+  // Supabaseからname+pinで検索
   try{
-    await fetch(SB+'/rest/v1/game_users',{
-      method:'POST',
-      headers:Object.assign({},SH,{'Prefer':'return=minimal'}),
-      body:JSON.stringify({name:name, medals:medals})
-    });
-  }catch(e){}
+    const res=await fetch(`${SB}/rest/v1/game_users?name=eq.${encodeURIComponent(name)}&pin=eq.${pin}`,{headers:SH});
+    const data=await res.json();
+    if(data&&data.length>0){
+      // 既存ユーザー
+      user={id:data[0].id,name:data[0].name,medals:data[0].medals,pin};
+      setMsg('ログイン成功！','ok');
+      save();
+      setTimeout(showLobby,500);
+    }else{
+      // 新規 or PIN違い → nameだけで検索
+      const res2=await fetch(`${SB}/rest/v1/game_users?name=eq.${encodeURIComponent(name)}`,{headers:SH});
+      const data2=await res2.json();
+      if(data2&&data2.length>0){
+        setMsg('PINが違います','err');
+      }else{
+        // 新規登録
+        await createUser(name,pin);
+      }
+    }
+  }catch(e){
+    // Supabase失敗 → ローカルのみで動作
+    user={id:null,name,medals:200,pin};
+    save();
+    setTimeout(showLobby,300);
+  }
 }
 
-// ============================================================
-// ロビー表示
-// ============================================================
+async function createUser(name,pin){
+  try{
+    const res=await fetch(`${SB}/rest/v1/game_users`,{
+      method:'POST',
+      headers:{...SH,'Prefer':'return=representation'},
+      body:JSON.stringify({name,pin,medals:200})
+    });
+    const data=await res.json();
+    if(data&&data.length>0){
+      user={id:data[0].id,name:data[0].name,medals:data[0].medals,pin};
+    }else{
+      user={id:null,name,medals:200,pin};
+    }
+    setMsg('新規登録完了！','ok');
+    save();
+    setTimeout(showLobby,500);
+  }catch(e){
+    user={id:null,name,medals:200,pin};
+    save();
+    setTimeout(showLobby,300);
+  }
+}
+
+function save(){
+  try{localStorage.setItem('hkg_user',JSON.stringify(user));}catch(e){}
+}
+
 function showLobby(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('lobbyScreen').style.display='';
   document.getElementById('dispName').textContent=user.name||'GUEST';
-  document.getElementById('medalCount').textContent=
-    String(user.medals||0).padStart(5,'0');
+  document.getElementById('medalCount').textContent=String(user.medals||0).padStart(5,'0');
 }
 
-// ============================================================
-// ログアウト
-// ============================================================
 function doLogout(){
   user=null;
   localStorage.removeItem('hkg_user');
@@ -416,45 +375,37 @@ function doLogout(){
   setMsg('','');
   document.getElementById('lobbyScreen').style.display='none';
   document.getElementById('loginScreen').style.display='';
-  toast('ログアウトしました');
 }
 
-// ============================================================
-// ゲームへ移動
-// ============================================================
-function saveAndGo(e, href){
+function saveAndGo(e,href){
   e.preventDefault();
-  if(user) saveUser();
+  if(user)save();
   location.href=href;
 }
 
-// ページに戻ってきた時にメダル更新
-window.addEventListener('pageshow', function(){
+// ページ戻り時にメダル更新
+window.addEventListener('pageshow',()=>{
   try{
-    var saved=JSON.parse(localStorage.getItem('hkg_user')||'null');
-    if(saved && user && document.getElementById('lobbyScreen').style.display!=='none'){
+    const saved=JSON.parse(localStorage.getItem('hkg_user')||'null');
+    if(saved&&user){
       user=saved;
-      document.getElementById('medalCount').textContent=
-        String(user.medals||0).padStart(5,'0');
+      document.getElementById('medalCount').textContent=String(user.medals||0).padStart(5,'0');
     }
   }catch(e){}
 });
 
-// ============================================================
-// UI
-// ============================================================
-function setMsg(msg, type){
-  var el=document.getElementById('loginMsg');
+function setMsg(msg,type){
+  const el=document.getElementById('loginMsg');
   el.textContent=msg;
   el.className='login-msg'+(type?' '+type:'');
 }
 
-var _tt;
+let _tt;
 function toast(m){
   clearTimeout(_tt);
-  var t=document.getElementById('toast');
+  const t=document.getElementById('toast');
   t.textContent=m;t.classList.add('show');
-  _tt=setTimeout(function(){t.classList.remove('show');},2200);
+  _tt=setTimeout(()=>t.classList.remove('show'),2200);
 }
 </script>
 </body>
