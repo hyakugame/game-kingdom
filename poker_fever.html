@@ -47,9 +47,9 @@ body{display:block !important}
 .cw{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:220px;min-width:220px}
 .hl-lbl{font-size:18px !important}
 .pt{padding:2px 3px !important;overflow-x:auto !important}
-.pt-hb{width:22px !important;font-size:7px !important}
-.pt-o{width:22px !important;font-size:16px !important}
-.pt-n{font-size:18px !important;letter-spacing:0 !important}
+.pt-hb{width:34px !important;font-size:9px !important}
+.pt-o{width:34px !important;font-size:13px !important}
+.pt-n{font-size:22px !important;letter-spacing:0 !important}
 .pk-hud{padding:4px 8px !important}
 .pk-val{font-size:60px !important}
 .pk-lbl{font-size:16px !important}
@@ -155,12 +155,12 @@ body{display:block !important}
 .pt{background:linear-gradient(180deg,#001a00,#002a00);width:100%;border-bottom:2px solid #FFD700;padding:3px 6px 2px;flex-shrink:0}
 .pt-inner{display:flex;flex-direction:column;gap:0}
 .pt-hdr{display:flex;margin-bottom:2px}
-.pt-hb{width:44px;text-align:center;font-family:var(--font-en);font-size:10px;font-weight:900;color:#FFD700;letter-spacing:.02em}
+.pt-hb{width:34px;text-align:center;font-family:var(--font-en);font-size:9px;font-weight:900;color:#FFD700;letter-spacing:.02em}
 .pt-row{display:flex;align-items:center;padding:1px 2px;border-bottom:1px solid rgba(0,100,0,.4);transition:all .2s}
-.pt-row.hi{background:rgba(255,215,0,.25);box-shadow:inset 0 0 8px rgba(255,215,0,.3)}
-.pt-n{flex:1;color:#00FF41;font-family:var(--font-en);font-size:18px;font-weight:700;letter-spacing:.03em;text-shadow:0 0 4px rgba(0,255,65,.4)}
+@keyframes winPulse{0%{background:rgba(255,215,0,.25);box-shadow:inset 0 0 12px rgba(255,215,0,.5)}100%{background:rgba(255,215,0,.5);box-shadow:inset 0 0 28px rgba(255,215,0,.9),0 0 16px rgba(255,215,0,.6)}}.pt-row.hi{background:rgba(255,215,0,.35);animation:winPulse .5s ease-in-out infinite alternate}
+.pt-n{flex:1;color:#00FF41;font-family:var(--font-en);font-size:22px;font-weight:700;letter-spacing:.02em;text-shadow:0 0 4px rgba(0,255,65,.4)}
 .pt-odds{display:flex;gap:2px}
-.pt-o{width:44px;text-align:center;font-family:var(--font-en);font-size:16px;font-weight:900;color:#aaa;padding:1px 0}
+.pt-o{width:34px;text-align:center;font-family:var(--font-en);font-size:13px;font-weight:900;color:#aaa;padding:1px 0}
 .pt-o.cur{color:#FFD700;text-shadow:0 0 6px rgba(255,215,0,.8);background:rgba(255,215,0,.12)}
 .pt-o.mx{color:#FF4444;text-shadow:0 0 8px rgba(255,68,68,1);background:rgba(180,0,0,.35);border:1px solid rgba(255,60,60,.5);border-radius:3px;font-size:13px}
 /* ===== HUD ===== */
@@ -454,21 +454,21 @@ body{display:block !important}
 <div id="spoker" class="gs">
 <div class="pt"><div class="pt-inner">
   <div class="pt-hdr">
-    <div style="flex:1;font-family:var(--font-en);font-size:9px;color:#00FF41;letter-spacing:.05em">HAND</div>
-    <div class="pt-hb" style="color:#aaa">1BET</div>
-    <div class="pt-hb" style="color:#aaa">5BET</div>
-    <div class="pt-hb" style="color:#FF4444;font-size:11px">MAX</div>
+    <div style="flex:1;font-family:var(--font-en);font-size:11px;color:#00FF41;letter-spacing:.05em">HAND</div>
+    <div class="pt-hb">1</div><div class="pt-hb">2</div><div class="pt-hb">3</div><div class="pt-hb">4</div><div class="pt-hb">5</div>
+    <div class="pt-hb">6</div><div class="pt-hb">7</div><div class="pt-hb">8</div><div class="pt-hb">9</div>
+    <div class="pt-hb" style="color:#FF4444">10</div>
   </div>
-  <div class="pt-row" id="pt-nrf"><div class="pt-n">NATURAL ROYAL FLUSH ★</div><div class="pt-odds"><div class="pt-o">800</div><div class="pt-o">4000</div><div class="pt-o mx">4000</div></div></div>
-  <div class="pt-row" id="pt-fa5"><div class="pt-n">FIVE ACES ★</div><div class="pt-odds"><div class="pt-o">300</div><div class="pt-o">1500</div><div class="pt-o mx">3000</div></div></div>
-  <div class="pt-row" id="pt-wrf"><div class="pt-n">ROYAL FLUSH W/ WILD</div><div class="pt-odds"><div class="pt-o">100</div><div class="pt-o">500</div><div class="pt-o mx">1000</div></div></div>
-  <div class="pt-row" id="pt-5ok"><div class="pt-n">FIVE OF A KIND</div><div class="pt-odds"><div class="pt-o">50</div><div class="pt-o">250</div><div class="pt-o mx">500</div></div></div>
-  <div class="pt-row" id="pt-sf"><div class="pt-n">STRAIGHT FLUSH</div><div class="pt-odds"><div class="pt-o">40</div><div class="pt-o">200</div><div class="pt-o mx">400</div></div></div>
-  <div class="pt-row" id="pt-4ok"><div class="pt-n">FOUR OF A KIND</div><div class="pt-odds"><div class="pt-o">20</div><div class="pt-o">100</div><div class="pt-o mx">200</div></div></div>
-  <div class="pt-row" id="pt-fh"><div class="pt-n">FULL HOUSE</div><div class="pt-odds"><div class="pt-o">10</div><div class="pt-o">50</div><div class="pt-o mx">100</div></div></div>
-  <div class="pt-row" id="pt-fl"><div class="pt-n">FLUSH</div><div class="pt-odds"><div class="pt-o">6</div><div class="pt-o">30</div><div class="pt-o mx">60</div></div></div>
-  <div class="pt-row" id="pt-st"><div class="pt-n">STRAIGHT</div><div class="pt-odds"><div class="pt-o">4</div><div class="pt-o">20</div><div class="pt-o mx">40</div></div></div>
-  <div class="pt-row" id="pt-3ok"><div class="pt-n">THREE OF A KIND</div><div class="pt-odds"><div class="pt-o">2</div><div class="pt-o">10</div><div class="pt-o mx">20</div></div></div>
+  <div class="pt-row" id="pt-nrf"><div class="pt-n">NATURAL ROYAL FLUSH ★</div><div class="pt-odds"><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o mx">4000</div></div></div>
+  <div class="pt-row" id="pt-fa5"><div class="pt-n">FIVE ACES ★</div><div class="pt-odds"><div class="pt-o">300</div><div class="pt-o">600</div><div class="pt-o">900</div><div class="pt-o">1200</div><div class="pt-o">1500</div><div class="pt-o">1800</div><div class="pt-o">2100</div><div class="pt-o">2400</div><div class="pt-o">2700</div><div class="pt-o mx">3000</div></div></div>
+  <div class="pt-row" id="pt-wrf"><div class="pt-n">ROYAL FLUSH W/ WILD</div><div class="pt-odds"><div class="pt-o">100</div><div class="pt-o">200</div><div class="pt-o">300</div><div class="pt-o">400</div><div class="pt-o">500</div><div class="pt-o">600</div><div class="pt-o">700</div><div class="pt-o">800</div><div class="pt-o">900</div><div class="pt-o mx">1000</div></div></div>
+  <div class="pt-row" id="pt-5ok"><div class="pt-n">FIVE OF A KIND</div><div class="pt-odds"><div class="pt-o">50</div><div class="pt-o">100</div><div class="pt-o">150</div><div class="pt-o">200</div><div class="pt-o">250</div><div class="pt-o">300</div><div class="pt-o">350</div><div class="pt-o">400</div><div class="pt-o">450</div><div class="pt-o mx">500</div></div></div>
+  <div class="pt-row" id="pt-sf"><div class="pt-n">STRAIGHT FLUSH</div><div class="pt-odds"><div class="pt-o">40</div><div class="pt-o">80</div><div class="pt-o">120</div><div class="pt-o">160</div><div class="pt-o">200</div><div class="pt-o">240</div><div class="pt-o">280</div><div class="pt-o">320</div><div class="pt-o">360</div><div class="pt-o mx">400</div></div></div>
+  <div class="pt-row" id="pt-4ok"><div class="pt-n">FOUR OF A KIND</div><div class="pt-odds"><div class="pt-o">20</div><div class="pt-o">40</div><div class="pt-o">60</div><div class="pt-o">80</div><div class="pt-o">100</div><div class="pt-o">120</div><div class="pt-o">140</div><div class="pt-o">160</div><div class="pt-o">180</div><div class="pt-o mx">200</div></div></div>
+  <div class="pt-row" id="pt-fh"><div class="pt-n">FULL HOUSE</div><div class="pt-odds"><div class="pt-o">10</div><div class="pt-o">20</div><div class="pt-o">30</div><div class="pt-o">40</div><div class="pt-o">50</div><div class="pt-o">60</div><div class="pt-o">70</div><div class="pt-o">80</div><div class="pt-o">90</div><div class="pt-o mx">100</div></div></div>
+  <div class="pt-row" id="pt-fl"><div class="pt-n">FLUSH</div><div class="pt-odds"><div class="pt-o">6</div><div class="pt-o">12</div><div class="pt-o">18</div><div class="pt-o">24</div><div class="pt-o">30</div><div class="pt-o">36</div><div class="pt-o">42</div><div class="pt-o">48</div><div class="pt-o">54</div><div class="pt-o mx">60</div></div></div>
+  <div class="pt-row" id="pt-st"><div class="pt-n">STRAIGHT</div><div class="pt-odds"><div class="pt-o">4</div><div class="pt-o">8</div><div class="pt-o">12</div><div class="pt-o">16</div><div class="pt-o">20</div><div class="pt-o">24</div><div class="pt-o">28</div><div class="pt-o">32</div><div class="pt-o">36</div><div class="pt-o mx">40</div></div></div>
+  <div class="pt-row" id="pt-3ok"><div class="pt-n">THREE OF A KIND</div><div class="pt-odds"><div class="pt-o">2</div><div class="pt-o">4</div><div class="pt-o">6</div><div class="pt-o">8</div><div class="pt-o">10</div><div class="pt-o">12</div><div class="pt-o">14</div><div class="pt-o">16</div><div class="pt-o">18</div><div class="pt-o mx">20</div></div></div><div class="pt-odds"><div class="pt-o">2</div><div class="pt-o">10</div><div class="pt-o mx">20</div></div></div>
 </div></div>
 <!-- カードエリア（中央） -->
 <div class="ca" id="pk-ca"></div>
@@ -1211,7 +1211,7 @@ function chgB(d){if(phase!=='deal')return;wake();seBet();const cur=betIdx(bet);i
 function updPT(){
   // 3列表示: [BET1, BET5, MAX(BET10)]
   // 強調: BET1→index0, BET5→index1, BET10→index2
-  const hiIdx=(bet>=10)?2:(bet>=5)?1:0;
+  const hiIdx=Math.min(bet-1,9);
   PAY.forEach(p=>{
     const r=document.getElementById('pt-'+p.id);if(!r)return;
     r.classList.remove('hi');
@@ -1635,40 +1635,36 @@ function makeCardHTML(c){
       '<div style="position:absolute;bottom:8px;right:10px;font-family:Georgia,serif;font-size:32px;color:#7700aa;font-weight:900;line-height:1;transform:rotate(180deg);z-index:3">J<br>&#9733;</div>'+
     '</div>';
   }
-  var isRed=SR[c.s];
-  var col=isRed?'#CC0000':'#111111';
-  var suit=S[c.s];
-  var rank=cl(c.n);
-  // コーナーラベル（本物のトランプ準拠）
+  var isRed=SR[c.s],col=isRed?'#CC0000':'#111111',suit=S[c.s],rank=cl(c.n);
   var cTop='<div style="position:absolute;top:8px;left:10px;font-family:Georgia,serif;font-size:36px;font-weight:900;color:'+col+';line-height:1;text-align:center;z-index:3">'+rank+'<br><span style="font-size:28px">'+suit+'</span></div>';
   var cBot='<div style="position:absolute;bottom:8px;right:10px;font-family:Georgia,serif;font-size:36px;font-weight:900;color:'+col+';line-height:1;text-align:center;transform:rotate(180deg);z-index:3">'+rank+'<br><span style="font-size:28px">'+suit+'</span></div>';
-  // フェイスカード
   if(c.n>=11){
     var key=(rank==='K'?'K':rank==='Q'?'Q':'J')+(isRed?'_r':'_b');
-    var art=FACE_SVG[key]||'';
-    return cTop+'<div style="position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;border-radius:8px">'+art+'</div>'+cBot;
+    return cTop+'<div style="position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;border-radius:8px">'+(FACE_SVG[key]||'')+'</div>'+cBot;
   }
-  // 数字カード: 本物のトランプのピップ配置
-  // カード: 220x308px コーナー: 上下80px 左右15px
-  // ピップエリア: y=80〜228(中心154), x=15〜205(中心110)
-  var p=function(s,x,y,rot){
-    return '<span style="position:absolute;left:'+x+'px;top:'+y+'px;transform:translate(-50%,-50%)'+(rot?'rotate(180deg)':'')+';font-size:'+
-      (c.n<=2?72:c.n<=4?60:c.n<=6?52:c.n<=8?44:38)+'px;color:'+col+';line-height:1;display:block">'+s+'</span>';
-  };
-  var L=55,R=165,C=110,T=95,B=213,M=154,TM=120,BM=188;
+  // ピップサイズ（カード番号で変える）
+  var sz=c.n===1?82:c.n<=4?60:c.n<=6?50:c.n<=8?42:30;
+  function p(x,y,rot){
+    return '<span style="position:absolute;left:'+x+'px;top:'+y+'px;transform:translate(-50%,-50%)'+(rot?'rotate(180deg)':'')+';font-size:'+sz+'px;color:'+col+';line-height:1">'+suit+'</span>';
+  }
+  // 220x308px カード, ピップエリア y=82〜228
+  // 本物のトランプの標準ピップ配置（Wikipedia・カード研究資料準拠）
+  // x: L=55 C=110 R=165
+  // y: L1=93 L2=121 L3=154 L4=187 L5=215
+  var L=55,C=110,R=165,L1=93,L2=121,L3=154,L4=187,L5=215;
   var pips={
-    1: p(suit,C,M),
-    2: p(suit,C,T)+p(suit,C,B,true),
-    3: p(suit,C,T)+p(suit,C,M)+p(suit,C,B,true),
-    4: p(suit,L,T)+p(suit,R,T)+p(suit,L,B,true)+p(suit,R,B,true),
-    5: p(suit,L,T)+p(suit,R,T)+p(suit,C,M)+p(suit,L,B,true)+p(suit,R,B,true),
-    6: p(suit,L,T)+p(suit,R,T)+p(suit,L,M)+p(suit,R,M)+p(suit,L,B,true)+p(suit,R,B,true),
-    7: p(suit,L,T)+p(suit,R,T)+p(suit,C,TM)+p(suit,L,M)+p(suit,R,M)+p(suit,L,B,true)+p(suit,R,B,true),
-    8: p(suit,L,T)+p(suit,R,T)+p(suit,C,TM)+p(suit,L,M)+p(suit,R,M)+p(suit,C,BM,true)+p(suit,L,B,true)+p(suit,R,B,true),
-    9: p(suit,L,T)+p(suit,R,T)+p(suit,L,TM)+p(suit,R,TM)+p(suit,C,M)+p(suit,L,BM,true)+p(suit,R,BM,true)+p(suit,L,B,true)+p(suit,R,B,true),
-    10:p(suit,L,T)+p(suit,R,T)+p(suit,C,TM)+p(suit,L,TM)+p(suit,R,TM)+p(suit,L,BM,true)+p(suit,R,BM,true)+p(suit,C,BM,true)+p(suit,L,B,true)+p(suit,R,B,true)
+    1:  p(C,L3),
+    2:  p(C,L1)+p(C,L5,true),
+    3:  p(C,L1)+p(C,L3)+p(C,L5,true),
+    4:  p(L,L1)+p(R,L1)+p(L,L5,true)+p(R,L5,true),
+    5:  p(L,L1)+p(R,L1)+p(C,L3)+p(L,L5,true)+p(R,L5,true),
+    6:  p(L,L1)+p(R,L1)+p(L,L3)+p(R,L3)+p(L,L5,true)+p(R,L5,true),
+    7:  p(L,L1)+p(R,L1)+p(C,L2)+p(L,L3)+p(R,L3)+p(L,L5,true)+p(R,L5,true),
+    8:  p(L,L1)+p(R,L1)+p(C,L2)+p(L,L3)+p(R,L3)+p(C,L4,true)+p(L,L5,true)+p(R,L5,true),
+    9:  p(L,90)+p(R,90)+p(L,117)+p(R,117)+p(C,154)+p(L,191,true)+p(R,191,true)+p(L,218,true)+p(R,218,true),
+    10: p(L,88)+p(R,88)+p(C,109)+p(L,130)+p(R,130)+p(L,178,true)+p(R,178,true)+p(C,199,true)+p(L,220,true)+p(R,220,true)
   };
-  return cTop+(pips[c.n]||p(suit,C,M))+cBot;
+  return cTop+(pips[c.n]||p(C,L3))+cBot;
 }
 
 function renderFD(){const a=document.getElementById('pk-ca');a.innerHTML='';for(let i=0;i<5;i++){const w=document.createElement('div');w.className='cw';const c=document.createElement('div');c.className='card dn';const l=document.createElement('div');l.className='hl-lbl hid';l.textContent='HOLD';w.appendChild(c);w.appendChild(l);a.appendChild(w);}}
