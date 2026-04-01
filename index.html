@@ -6,339 +6,252 @@
 <title>百式ゲーム王国</title>
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Barlow+Condensed:wght@700;900&family=Noto+Sans+JP:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{
-  background:#050810;
-  font-family:'Barlow Condensed',sans-serif;
-  min-height:100vh;
-  display:flex;flex-direction:column;align-items:center;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
 
-/* ===== ログイン画面 ===== */
-#loginScreen{
-  width:100%;max-width:380px;
-  padding:24px 20px;
-  display:flex;flex-direction:column;align-items:center;
-}
+/* ログイン */
+#login{width:100%;max-width:380px;padding:24px 20px;display:flex;flex-direction:column;align-items:center}
 .logo-en{font-family:'Russo One',sans-serif;font-size:11px;letter-spacing:.3em;color:rgba(0,200,255,.5);margin-bottom:4px}
-.logo-jp{
-  font-family:'Noto Sans JP',sans-serif;font-size:28px;font-weight:900;
-  background:linear-gradient(135deg,#fff 0%,#88ddff 40%,#ffcc44 70%,#ff8844 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  letter-spacing:.06em;line-height:1;margin-bottom:4px;
-}
+.logo-jp{font-family:'Noto Sans JP',sans-serif;font-size:28px;font-weight:900;background:linear-gradient(135deg,#fff 0%,#88ddff 40%,#ffcc44 70%,#ff8844 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.06em;line-height:1;margin-bottom:4px}
 .logo-sub{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.2em;margin-bottom:24px}
+.box{width:100%;background:linear-gradient(135deg,rgba(0,20,40,.9),rgba(0,10,25,.95));border:1px solid rgba(0,200,255,.2);border-radius:14px;padding:22px 20px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.box-title{font-family:'Russo One',sans-serif;font-size:14px;color:#88ddff;letter-spacing:.08em;text-align:center;margin-bottom:4px}
+.box-hint{font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-bottom:16px}
+.nf{width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:#fff;outline:none;margin-bottom:16px}
+.nf::placeholder{color:rgba(255,255,255,.2)}
+.nf:focus{border-color:rgba(0,200,255,.4)}
+.dots{display:flex;justify-content:center;gap:14px;margin-bottom:16px}
+.dot{width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.2);background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;transition:.15s}
+.dot.on{border-color:#00ccff;background:rgba(0,200,255,.15);box-shadow:0 0 10px rgba(0,200,255,.3)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.pb{height:52px;border:none;border-radius:10px;cursor:pointer;background:rgba(255,255,255,.07);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;border:1px solid rgba(255,255,255,.1)}
+.pb:active{transform:scale(.94);background:rgba(255,255,255,.15)}
+.pb.del{font-size:14px;color:rgba(255,255,255,.5)}
+.pb.ok{background:linear-gradient(135deg,#0088cc,#0055aa);font-family:'Russo One',sans-serif;font-size:16px;box-shadow:0 3px 0 #003366}
+.pb.ok:active{transform:translateY(2px);box-shadow:0 1px 0 #003366}
+.pb.ok:disabled{background:rgba(40,50,70,.6);color:rgba(255,255,255,.25);box-shadow:none;cursor:not-allowed}
+.lmsg{text-align:center;font-size:12px;font-weight:700;min-height:20px;color:#aaa}
+.lmsg.err{color:#ff6666}.lmsg.ok{color:#44ff88}
+.gbtn{width:100%;padding:10px;margin-top:12px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:transparent;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.4)}
+.gbtn:hover{color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.3)}
 
-.login-box{
-  width:100%;
-  background:linear-gradient(135deg,rgba(0,20,40,.9),rgba(0,10,25,.95));
-  border:1px solid rgba(0,200,255,.2);border-radius:14px;
-  padding:22px 20px;
-  box-shadow:0 8px 32px rgba(0,0,0,.5);
-}
-.login-title{font-family:'Russo One',sans-serif;font-size:14px;color:#88ddff;letter-spacing:.08em;text-align:center;margin-bottom:4px}
-.login-hint{font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-bottom:16px}
-
-.name-field{
-  width:100%;background:rgba(0,0,0,.4);
-  border:1px solid rgba(255,255,255,.1);border-radius:8px;
-  padding:10px 12px;
-  font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;
-  color:#fff;outline:none;margin-bottom:16px;transition:.15s;
-}
-.name-field:focus{border-color:rgba(0,200,255,.4)}
-.name-field::placeholder{color:rgba(255,255,255,.2)}
-
-.pin-dots{display:flex;justify-content:center;gap:14px;margin-bottom:16px}
-.pin-dot{
-  width:44px;height:44px;border-radius:50%;
-  border:2px solid rgba(255,255,255,.2);background:rgba(0,0,0,.3);
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;color:#fff;transition:.15s;
-}
-.pin-dot.on{border-color:#00ccff;background:rgba(0,200,255,.15);box-shadow:0 0 10px rgba(0,200,255,.3)}
-
-.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.nb{
-  height:52px;border:none;border-radius:10px;cursor:pointer;
-  background:rgba(255,255,255,.07);color:#fff;
-  font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;
-  border:1px solid rgba(255,255,255,.1);transition:.1s;
-}
-.nb:active{transform:scale(.94);background:rgba(255,255,255,.15)}
-.nb.del{font-size:14px;color:rgba(255,255,255,.5)}
-.nb.ok{
-  background:linear-gradient(135deg,#0088cc,#0055aa);
-  font-family:'Russo One',sans-serif;font-size:16px;
-  box-shadow:0 3px 0 #003366;
-}
-.nb.ok:active{transform:translateY(2px);box-shadow:0 1px 0 #003366}
-.nb.ok:disabled{background:rgba(40,50,70,.6);color:rgba(255,255,255,.25);box-shadow:none;cursor:not-allowed}
-
-.msg{text-align:center;font-size:12px;font-weight:700;min-height:20px}
-.msg.err{color:#ff6666}.msg.ok{color:#44ff88}
-
-.guest-btn{
-  width:100%;padding:10px;margin-top:12px;
-  border:1px solid rgba(255,255,255,.12);border-radius:8px;
-  background:transparent;cursor:pointer;
-  font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;
-  color:rgba(255,255,255,.4);transition:.15s;
-}
-.guest-btn:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.6)}
-
-/* ===== ロビー画面 ===== */
-#lobbyScreen{
-  display:none;
-  width:100%;max-width:420px;
-  flex-direction:column;
-}
-.medal-bar{
-  padding:10px 16px;
-  background:rgba(0,0,0,.4);
-  border-bottom:1px solid rgba(0,200,255,.12);
-  display:flex;align-items:center;justify-content:space-between;
-}
-.medal-lbl{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.1em}
-.medal-count{font-family:'Press Start 2P',monospace;font-size:13px;color:#ffcc00}
-.user-wrap{display:flex;align-items:center;gap:8px}
-.user-name{font-size:14px;font-weight:700;color:rgba(255,255,255,.7)}
-.logout-btn{
-  background:none;border:1px solid rgba(255,255,255,.15);border-radius:5px;
-  color:rgba(255,255,255,.4);font-size:10px;font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;padding:3px 8px;cursor:pointer;
-}
-.lobby-body{padding:16px}
-.games-lbl{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.3em;text-align:center;margin-bottom:10px}
-
-.card{
-  display:block;text-decoration:none;
-  background:linear-gradient(135deg,rgba(0,20,40,.9),rgba(0,10,25,.95));
-  border:1px solid rgba(255,255,255,.08);border-radius:14px;
-  overflow:hidden;margin-bottom:12px;position:relative;
-  transition:all .2s;cursor:pointer;
-}
+/* ロビー */
+#lobby{width:100%;max-width:420px;display:none;flex-direction:column}
+.mbar{padding:10px 16px;background:rgba(0,0,0,.4);border-bottom:1px solid rgba(0,200,255,.12);display:flex;align-items:center;justify-content:space-between}
+.mlbl{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.1em}
+.mcnt{font-family:'Press Start 2P',monospace;font-size:13px;color:#ffcc00}
+.uwrap{display:flex;align-items:center;gap:8px}
+.uname{font-size:14px;font-weight:700;color:rgba(255,255,255,.7)}
+.lout{background:none;border:1px solid rgba(255,255,255,.15);border-radius:5px;color:rgba(255,255,255,.4);font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;padding:3px 8px;cursor:pointer}
+.lbody{padding:16px}
+.glbl{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.3em;text-align:center;margin-bottom:10px}
+.card{display:block;text-decoration:none;background:linear-gradient(135deg,rgba(0,20,40,.9),rgba(0,10,25,.95));border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;margin-bottom:12px;position:relative}
 .card:hover{border-color:rgba(0,200,255,.3);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.card:active{transform:none}
-
-.banner{
-  height:80px;display:flex;align-items:center;justify-content:center;
-  font-size:40px;letter-spacing:4px;
-}
-.banner.slot{background:linear-gradient(135deg,#003355,#001a33);border-bottom:2px solid #0099bb}
-.banner.janken{background:linear-gradient(135deg,#1a0033,#0d001a);border-bottom:2px solid #8800cc}
-.banner.poker{background:linear-gradient(135deg,#001a00,#000d00);border-bottom:2px solid #00aa44}
-
-.card-body{padding:12px 14px}
-.card-name{font-family:'Russo One',sans-serif;font-size:16px;color:#fff;margin-bottom:3px}
-.card-name small{font-family:'Noto Sans JP',sans-serif;font-size:11px;color:rgba(255,255,255,.4);font-weight:400;margin-left:8px}
-.card-desc{font-size:12px;color:rgba(255,255,255,.35)}
-
+.banner{height:80px;display:flex;align-items:center;justify-content:center;font-size:40px;letter-spacing:4px}
+.banner.sl{background:linear-gradient(135deg,#003355,#001a33);border-bottom:2px solid #0099bb}
+.banner.jk{background:linear-gradient(135deg,#1a0033,#0d001a);border-bottom:2px solid #8800cc}
+.banner.pk{background:linear-gradient(135deg,#001a00,#000d00);border-bottom:2px solid #00aa44}
+.cinfo{padding:12px 14px}
+.cname{font-family:'Russo One',sans-serif;font-size:16px;color:#fff;margin-bottom:3px}
+.cname small{font-family:'Noto Sans JP',sans-serif;font-size:11px;color:rgba(255,255,255,.4);font-weight:400;margin-left:8px}
+.cdesc{font-size:12px;color:rgba(255,255,255,.35)}
 .badge{position:absolute;top:10px;right:10px;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700}
-.badge-new{background:rgba(255,80,80,.8);color:#fff}
-.badge-hot{background:rgba(255,150,0,.8);color:#fff}
+.bnew{background:rgba(255,80,80,.8);color:#fff}
+.bhot{background:rgba(255,150,0,.8);color:#fff}
+.foot{padding:12px;text-align:center;font-size:10px;color:rgba(255,255,255,.12)}
 
-.footer{padding:12px;text-align:center;font-size:10px;color:rgba(255,255,255,.12)}
-
-.toast{
-  position:fixed;bottom:60px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.15);border-radius:8px;
-  padding:8px 16px;font-size:13px;font-weight:700;color:#fff;
-  pointer-events:none;z-index:999;opacity:0;transition:opacity .3s;white-space:nowrap;
-}
+.toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;color:#fff;pointer-events:none;z-index:999;opacity:0;transition:opacity .3s;white-space:nowrap}
 .toast.show{opacity:1}
 </style>
 </head>
 <body>
 
-<div id="loginScreen">
+<!-- ログイン画面（デフォルトで表示） -->
+<div id="login">
   <div class="logo-en">HYAKUSHIKI GAME KINGDOM</div>
   <div class="logo-jp">百式ゲーム王国</div>
   <div class="logo-sub">ALL GAMES · ALL MEDALS</div>
-  <div class="login-box">
-    <div class="login-title">🎮 プレイヤー認証</div>
-    <div class="login-hint">初回は自動で新規登録されます</div>
-    <input class="name-field" type="text" id="nameField" placeholder="なまえ（10文字以内）" maxlength="10" autocomplete="off">
-    <div class="pin-dots">
-      <div class="pin-dot" id="d0"></div>
-      <div class="pin-dot" id="d1"></div>
-      <div class="pin-dot" id="d2"></div>
-      <div class="pin-dot" id="d3"></div>
+  <div class="box">
+    <div class="box-title">🎮 プレイヤー認証</div>
+    <div class="box-hint">初回は自動で新規登録されます</div>
+    <input class="nf" type="text" id="nf" placeholder="なまえ（10文字以内）" maxlength="10" autocomplete="off">
+    <div class="dots">
+      <div class="dot" id="d0"></div>
+      <div class="dot" id="d1"></div>
+      <div class="dot" id="d2"></div>
+      <div class="dot" id="d3"></div>
     </div>
-    <div class="numpad">
-      <button class="nb" onclick="pi('1')">1</button>
-      <button class="nb" onclick="pi('2')">2</button>
-      <button class="nb" onclick="pi('3')">3</button>
-      <button class="nb" onclick="pi('4')">4</button>
-      <button class="nb" onclick="pi('5')">5</button>
-      <button class="nb" onclick="pi('6')">6</button>
-      <button class="nb" onclick="pi('7')">7</button>
-      <button class="nb" onclick="pi('8')">8</button>
-      <button class="nb" onclick="pi('9')">9</button>
-      <button class="nb del" onclick="pd()">←消す</button>
-      <button class="nb" onclick="pi('0')">0</button>
-      <button class="nb ok" id="okBtn" onclick="doLogin()" disabled>OK✓</button>
+    <div class="pad">
+      <button class="pb" onclick="pi('1')">1</button>
+      <button class="pb" onclick="pi('2')">2</button>
+      <button class="pb" onclick="pi('3')">3</button>
+      <button class="pb" onclick="pi('4')">4</button>
+      <button class="pb" onclick="pi('5')">5</button>
+      <button class="pb" onclick="pi('6')">6</button>
+      <button class="pb" onclick="pi('7')">7</button>
+      <button class="pb" onclick="pi('8')">8</button>
+      <button class="pb" onclick="pi('9')">9</button>
+      <button class="pb del" onclick="pd()">←消す</button>
+      <button class="pb" onclick="pi('0')">0</button>
+      <button class="pb ok" id="ok" onclick="login()" disabled>OK✓</button>
     </div>
-    <div class="msg" id="msg"></div>
-    <button class="guest-btn" onclick="goGuest()">🎲 ゲストでプレイ（200枚からスタート）</button>
+    <div class="lmsg" id="lmsg"></div>
+    <button class="gbtn" onclick="guest()">🎲 ゲストでプレイ（200枚からスタート）</button>
   </div>
 </div>
 
-<div id="lobbyScreen">
-  <div class="medal-bar">
+<!-- ロビー画面（最初は非表示） -->
+<div id="lobby">
+  <div class="mbar">
     <div>
-      <div class="medal-lbl">🪙 MEDALS</div>
-      <div class="medal-count" id="mcount">00000</div>
+      <div class="mlbl">🪙 MEDALS</div>
+      <div class="mcnt" id="mc">00000</div>
     </div>
-    <div class="user-wrap">
-      <span class="user-name" id="uname"></span>
-      <button class="logout-btn" onclick="doLogout()">ログアウト</button>
+    <div class="uwrap">
+      <span class="uname" id="un"></span>
+      <button class="lout" onclick="logout()">ログアウト</button>
     </div>
   </div>
-  <div class="lobby-body">
-    <div class="games-lbl">▶ SELECT GAME ◀</div>
+  <div class="lbody">
+    <div class="glbl">▶ SELECT GAME ◀</div>
     <a class="card" href="slot.html" onclick="go(event,'slot.html')">
-      <div class="banner slot">🎰🌴🌺</div>
-      <div class="card-body">
-        <div class="card-name">OKI FEVER SLOT <small>沖縄スロット</small></div>
-        <div class="card-desc">天国モード・ドキドキモード搭載。設定1〜6で毎回変わる。</div>
+      <div class="banner sl">🎰🌴🌺</div>
+      <div class="cinfo">
+        <div class="cname">OKI FEVER SLOT <small>沖縄スロット</small></div>
+        <div class="cdesc">天国モード・ドキドキモード搭載。設定1〜6で毎回変わる。</div>
       </div>
-      <span class="badge badge-new">NEW</span>
+      <span class="badge bnew">NEW</span>
     </a>
     <a class="card" href="janken-fever.html" onclick="go(event,'janken-fever.html')">
-      <div class="banner janken">✊✌🖐</div>
-      <div class="card-body">
-        <div class="card-name">グーチョキパー FEVER <small>じゃんけんゲーム</small></div>
-        <div class="card-desc">じゃんけんバトルメダルゲーム。連勝でボーナスフィーバー！</div>
+      <div class="banner jk">✊✌🖐</div>
+      <div class="cinfo">
+        <div class="cname">グーチョキパー FEVER <small>じゃんけんゲーム</small></div>
+        <div class="cdesc">じゃんけんバトルメダルゲーム。連勝でボーナスフィーバー！</div>
       </div>
     </a>
     <a class="card" href="poker_fever.html" onclick="go(event,'poker_fever.html')">
-      <div class="banner poker">🃏♠🃏</div>
-      <div class="card-body">
-        <div class="card-name">7's WILD PLUS <small>ビデオポーカー</small></div>
-        <div class="card-desc">53枚デッキ（ジョーカー付き）。11種の役でダブルアップ。</div>
+      <div class="banner pk">🃏♠🃏</div>
+      <div class="cinfo">
+        <div class="cname">7's WILD PLUS <small>ビデオポーカー</small></div>
+        <div class="cdesc">53枚デッキ（ジョーカー付き）。11種の役でダブルアップ。</div>
       </div>
-      <span class="badge badge-hot">HOT</span>
+      <span class="badge bhot">HOT</span>
     </a>
   </div>
-  <div class="footer">© 2025 百式ゲーム王国 · メダルはゲーム間で共通</div>
+  <div class="foot">© 2025 百式ゲーム王国 · メダルはゲーム間で共通</div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-var pin='', user=null;
+var pin = '';
+var user = null;
 
-/* ---- 起動時チェック ---- */
-(function init(){
-  try{
-    var s=JSON.parse(localStorage.getItem('hkg_user')||'null');
-    if(s && s.name){ user=s; showLobby(); return; }
-  }catch(e){}
-  showLogin();
-})();
+// 起動時: 保存済みユーザーがいればロビーへ
+try {
+  var saved = JSON.parse(localStorage.getItem('hkg_user') || 'null');
+  if (saved && saved.name) {
+    user = saved;
+    openLobby();
+  }
+} catch(e) {}
 
-function showLogin(){
-  document.getElementById('loginScreen').style.display='flex';
-  document.getElementById('lobbyScreen').style.display='none';
-}
-function showLobby(){
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('lobbyScreen').style.display='flex';
-  document.getElementById('uname').textContent=user.name;
-  document.getElementById('mcount').textContent=String(user.medals||0).padStart(5,'0');
+function openLobby() {
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('lobby').style.display = 'flex';
+  document.getElementById('un').textContent = user.name;
+  document.getElementById('mc').textContent = String(user.medals || 0).padStart(5, '0');
 }
 
-/* ---- PIN入力 ---- */
-function pi(n){
-  if(pin.length>=4) return;
-  pin+=n; dots();
-  if(pin.length===4) document.getElementById('okBtn').disabled=false;
+function openLogin() {
+  document.getElementById('login').style.display = 'flex';
+  document.getElementById('lobby').style.display = 'none';
 }
-function pd(){
-  pin=pin.slice(0,-1); dots();
-  document.getElementById('okBtn').disabled=true;
+
+// PIN入力
+function pi(n) {
+  if (pin.length >= 4) return;
+  pin += n;
+  upd();
+  if (pin.length === 4) document.getElementById('ok').disabled = false;
 }
-function dots(){
-  for(var i=0;i<4;i++){
-    var d=document.getElementById('d'+i);
-    d.textContent=i<pin.length?'●':'';
-    d.classList.toggle('on',i<pin.length);
+function pd() {
+  pin = pin.slice(0, -1);
+  upd();
+  document.getElementById('ok').disabled = true;
+}
+function upd() {
+  for (var i = 0; i < 4; i++) {
+    var d = document.getElementById('d' + i);
+    d.textContent = i < pin.length ? '●' : '';
+    i < pin.length ? d.classList.add('on') : d.classList.remove('on');
   }
 }
 
-/* ---- ログイン ---- */
-function doLogin(){
-  var name=document.getElementById('nameField').value.trim();
-  if(!name){ msg('なまえを入力してください','err'); return; }
-  if(pin.length<4){ msg('4桁のPINを入力してください','err'); return; }
+// ログイン
+function login() {
+  var name = document.getElementById('nf').value.trim();
+  if (!name) { msg('なまえを入力してください', 'err'); return; }
+  if (pin.length < 4) { msg('4桁のPINを入力してください', 'err'); return; }
 
-  var db=getDB();
-  if(db[name]){
-    if(db[name].pin===pin){
-      user={name:name, medals:db[name].medals||0, pin:pin};
-      msg('ログイン成功！','ok');
-      saveUser(); setTimeout(showLobby,400);
-    }else{
-      msg('PINが違います','err');
+  var db = getDB();
+  if (db[name]) {
+    if (db[name].pin === pin) {
+      user = { name: name, medals: db[name].medals || 0 };
+      msg('ログイン成功！', 'ok');
+      save();
+      setTimeout(openLobby, 400);
+    } else {
+      msg('PINが違います', 'err');
     }
-  }else{
-    db[name]={pin:pin, medals:200};
+  } else {
+    // 新規登録
+    db[name] = { pin: pin, medals: 200 };
     saveDB(db);
-    user={name:name, medals:200, pin:pin};
-    msg('新規登録しました！','ok');
-    saveUser(); setTimeout(showLobby,400);
+    user = { name: name, medals: 200 };
+    msg('新規登録しました！', 'ok');
+    save();
+    setTimeout(openLobby, 400);
   }
 }
 
-function goGuest(){
-  user={name:'GUEST', medals:200, pin:null};
-  saveUser(); showLobby();
+function guest() {
+  user = { name: 'GUEST', medals: 200 };
+  save();
+  openLobby();
 }
 
-function doLogout(){
-  user=null;
+function logout() {
+  user = null;
   localStorage.removeItem('hkg_user');
-  pin=''; dots();
-  document.getElementById('nameField').value='';
-  document.getElementById('okBtn').disabled=true;
-  msg('','');
-  showLogin();
+  pin = '';
+  upd();
+  document.getElementById('nf').value = '';
+  document.getElementById('ok').disabled = true;
+  msg('', '');
+  openLogin();
 }
 
-/* ---- ゲームへ ---- */
-function go(e,href){
+function go(e, href) {
   e.preventDefault();
-  if(user) saveUser();
-  location.href=href;
+  save();
+  location.href = href;
 }
 
-window.addEventListener('pageshow',function(){
-  try{
-    var s=JSON.parse(localStorage.getItem('hkg_user')||'null');
-    if(s && user && s.name===user.name){
-      user=s;
-      document.getElementById('mcount').textContent=String(user.medals||0).padStart(5,'0');
+window.addEventListener('pageshow', function() {
+  try {
+    var s = JSON.parse(localStorage.getItem('hkg_user') || 'null');
+    if (s && user && s.name === user.name) {
+      user = s;
+      document.getElementById('mc').textContent = String(user.medals || 0).padStart(5, '0');
     }
-  }catch(e){}
+  } catch(e) {}
 });
 
-/* ---- DB ---- */
-function getDB(){ try{ return JSON.parse(localStorage.getItem('hkg_db')||'{}'); }catch(e){ return {}; } }
-function saveDB(db){ try{ localStorage.setItem('hkg_db',JSON.stringify(db)); }catch(e){} }
-function saveUser(){
-  try{ localStorage.setItem('hkg_user',JSON.stringify(user)); }catch(e){}
-  if(user && user.name && user.name!=='GUEST'){
-    var db=getDB();
-    if(db[user.name]) db[user.name].medals=user.medals;
-    saveDB(db);
-  }
-}
-
-/* ---- UI ---- */
-function msg(t,c){ var e=document.getElementById('msg'); e.textContent=t; e.className='msg'+(c?' '+c:''); }
-var _tt;
-function toast(m){ clearTimeout(_tt); var t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); _tt=setTimeout(function(){t.classList.remove('show');},2200); }
+function getDB() { try { return JSON.parse(localStorage.getItem('hkg_db') || '{}'); } catch(e) { return {}; } }
+function saveDB(db) { try { localStorage.setItem('hkg_db', JSON.stringify(db)); } catch(e) {} }
+function save() { try { localStorage.setItem('hkg_user', JSON.stringify(user)); } catch(e) {} }
+function msg(t, c) { var e = document.getElementById('lmsg'); e.textContent = t; e.className = 'lmsg' + (c ? ' ' + c : ''); }
 </script>
 </body>
 </html>
