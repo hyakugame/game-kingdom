@@ -167,7 +167,7 @@ body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans
 </head>
 <body>
 <div class="cab">
-  <div class="mq-wrap"><div class="mq">
+  <div style="position:fixed;top:8px;left:8px;z-index:999"><button onclick="goBackLobby()" style="background:rgba(0,0,0,.7);color:#aaa;border:1px solid rgba(255,255,255,.2);padding:6px 12px;font-size:13px;border-radius:6px;cursor:pointer;font-family:Oswald,sans-serif">← ロビー</button></div><div class="mq-wrap"><div class="mq">
     <span>★ グーチョキパー FEVER!! ★ じゃんけんで勝ってルーレット！ ★ ハイ＆ローで倍々ゲーム！ ★</span>
     <span>★ グーチョキパー FEVER!! ★ じゃんけんで勝ってルーレット！ ★ ハイ＆ローで倍々ゲーム！ ★</span>
   </div></div>
@@ -185,6 +185,11 @@ body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans
       <div class="scores-row">
         <div class="score-box"><div class="score-lbl">HI-SCORE</div><div class="score-val" id="hi-v">0</div></div>
         <div class="score-box"><div class="score-lbl">TOTAL</div><div class="score-val" id="tot-v">0</div></div>
+      </div>
+    
+      <div style="background:rgba(0,0,0,.5);border:1px solid rgba(0,200,60,.3);border-radius:10px;padding:10px;width:100%;margin-top:4px">
+        <div style="font-family:Oswald,sans-serif;font-size:16px;color:#FFD700;text-align:center;margin-bottom:8px">🏆 ランキング</div>
+        <div id="sa-rank-list" style="font-size:13px;color:#aaa;text-align:center">読み込み中...</div>
       </div>
     </div>
   </div>
@@ -619,6 +624,7 @@ function show(id){
     document.getElementById('ctrl-panel').classList.add('hidden');
   }
   if(id==='ssetup') initSetupScreen();
+  if(id==='sa') loadSaRank();
 }
 function setV(txt,cls){const el=document.getElementById('vbox');el.textContent=txt;el.className='vbox '+(cls||'');}
 function updPHP(){const p=(php/5)*100,f=document.getElementById('p-hp');f.style.width=p+'%';f.className='hpf'+(p<=40?' low':p<=70?' med':'');}
@@ -643,6 +649,24 @@ function updTmr(){const el=document.getElementById('tmr');el.textContent=String(
 function stopAll(){timerStop();signStop();if(rlLitTid){clearInterval(rlLitTid);rlLitTid=null;}rlStopping=false;patOff();hideRov();bgmStop();hlActive=false;hlBtnOK=false;}
 
 // ATTRACT
+function loadSaRank(){
+  var el=document.getElementById('sa-rank-list'); if(!el)return;
+  try{
+    var cfg=JSON.parse(localStorage.getItem('gcpfever-supabase')||'null');
+    if(!cfg||!cfg.url){el.textContent='(ランキング未設定)';return;}
+    var H={'apikey':cfg.key,'Authorization':'Bearer '+cfg.key};
+    fetch(cfg.url+'/rest/v1/jk_scores?select=name,score&order=score.desc&limit=10',{headers:H})
+      .then(r=>r.json()).then(data=>{
+        if(!Array.isArray(data)||data.length===0){el.textContent='(まだ記録なし)';return;}
+        el.innerHTML=data.map((r,i)=>'<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)">'+
+          '<span style="color:#FFD700;font-family:Oswald,sans-serif;width:24px">'+(i+1)+'</span>'+
+          '<span style="flex:1;color:#ccc">'+r.name+'</span>'+
+          '<span style="color:#00FF41;font-family:Oswald,sans-serif">'+r.score+'枚</span>'+
+        '</div>').join('');
+      }).catch(()=>{el.textContent='(取得失敗)';});
+  }catch(e){el.textContent='(エラー)';}
+}
+function goBackLobby(){stopAll();var su=JSON.parse(localStorage.getItem('hkg_user')||'null');if(su){su.medals=(su.medals||0)+totalMedals;localStorage.setItem('hkg_user',JSON.stringify(su));}location.href='index.html';}
 function openPoker(){
   const su=JSON.parse(localStorage.getItem('hkg_user')||'null');
   if(!su) { location.href='poker_fever.html'; return; }
@@ -668,11 +692,11 @@ function insertCoin(){
   if(su && su.medals<=0){return;}
   wake(); credits++;
   if(su){ su.medals=Math.max(0,su.medals-1); localStorage.setItem('hkg_user',JSON.stringify(su)); updateBadge(); }
-  document.getElementById('cr-v').textContent=credits;
+  var cr=document.getElementById('cr-v');if(cr)cr.textContent=credits;
   document.getElementById('start-btn').disabled=false;
   seCoin(); bgmPlay('attract');
 }
-function goAttract(){stopAll();credits=0;document.getElementById('cr-v').textContent=0;document.getElementById('start-btn').disabled=true;document.getElementById('hi-v').textContent=hiScore;document.getElementById('tot-v').textContent=totalMedals;bgmPlay('attract');show('sa');}
+function goAttract(){stopAll();credits=0;document.getElementById('start-btn').disabled=true;var hv=document.getElementById('hi-v');if(hv)hv.textContent=hiScore;var tv=document.getElementById('tot-v');if(tv)tv.textContent=totalMedals;var lm=document.getElementById('lobby-med');if(lm)lm.textContent=hiScore;bgmPlay('attract');show('sa');loadSaRank();}
 
 // GAME
 function startGame(){if(!credits)return;wake();credits--;bgmStop();sessionGained=0;php=5;updMed();updPHP();show('sb');startRound();}
@@ -852,6 +876,27 @@ function shareToLINE(){
 })();
 document.addEventListener('click',()=>wake(),{once:true});
 document.addEventListener('touchstart',()=>wake(),{once:true});
+// 自動起動：hkg_userがあればメダルを消費してすぐゲーム開始
+(function(){
+  var su=JSON.parse(localStorage.getItem('hkg_user')||'null');
+  if(su && su.medals>0){
+    // メダルを1枚消費してゲーム開始
+    su.medals=Math.max(0,su.medals-1);
+    localStorage.setItem('hkg_user',JSON.stringify(su));
+    credits=1;
+    totalMedals=su.medals;
+    hiScore=su.medals; // 仮
+    var sb=document.getElementById('start-btn');if(sb)sb.disabled=false;
+    var lm=document.getElementById('lobby-med');if(lm)lm.textContent=su.medals;
+    bgmPlay('attract');
+    // すぐじゃんけん画面へ
+    show('sb');
+    startGame();
+  } else {
+    // メダルなし→ロビーへ
+    goAttract();
+  }
+})();
 </script>
 </body>
 </html>
