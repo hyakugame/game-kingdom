@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>百式ゲーム王国</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Barlow+Condensed:wght@700;900&family=Noto+Sans+JP:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -15,67 +14,103 @@ body{
   display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   min-height:100vh;overflow-y:auto;
 }
-
-/* ━━━ 背景パーティクル ━━━ */
-.bg-stars{
-  position:fixed;inset:0;pointer-events:none;z-index:0;
+.bg{position:fixed;inset:0;pointer-events:none;z-index:0;
   background:
     radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,150,200,.12),transparent),
-    radial-gradient(ellipse 60% 40% at 20% 100%,rgba(0,80,140,.1),transparent),
-    radial-gradient(ellipse 50% 30% at 80% 80%,rgba(80,0,140,.08),transparent);
+    radial-gradient(ellipse 60% 40% at 20% 100%,rgba(0,80,140,.10),transparent);
 }
-.scanlines{
-  position:fixed;inset:0;pointer-events:none;z-index:0;
+.scanlines{position:fixed;inset:0;pointer-events:none;z-index:0;
   background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.08) 3px,rgba(0,0,0,.08) 4px);
 }
 
-/* ━━━ ヘッダー ━━━ */
-.header{
-  width:100%;max-width:420px;
-  padding:18px 20px 10px;
-  display:flex;flex-direction:column;align-items:center;
+/* ===== ログイン画面 ===== */
+#loginScreen{
   position:relative;z-index:10;
+  width:100%;max-width:380px;
+  padding:24px 20px;
+  display:flex;flex-direction:column;align-items:center;gap:0;
 }
-.title-en{
-  font-family:'Russo One',sans-serif;
-  font-size:11px;letter-spacing:.3em;
-  color:rgba(0,200,255,.5);margin-bottom:4px;
-}
-.title-jp{
-  font-family:'Noto Sans JP',sans-serif;
-  font-size:28px;font-weight:900;
+.logo-en{font-family:'Russo One',sans-serif;font-size:11px;letter-spacing:.3em;color:rgba(0,200,255,.5);margin-bottom:4px}
+.logo-jp{
+  font-family:'Noto Sans JP',sans-serif;font-size:28px;font-weight:900;
   background:linear-gradient(135deg,#fff 0%,#88ddff 40%,#ffcc44 70%,#ff8844 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  letter-spacing:.06em;line-height:1;
-  filter:drop-shadow(0 0 20px rgba(0,200,255,.3));
-  animation:titleShimmer 4s linear infinite;
-  background-size:200%;
+  letter-spacing:.06em;line-height:1;margin-bottom:4px;
 }
-@keyframes titleShimmer{0%{background-position:0%}100%{background-position:200%}}
-.title-sub{
-  font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.2em;margin-top:4px;
-}
+.logo-sub{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.2em;margin-bottom:24px}
 
-/* ━━━ メダル表示バー ━━━ */
+.login-box{
+  width:100%;
+  background:linear-gradient(135deg,rgba(0,20,40,.9),rgba(0,10,25,.95));
+  border:1px solid rgba(0,200,255,.2);border-radius:14px;
+  padding:22px 20px;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+}
+.login-title{
+  font-family:'Russo One',sans-serif;font-size:14px;
+  color:#88ddff;letter-spacing:.08em;text-align:center;margin-bottom:18px;
+}
+.name-field{
+  width:100%;background:rgba(0,0,0,.4);
+  border:1px solid rgba(255,255,255,.1);border-radius:8px;
+  padding:10px 12px;font-family:'Barlow Condensed',sans-serif;
+  font-size:17px;font-weight:700;color:#fff;outline:none;margin-bottom:16px;
+  transition:.15s;
+}
+.name-field:focus{border-color:rgba(0,200,255,.4);box-shadow:0 0 12px rgba(0,200,255,.1)}
+.name-field::placeholder{color:rgba(255,255,255,.2)}
+
+/* 4桁PIN表示 */
+.pin-dots{display:flex;justify-content:center;gap:14px;margin-bottom:16px}
+.pin-dot{
+  width:44px;height:44px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.2);
+  background:rgba(0,0,0,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;color:#fff;transition:.15s;
+}
+.pin-dot.filled{border-color:#00ccff;background:rgba(0,200,255,.15);box-shadow:0 0 10px rgba(0,200,255,.3)}
+
+/* テンキー */
+.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.numpad-btn{
+  height:52px;border:none;border-radius:10px;cursor:pointer;
+  background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.05));
+  color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;
+  border:1px solid rgba(255,255,255,.1);transition:.1s;
+  display:flex;align-items:center;justify-content:center;
+}
+.numpad-btn:active{transform:scale(.94);background:rgba(255,255,255,.15)}
+.numpad-btn.del{font-size:16px;color:rgba(255,255,255,.5)}
+.numpad-btn.ok{
+  background:linear-gradient(135deg,#0088cc,#0055aa);
+  color:#fff;font-family:'Russo One',sans-serif;font-size:17px;
+  border-color:rgba(0,180,255,.3);
+  box-shadow:0 3px 0 #003366;
+}
+.numpad-btn.ok:active{transform:translateY(2px);box-shadow:0 1px 0 #003366}
+.numpad-btn.ok:disabled{background:linear-gradient(180deg,#446,#334);cursor:not-allowed;box-shadow:none}
+
+.login-msg{text-align:center;font-size:12px;font-weight:700;letter-spacing:.05em;min-height:20px;margin-top:4px}
+.login-msg.err{color:#ff6666}
+.login-msg.ok{color:#44ff88}
+
+/* ===== ロビー画面 ===== */
+#lobbyScreen{display:none;width:100%;max-width:420px;position:relative;z-index:10}
+
 .medal-bar{
-  width:100%;max-width:420px;
-  padding:8px 16px;
+  width:100%;padding:10px 16px;
   background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(0,0,0,.3));
-  border-top:1px solid rgba(0,200,255,.15);
-  border-bottom:1px solid rgba(0,200,255,.1);
+  border-bottom:1px solid rgba(0,200,255,.12);
   display:flex;align-items:center;justify-content:space-between;
-  position:relative;z-index:10;
 }
 .medal-info{display:flex;align-items:center;gap:8px}
 .medal-icon{font-size:18px}
-.medal-count{
-  font-family:'Press Start 2P',monospace;
-  font-size:13px;color:#ffcc00;
-  text-shadow:0 0 8px rgba(255,200,0,.5);
-}
+.medal-wrap{}
 .medal-lbl{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.1em}
-.user-info{display:flex;align-items:center;gap:8px}
-.user-name{font-size:13px;font-weight:700;color:rgba(255,255,255,.7)}
+.medal-count{font-family:'Press Start 2P',monospace;font-size:13px;color:#ffcc00;text-shadow:0 0 8px rgba(255,200,0,.5)}
+.user-wrap{display:flex;align-items:center;gap:8px}
+.user-name{font-size:14px;font-weight:700;color:rgba(255,255,255,.7)}
 .logout-btn{
   background:none;border:1px solid rgba(255,255,255,.15);border-radius:5px;
   color:rgba(255,255,255,.4);font-size:10px;font-family:'Barlow Condensed',sans-serif;
@@ -83,228 +118,111 @@ body{
 }
 .logout-btn:hover{border-color:rgba(255,100,100,.4);color:rgba(255,120,120,.7)}
 
-/* ━━━ メインコンテンツ ━━━ */
-.main{
-  width:100%;max-width:420px;
-  padding:16px;
-  display:flex;flex-direction:column;gap:12px;
-  position:relative;z-index:10;flex:1;
-}
+.lobby-main{padding:16px}
+.games-lbl{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.3em;text-align:center;padding:4px 0;margin-bottom:10px}
 
-/* ━━━ ログインパネル ━━━ */
-.auth-panel{
-  background:linear-gradient(135deg,rgba(0,20,40,.9),rgba(0,10,25,.95));
-  border:1px solid rgba(0,200,255,.2);
-  border-radius:14px;
-  padding:20px;
-  box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 40px rgba(0,150,200,.05);
-}
-.auth-title{
-  font-family:'Russo One',sans-serif;font-size:16px;
-  color:#88ddff;letter-spacing:.08em;margin-bottom:16px;text-align:center;
-}
-.auth-tabs{
-  display:flex;gap:0;margin-bottom:16px;
-  border:1px solid rgba(0,200,255,.2);border-radius:8px;overflow:hidden;
-}
-.auth-tab{
-  flex:1;padding:8px;background:transparent;border:none;cursor:pointer;
-  font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;
-  color:rgba(255,255,255,.35);letter-spacing:.1em;transition:.15s;
-}
-.auth-tab.active{background:rgba(0,200,255,.15);color:#88ddff}
-.auth-field{
-  width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);
-  border-radius:8px;padding:10px 12px;
-  font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;
-  color:#fff;outline:none;margin-bottom:10px;transition:.15s;
-}
-.auth-field:focus{border-color:rgba(0,200,255,.4);box-shadow:0 0 12px rgba(0,200,255,.1)}
-.auth-field::placeholder{color:rgba(255,255,255,.2)}
-.auth-submit{
-  width:100%;padding:12px;border:none;border-radius:9px;cursor:pointer;
-  font-family:'Russo One',sans-serif;font-size:15px;letter-spacing:.08em;
-  background:linear-gradient(135deg,#0088cc,#0055aa);
-  color:#fff;
-  box-shadow:0 4px 0 #003366,0 0 20px rgba(0,150,200,.2),inset 0 1px 0 rgba(255,255,255,.15);
-  transition:.12s;
-}
-.auth-submit:hover{background:linear-gradient(135deg,#0099dd,#0066bb)}
-.auth-submit:active{transform:translateY(3px);box-shadow:0 1px 0 #003366}
-.auth-divider{
-  text-align:center;font-size:11px;color:rgba(255,255,255,.2);
-  letter-spacing:.1em;margin:10px 0;
-}
-.guest-btn{
-  width:100%;padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:8px;
-  background:transparent;cursor:pointer;
-  font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;
-  color:rgba(255,255,255,.4);letter-spacing:.08em;transition:.15s;
-}
-.guest-btn:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.6)}
-.auth-msg{
-  text-align:center;font-size:12px;font-weight:700;letter-spacing:.05em;
-  min-height:20px;margin-top:8px;
-}
-.auth-msg.err{color:#ff6666}
-.auth-msg.ok{color:#44ff88}
-
-/* ━━━ ゲームカード ━━━ */
-.games-title{
-  font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.3em;
-  text-align:center;padding:4px 0;
-}
 .game-card{
   background:linear-gradient(135deg,rgba(0,20,40,.9),rgba(0,10,25,.95));
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:14px;
-  padding:0;overflow:hidden;cursor:pointer;
-  transition:all .2s;
-  text-decoration:none;display:block;
-  position:relative;
+  border:1px solid rgba(255,255,255,.08);border-radius:14px;
+  overflow:hidden;cursor:pointer;transition:all .2s;
+  text-decoration:none;display:block;margin-bottom:12px;position:relative;
 }
-.game-card:hover{
-  border-color:rgba(0,200,255,.3);
-  transform:translateY(-2px);
-  box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 30px rgba(0,150,200,.1);
-}
+.game-card:hover{border-color:rgba(0,200,255,.3);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
 .game-card:active{transform:translateY(0)}
 .game-banner{
-  width:100%;height:80px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:40px;letter-spacing:4px;
-  position:relative;overflow:hidden;
-}
-.game-banner.slot{
-  background:linear-gradient(135deg,#003355,#001a33,#002244);
-  border-bottom:2px solid #0099bb;
-}
-.game-banner.janken{
-  background:linear-gradient(135deg,#1a0033,#0d001a,#150029);
-  border-bottom:2px solid #8800cc;
-}
-.game-banner.poker{
-  background:linear-gradient(135deg,#001a00,#000d00,#001500);
-  border-bottom:2px solid #00aa44;
+  width:100%;height:80px;display:flex;align-items:center;justify-content:center;
+  font-size:40px;letter-spacing:4px;position:relative;overflow:hidden;
 }
 .game-banner::before{
   content:'';position:absolute;inset:0;
   background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(255,255,255,.015) 20px,rgba(255,255,255,.015) 40px);
 }
-.game-banner-emoji{position:relative;z-index:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
+.game-banner.slot{background:linear-gradient(135deg,#003355,#001a33,#002244);border-bottom:2px solid #0099bb}
+.game-banner.janken{background:linear-gradient(135deg,#1a0033,#0d001a,#150029);border-bottom:2px solid #8800cc}
+.game-banner.poker{background:linear-gradient(135deg,#001a00,#000d00,#001500);border-bottom:2px solid #00aa44}
+.banner-emoji{position:relative;z-index:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
 .game-info{padding:12px 14px}
-.game-name{
-  font-family:'Russo One',sans-serif;font-size:16px;
-  color:#fff;letter-spacing:.04em;margin-bottom:3px;
-}
-.game-name span{
-  font-family:'Noto Sans JP',sans-serif;font-size:11px;
-  color:rgba(255,255,255,.4);font-weight:400;letter-spacing:.04em;
-  display:inline-block;margin-left:8px;
-}
+.game-name{font-family:'Russo One',sans-serif;font-size:16px;color:#fff;letter-spacing:.04em;margin-bottom:3px}
+.game-name span{font-family:'Noto Sans JP',sans-serif;font-size:11px;color:rgba(255,255,255,.4);font-weight:400;letter-spacing:.04em;display:inline-block;margin-left:8px}
 .game-desc{font-size:12px;color:rgba(255,255,255,.35);letter-spacing:.02em}
 .game-badge{
   position:absolute;top:10px;right:10px;
-  padding:3px 8px;border-radius:4px;
-  font-size:10px;font-weight:700;letter-spacing:.05em;
+  padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.05em;
 }
 .badge-new{background:rgba(255,80,80,.8);color:#fff}
 .badge-hot{background:rgba(255,150,0,.8);color:#fff}
 
-/* ━━━ フッター ━━━ */
-.footer{
-  width:100%;max-width:420px;
-  padding:12px 16px;text-align:center;
-  font-size:10px;color:rgba(255,255,255,.15);letter-spacing:.1em;
-  position:relative;z-index:10;
-}
+.footer{width:100%;padding:12px 16px;text-align:center;font-size:10px;color:rgba(255,255,255,.12);letter-spacing:.1em}
 
-/* ━━━ トースト ━━━ */
+/* トースト */
 .toast{
-  position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.15);
-  border-radius:8px;padding:8px 16px;
-  font-size:13px;font-weight:700;color:#fff;letter-spacing:.05em;
-  pointer-events:none;z-index:500;
-  transition:opacity .3s;opacity:0;white-space:nowrap;
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(8px);
+  background:rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.15);border-radius:8px;
+  padding:8px 16px;font-size:13px;font-weight:700;color:#fff;
+  pointer-events:none;z-index:500;opacity:0;transition:all .3s;white-space:nowrap;
 }
-.toast.show{opacity:1}
-
-/* ローディング */
-.loading-overlay{
-  position:fixed;inset:0;background:rgba(5,8,16,.95);z-index:600;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
-}
-.loading-spinner{
-  width:36px;height:36px;border-radius:50%;
-  border:3px solid rgba(0,200,255,.1);
-  border-top-color:rgba(0,200,255,.8);
-  animation:spin .8s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-txt{font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.2em}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
-<div class="bg-stars"></div>
+<div class="bg"></div>
 <div class="scanlines"></div>
 
-<!-- ローディング -->
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="loading-spinner"></div>
-  <div class="loading-txt">LOADING...</div>
-</div>
+<!-- ログイン画面 -->
+<div id="loginScreen">
+  <div class="logo-en">HYAKUSHIKI GAME KINGDOM</div>
+  <div class="logo-jp">百式ゲーム王国</div>
+  <div class="logo-sub">ALL GAMES · ALL MEDALS</div>
 
-<!-- ヘッダー -->
-<div class="header">
-  <div class="title-en">HYAKUSHIKI GAME KINGDOM</div>
-  <div class="title-jp">百式ゲーム王国</div>
-  <div class="title-sub">ALL GAMES・ALL MEDALS</div>
-</div>
-
-<!-- メダルバー（ログイン後） -->
-<div class="medal-bar" id="medalBar" style="display:none">
-  <div class="medal-info">
-    <span class="medal-icon">🪙</span>
-    <div>
-      <div class="medal-lbl">MEDALS</div>
-      <div class="medal-count" id="medalCount">000</div>
+  <div class="login-box">
+    <div class="login-title">🎮 プレイヤー認証</div>
+    <input class="name-field" type="text" id="nameField" placeholder="なまえ（10文字以内）" maxlength="10" autocomplete="off">
+    <div class="pin-dots">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
     </div>
-  </div>
-  <div class="user-info">
-    <span class="user-name" id="dispName">--</span>
-    <button class="logout-btn" onclick="doLogout()">ログアウト</button>
+    <div class="numpad">
+      <button class="numpad-btn" onclick="pinInput('1')">1</button>
+      <button class="numpad-btn" onclick="pinInput('2')">2</button>
+      <button class="numpad-btn" onclick="pinInput('3')">3</button>
+      <button class="numpad-btn" onclick="pinInput('4')">4</button>
+      <button class="numpad-btn" onclick="pinInput('5')">5</button>
+      <button class="numpad-btn" onclick="pinInput('6')">6</button>
+      <button class="numpad-btn" onclick="pinInput('7')">7</button>
+      <button class="numpad-btn" onclick="pinInput('8')">8</button>
+      <button class="numpad-btn" onclick="pinInput('9')">9</button>
+      <button class="numpad-btn del" onclick="pinDel()">←消す</button>
+      <button class="numpad-btn" onclick="pinInput('0')">0</button>
+      <button class="numpad-btn ok" id="okBtn" onclick="doLogin()" disabled>OK✓</button>
+    </div>
+    <div class="login-msg" id="loginMsg"></div>
   </div>
 </div>
 
-<div class="main" id="mainContent">
-
-  <!-- ログインパネル（未ログイン時） -->
-  <div id="authPanel">
-    <div class="auth-panel">
-      <div class="auth-title">🎮 プレイヤー認証</div>
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">ログイン</button>
-        <button class="auth-tab" id="tabRegist" onclick="switchTab('regist')">新規登録</button>
+<!-- ロビー画面 -->
+<div id="lobbyScreen">
+  <div class="medal-bar">
+    <div class="medal-info">
+      <span class="medal-icon">🪙</span>
+      <div class="medal-wrap">
+        <div class="medal-lbl">MEDALS</div>
+        <div class="medal-count" id="medalCount">00000</div>
       </div>
-      <input class="auth-field" type="email" id="emailField" placeholder="メールアドレス" autocomplete="email">
-      <input class="auth-field" type="password" id="passField" placeholder="パスワード" autocomplete="current-password">
-      <input class="auth-field" type="text" id="nameField" placeholder="プレイヤー名（登録時のみ）" style="display:none">
-      <button class="auth-submit" id="authSubmit" onclick="doAuth()">ログイン</button>
-      <div class="auth-divider">— または —</div>
-      <button class="guest-btn" onclick="playAsGuest()">🎲 ゲストでプレイ（200枚からスタート）</button>
-      <div class="auth-msg" id="authMsg"></div>
+    </div>
+    <div class="user-wrap">
+      <span class="user-name" id="dispName">--</span>
+      <button class="logout-btn" onclick="doLogout()">ログアウト</button>
     </div>
   </div>
 
-  <!-- ゲーム一覧（ログイン後） -->
-  <div id="gameList" style="display:none">
-    <div class="games-title">▶ SELECT GAME ◀</div>
+  <div class="lobby-main">
+    <div class="games-lbl">▶ SELECT GAME ◀</div>
 
-    <!-- スロット -->
     <a class="game-card" href="slot.html" onclick="saveAndGo(event,'slot.html')">
       <div class="game-banner slot">
-        <span class="game-banner-emoji">🎰🌴🌺</span>
+        <span class="banner-emoji">🎰🌴🌺</span>
       </div>
       <div class="game-info">
         <div class="game-name">OKI FEVER SLOT <span>沖縄スロット</span></div>
@@ -313,10 +231,9 @@ body{
       <span class="game-badge badge-new">NEW</span>
     </a>
 
-    <!-- じゃんけん -->
     <a class="game-card" href="janken-fever.html" onclick="saveAndGo(event,'janken-fever.html')">
       <div class="game-banner janken">
-        <span class="game-banner-emoji">✊✌️🖐️</span>
+        <span class="banner-emoji">✊✌🖐</span>
       </div>
       <div class="game-info">
         <div class="game-name">グーチョキパー FEVER <span>じゃんけんゲーム</span></div>
@@ -324,10 +241,9 @@ body{
       </div>
     </a>
 
-    <!-- ポーカー -->
     <a class="game-card" href="poker_fever.html" onclick="saveAndGo(event,'poker_fever.html')">
       <div class="game-banner poker">
-        <span class="game-banner-emoji">🃏♠️🃏</span>
+        <span class="banner-emoji">🃏♠🃏</span>
       </div>
       <div class="game-info">
         <div class="game-name">7's WILD PLUS <span>ビデオポーカー</span></div>
@@ -337,224 +253,159 @@ body{
     </a>
   </div>
 
-</div>
-
-<div class="footer" id="footerArea">
-  © 2025 百式ゲーム王国 · メダルはゲーム間で共有されます
+  <div class="footer">© 2025 百式ゲーム王国 · メダルはゲーム間で共通です</div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+'use strict';
 const SB='https://gtzfcoiowdnyjvwikxku.supabase.co';
 const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
 const SH={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
 
+let pin='';
 let user=null;
-let authMode='login';
 
-// ━━━ 初期化 ━━━
-window.addEventListener('DOMContentLoaded', async ()=>{
-  // localStorageからユーザーを復元
-  try{
-    const saved = JSON.parse(localStorage.getItem('hkg_user')||'null');
-    if(saved){
-      user = saved;
-      // Supabaseからメダル最新値を取得
-      if(user.id) await syncMedals();
-      showGameList();
-    }
-  }catch(e){}
-  document.getElementById('loadingOverlay').style.display='none';
-});
+// 起動時: localStorage確認
+try{
+  const saved=JSON.parse(localStorage.getItem('hkg_user')||'null');
+  if(saved&&saved.name&&saved.pin){
+    user=saved;
+    showLobby();
+  }
+}catch(e){}
 
-// ━━━ タブ切替 ━━━
-function switchTab(mode){
-  authMode=mode;
-  document.getElementById('tabLogin').classList.toggle('active', mode==='login');
-  document.getElementById('tabRegist').classList.toggle('active', mode==='regist');
-  document.getElementById('authSubmit').textContent = mode==='login'?'ログイン':'新規登録';
-  document.getElementById('nameField').style.display = mode==='regist'?'block':'none';
-  document.getElementById('authMsg').textContent='';
-  document.getElementById('passField').setAttribute('autocomplete',
-    mode==='login'?'current-password':'new-password');
+// PIN入力
+function pinInput(n){
+  if(pin.length>=4)return;
+  pin+=n;
+  updateDots();
+  if(pin.length===4)document.getElementById('okBtn').disabled=false;
+}
+function pinDel(){
+  pin=pin.slice(0,-1);
+  updateDots();
+  document.getElementById('okBtn').disabled=true;
+}
+function updateDots(){
+  for(let i=0;i<4;i++){
+    const d=document.getElementById('d'+i);
+    if(i<pin.length){d.textContent='●';d.classList.add('filled')}
+    else{d.textContent='';d.classList.remove('filled')}
+  }
 }
 
-// ━━━ 認証 ━━━
-async function doAuth(){
-  const email = document.getElementById('emailField').value.trim();
-  const pass  = document.getElementById('passField').value;
-  const name  = document.getElementById('nameField').value.trim();
-  const msg   = document.getElementById('authMsg');
+async function doLogin(){
+  const name=document.getElementById('nameField').value.trim();
+  if(!name){setMsg('なまえを入力してください','err');return;}
+  if(pin.length<4){setMsg('4桁のPINを入力してください','err');return;}
+  setMsg('認証中...','');
 
-  if(!email||!pass){ setMsg('メールとパスワードを入力してください','err'); return; }
-  if(authMode==='regist'&&!name){ setMsg('プレイヤー名を入力してください','err'); return; }
-
-  setMsg('...','');
-  document.getElementById('authSubmit').disabled=true;
-
+  // Supabaseからname+pinで検索
   try{
-    if(authMode==='login'){
-      await loginUser(email, pass);
+    const res=await fetch(`${SB}/rest/v1/game_users?name=eq.${encodeURIComponent(name)}&pin=eq.${pin}`,{headers:SH});
+    const data=await res.json();
+    if(data&&data.length>0){
+      // 既存ユーザー
+      user={id:data[0].id,name:data[0].name,medals:data[0].medals,pin};
+      setMsg('ログイン成功！','ok');
+      save();
+      setTimeout(showLobby,500);
     }else{
-      await registerUser(email, pass, name);
+      // 新規 or PIN違い → nameだけで検索
+      const res2=await fetch(`${SB}/rest/v1/game_users?name=eq.${encodeURIComponent(name)}`,{headers:SH});
+      const data2=await res2.json();
+      if(data2&&data2.length>0){
+        setMsg('PINが違います','err');
+      }else{
+        // 新規登録
+        await createUser(name,pin);
+      }
     }
   }catch(e){
-    setMsg(e.message||'エラーが発生しました','err');
+    // Supabase失敗 → ローカルのみで動作
+    user={id:null,name,medals:200,pin};
+    save();
+    setTimeout(showLobby,300);
   }
-  document.getElementById('authSubmit').disabled=false;
 }
 
-async function loginUser(email, pass){
-  // Supabase Auth でサインイン
-  const res = await fetch(`${SB}/auth/v1/token?grant_type=password`,{
-    method:'POST', headers:SH,
-    body:JSON.stringify({email, password:pass})
-  });
-  const data = await res.json();
-  if(data.error){ setMsg(data.error_description||data.error,'err'); return; }
-
-  // game_users テーブルからユーザー情報取得
-  const uid = data.user.id;
-  const gRes = await fetch(`${SB}/rest/v1/game_users?id=eq.${uid}`,{headers:SH});
-  const gData = await gRes.json();
-
-  if(gData && gData.length>0){
-    user={id:uid, name:gData[0].name, medals:gData[0].medals};
-  }else{
-    // テーブルにない場合は作成
-    user={id:uid, name:email.split('@')[0], medals:1000};
-    await fetch(`${SB}/rest/v1/game_users`,{
-      method:'POST', headers:{...SH,'Prefer':'return=minimal'},
-      body:JSON.stringify({id:uid, name:user.name, medals:user.medals})
-    });
-  }
-  localStorage.setItem('hkg_user', JSON.stringify(user));
-  setMsg('ログイン成功！','ok');
-  setTimeout(showGameList, 600);
-}
-
-async function registerUser(email, pass, name){
-  // Supabase Auth でサインアップ
-  const res = await fetch(`${SB}/auth/v1/signup`,{
-    method:'POST', headers:SH,
-    body:JSON.stringify({email, password:pass})
-  });
-  const data = await res.json();
-  if(data.error){ setMsg(data.error_description||data.error,'err'); return; }
-
-  const uid = data.user?.id;
-  if(!uid){ setMsg('登録に失敗しました','err'); return; }
-
-  // game_users に追加（初期メダル1000枚）
-  user={id:uid, name, medals:1000};
-  await fetch(`${SB}/rest/v1/game_users`,{
-    method:'POST', headers:{...SH,'Prefer':'return=minimal'},
-    body:JSON.stringify({id:uid, name, medals:1000})
-  });
-  localStorage.setItem('hkg_user', JSON.stringify(user));
-  setMsg('登録完了！','ok');
-  setTimeout(showGameList, 600);
-}
-
-// ━━━ ゲストプレイ ━━━
-function playAsGuest(){
-  user={id:null, name:'GUEST', medals:200};
-  localStorage.setItem('hkg_user', JSON.stringify(user));
-  showGameList();
-}
-
-// ━━━ メダル同期 ━━━
-async function syncMedals(){
-  if(!user||!user.id) return;
+async function createUser(name,pin){
   try{
-    const res = await fetch(`${SB}/rest/v1/game_users?id=eq.${user.id}`,{headers:SH});
-    const data = await res.json();
+    const res=await fetch(`${SB}/rest/v1/game_users`,{
+      method:'POST',
+      headers:{...SH,'Prefer':'return=representation'},
+      body:JSON.stringify({name,pin,medals:200})
+    });
+    const data=await res.json();
     if(data&&data.length>0){
-      user.medals = data[0].medals;
-      user.name   = data[0].name;
-      localStorage.setItem('hkg_user', JSON.stringify(user));
+      user={id:data[0].id,name:data[0].name,medals:data[0].medals,pin};
+    }else{
+      user={id:null,name,medals:200,pin};
     }
-  }catch(e){}
+    setMsg('新規登録完了！','ok');
+    save();
+    setTimeout(showLobby,500);
+  }catch(e){
+    user={id:null,name,medals:200,pin};
+    save();
+    setTimeout(showLobby,300);
+  }
 }
 
-// ━━━ ログアウト ━━━
-async function doLogout(){
-  // Supabase Auth サインアウト
-  if(user&&user.id){
-    try{
-      await fetch(`${SB}/auth/v1/logout`,{method:'POST',headers:SH});
-    }catch(e){}
-  }
+function save(){
+  try{localStorage.setItem('hkg_user',JSON.stringify(user));}catch(e){}
+}
+
+function showLobby(){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('lobbyScreen').style.display='';
+  document.getElementById('dispName').textContent=user.name||'GUEST';
+  document.getElementById('medalCount').textContent=String(user.medals||0).padStart(5,'0');
+}
+
+function doLogout(){
   user=null;
   localStorage.removeItem('hkg_user');
-  document.getElementById('medalBar').style.display='none';
-  document.getElementById('gameList').style.display='none';
-  document.getElementById('authPanel').style.display='';
-  document.getElementById('emailField').value='';
-  document.getElementById('passField').value='';
-  document.getElementById('authMsg').textContent='';
-  toast('ログアウトしました');
+  pin='';
+  updateDots();
+  document.getElementById('nameField').value='';
+  document.getElementById('okBtn').disabled=true;
+  setMsg('','');
+  document.getElementById('lobbyScreen').style.display='none';
+  document.getElementById('loginScreen').style.display='';
 }
 
-// ━━━ ゲーム画面に移動（メダル保存してから） ━━━
-function saveAndGo(e, href){
+function saveAndGo(e,href){
   e.preventDefault();
-  if(!user){playAsGuest();return;}
-  localStorage.setItem('hkg_user', JSON.stringify(user));
-  location.href = href;
+  if(user)save();
+  location.href=href;
 }
 
-// ━━━ ゲーム一覧表示 ━━━
-function showGameList(){
-  document.getElementById('authPanel').style.display='none';
-  document.getElementById('gameList').style.display='';
-  document.getElementById('medalBar').style.display='';
-  document.getElementById('dispName').textContent = user.name||'GUEST';
-  document.getElementById('medalCount').textContent =
-    String(user.medals).padStart(5,'0');
-}
-
-// ━━━ メッセージ ━━━
-function setMsg(msg, type){
-  const el=document.getElementById('authMsg');
-  el.textContent=msg;
-  el.className='auth-msg'+(type?' '+type:'');
-}
-
-// ━━━ トースト ━━━
-let toastTimer;
-function toast(msg){
-  const el=document.getElementById('toast');
-  el.textContent=msg;el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>el.classList.remove('show'),2200);
-}
-
-// ━━━ ゲームから戻ってきた時のメダル更新 ━━━
-// slot.htmlからlocation.href='index.html'で戻ってきた時
-// localStorageはslot.html側で保存済みのはず
-window.addEventListener('pageshow', async (e)=>{
-  const saved = JSON.parse(localStorage.getItem('hkg_user')||'null');
-  if(saved && user){
-    user=saved;
-    document.getElementById('medalCount').textContent =
-      String(user.medals).padStart(5,'0');
-    // Supabaseにも同期
-    if(user.id) await saveMedals();
-  }
+// ページ戻り時にメダル更新
+window.addEventListener('pageshow',()=>{
+  try{
+    const saved=JSON.parse(localStorage.getItem('hkg_user')||'null');
+    if(saved&&user){
+      user=saved;
+      document.getElementById('medalCount').textContent=String(user.medals||0).padStart(5,'0');
+    }
+  }catch(e){}
 });
 
-// ━━━ メダル保存（Supabase） ━━━
-async function saveMedals(){
-  if(!user||!user.id) return;
-  try{
-    await fetch(`${SB}/rest/v1/game_users?id=eq.${user.id}`,{
-      method:'PATCH',
-      headers:{...SH,'Prefer':'return=minimal'},
-      body:JSON.stringify({medals:user.medals})
-    });
-  }catch(e){}
+function setMsg(msg,type){
+  const el=document.getElementById('loginMsg');
+  el.textContent=msg;
+  el.className='login-msg'+(type?' '+type:'');
+}
+
+let _tt;
+function toast(m){
+  clearTimeout(_tt);
+  const t=document.getElementById('toast');
+  t.textContent=m;t.classList.add('show');
+  _tt=setTimeout(()=>t.classList.remove('show'),2200);
 }
 </script>
 </body>
