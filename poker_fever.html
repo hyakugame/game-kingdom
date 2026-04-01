@@ -454,10 +454,6 @@ body{display:block !important}
 <div id="spoker" class="gs">
 <div class="pt"><div class="pt-inner">
   <div class="pt-hdr"><div style="flex:1;font-family:var(--font-en);font-size:11px;color:#00FF41;letter-spacing:.05em;white-space:nowrap">HAND</div><div class="pt-hb">1</div><div class="pt-hb">2</div><div class="pt-hb">3</div><div class="pt-hb">4</div><div class="pt-hb">5</div><div class="pt-hb">6</div><div class="pt-hb">7</div><div class="pt-hb">8</div><div class="pt-hb">9</div><div class="pt-hb" style="color:#FF4444">10</div></div>
-    <div class="pt-hb">1</div><div class="pt-hb">2</div><div class="pt-hb">3</div><div class="pt-hb">4</div><div class="pt-hb">5</div>
-    <div class="pt-hb">6</div><div class="pt-hb">7</div><div class="pt-hb">8</div><div class="pt-hb">9</div>
-    <div class="pt-hb" style="color:#FF4444">10</div>
-  </div>
   <div class="pt-row" id="pt-nrf"><div class="pt-n">NATURAL ROYAL FLUSH ★</div><div class="pt-odds"><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o">800</div><div class="pt-o mx">4000</div></div></div>
   <div class="pt-row" id="pt-fa5"><div class="pt-n">FIVE ACES ★</div><div class="pt-odds"><div class="pt-o">300</div><div class="pt-o">600</div><div class="pt-o">900</div><div class="pt-o">1200</div><div class="pt-o">1500</div><div class="pt-o">1800</div><div class="pt-o">2100</div><div class="pt-o">2400</div><div class="pt-o">2700</div><div class="pt-o mx">3000</div></div></div>
   <div class="pt-row" id="pt-wrf"><div class="pt-n">ROYAL FLUSH W/ WILD</div><div class="pt-odds"><div class="pt-o">100</div><div class="pt-o">200</div><div class="pt-o">300</div><div class="pt-o">400</div><div class="pt-o">500</div><div class="pt-o">600</div><div class="pt-o">700</div><div class="pt-o">800</div><div class="pt-o">900</div><div class="pt-o mx">1000</div></div></div>
@@ -1768,36 +1764,46 @@ function autoH(){
     Object.values(cnt).forEach(a=>{if(a.length>=2)a.forEach(i=>held[i]=true);});
   }
 }
-function showUG(m){ugM=m;duOn=false;duPicked=false;duLc=null;duRc=[];updDuDisplay();setDuMsg('DOUBLE UP にチャレンジ？','info');const de=document.getElementById('duc-dealer');de.className='duc dn';de.innerHTML='';document.getElementById('duc-dealer-lbl').textContent='';for(let i=0;i<4;i++){const e=document.getElementById('duc'+i);e.className='duc dn';e.innerHTML='';e.onclick=null;}setBtns(true);PAY.forEach(p=>{var r=document.getElementById('pt-'+p.id);if(r)r.classList.remove('hi');});bgmPlay('up');show('supgame');}
+function showUG(m){ugM=m;duOn=false;duPicked=false;duLc=null;duRc=[];updDuDisplay();setDuMsg('DOUBLE UP にチャレンジ？','info');const de=document.getElementById('duc-dealer');de.className='duc dn';de.innerHTML='';document.getElementById('duc-dealer-lbl').textContent='';for(let i=0;i<4;i++){const e=document.getElementById('duc'+i);e.className='duc dn';e.innerHTML='';e.onclick=null;}setBtns(true);PAY.forEach(p=>{var r=document.getElementById('pt-'+p.id);if(r)r.classList.remove('hi');});document.getElementById('pk-ca').innerHTML='';bgmPlay('up');show('supgame');}
 let duMode='',duOn=false,duPicked=false,duLc=null,duRc=[];
 function duStr(n){if(n===0)return 16;if(n===2)return 15;if(n===1)return 14;return n;}
 function duLabel(c){if(c&&c.joker)return'JOKER ★最強';if(c&&c.n===2)return'2 ★強';if(c&&c.n===1)return'A';return c?cl(c.n):'?';}
 /* ダブルアップカードHTML — K/Q/J/JOKER対応 */
 function makeDucHTML(c){
   if(!c)return'';
-  if(c.joker)return(
-    '<div style="position:absolute;inset:0;border-radius:7px;overflow:hidden">'+
-    FACE_SVG.JKR+
-    '<div style="position:absolute;top:4px;left:5px;font-family:Georgia,serif;font-size:9px;color:#7700aa;font-weight:900;line-height:1.2;z-index:3">J<br>★</div>'+
-    '<div style="position:absolute;bottom:4px;right:5px;font-family:Georgia,serif;font-size:9px;color:#7700aa;font-weight:900;line-height:1.2;transform:rotate(180deg);z-index:3">J<br>★</div>'+
-    '</div>'
-  );
-  const col=SR[c.s]?'#C00000':'#0D1B8F';
-  // フェイスカード (K/Q/J): SVGアート (ダブルアップ用)
-  if(c.n===13||c.n===12||c.n===11){
-    const rank=cl(c.n);
-    const suit=S[c.s];
-    const key=(rank==='K'?'K':(rank==='Q'?'Q':'J'))+(SR[c.s]?'_r':'_b');
-    const svgArt=FACE_SVG[key]||'';
-    return '<div style="position:absolute;top:4px;left:5px;font-family:Georgia,serif;font-size:13px;font-weight:900;color:'+col+';line-height:1.1;z-index:3">'+rank+'<br><span style="font-size:10px">'+suit+'</span></div>'+
-           '<div style="position:absolute;inset:0;overflow:hidden;border-radius:7px">'+svgArt+'</div>'+
-           '<div style="position:absolute;bottom:4px;right:5px;font-family:Georgia,serif;font-size:13px;font-weight:900;color:'+col+';line-height:1.1;transform:rotate(180deg);z-index:3">'+rank+'<br><span style="font-size:10px">'+suit+'</span></div>';
+  if(c.joker){
+    return '<div style="position:absolute;inset:0;border-radius:8px;overflow:hidden">'+FACE_SVG.JKR+
+      '<div style="position:absolute;top:8px;left:10px;font-family:Georgia,serif;font-size:32px;color:#7700aa;font-weight:900;line-height:1;z-index:3">J<br>&#9733;</div>'+
+      '<div style="position:absolute;bottom:8px;right:10px;font-family:Georgia,serif;font-size:32px;color:#7700aa;font-weight:900;line-height:1;transform:rotate(180deg);z-index:3">J<br>&#9733;</div>'+
+    '</div>';
   }
-  // 数字カード
-  return '<div class="duc-ct" style="color:'+col+'">'+cl(c.n)+'<br>'+S[c.s]+'</div>'+
-         '<div class="duc-cs" style="color:'+col+'">'+S[c.s]+'</div>'+
-         '<div class="duc-cb" style="color:'+col+'">'+cl(c.n)+'</div>';
+  var isRed=SR[c.s],col=isRed?'#CC0000':'#111111',suit=S[c.s],rank=cl(c.n);
+  var cTop='<div style="position:absolute;top:8px;left:10px;font-family:Georgia,serif;font-size:36px;font-weight:900;color:'+col+';line-height:1;text-align:center;z-index:3">'+rank+'<br><span style="font-size:28px">'+suit+'</span></div>';
+  var cBot='<div style="position:absolute;bottom:8px;right:10px;font-family:Georgia,serif;font-size:36px;font-weight:900;color:'+col+';line-height:1;text-align:center;transform:rotate(180deg);z-index:3">'+rank+'<br><span style="font-size:28px">'+suit+'</span></div>';
+  if(c.n>=11){
+    var key=(rank==='K'?'K':rank==='Q'?'Q':'J')+(isRed?'_r':'_b');
+    return cTop+'<div style="position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden;border-radius:8px">'+(FACE_SVG[key]||'')+'</div>'+cBot;
+  }
+  var sz=c.n===1?82:c.n<=4?60:c.n<=6?50:c.n<=8?42:30;
+  function p(x,y,rot){
+    return '<span style="position:absolute;left:'+x+'px;top:'+y+'px;transform:translate(-50%,-50%)'+(rot?'rotate(180deg)':'')+';font-size:'+sz+'px;color:'+col+';line-height:1">'+suit+'</span>';
+  }
+  var L=55,C=110,R=165,L1=93,L2=121,L3=154,L4=187,L5=215;
+  var pips={
+    1:p(C,L3),
+    2:p(C,L1)+p(C,L5,true),
+    3:p(C,L1)+p(C,L3)+p(C,L5,true),
+    4:p(L,L1)+p(R,L1)+p(L,L5,true)+p(R,L5,true),
+    5:p(L,L1)+p(R,L1)+p(C,L3)+p(L,L5,true)+p(R,L5,true),
+    6:p(L,L1)+p(R,L1)+p(L,L3)+p(R,L3)+p(L,L5,true)+p(R,L5,true),
+    7:p(L,L1)+p(R,L1)+p(C,L2)+p(L,L3)+p(R,L3)+p(L,L5,true)+p(R,L5,true),
+    8:p(L,L1)+p(R,L1)+p(C,L2)+p(L,L3)+p(R,L3)+p(C,L4,true)+p(L,L5,true)+p(R,L5,true),
+    9:p(L,90)+p(R,90)+p(L,117)+p(R,117)+p(C,154)+p(L,191,true)+p(R,191,true)+p(L,218,true)+p(R,218,true),
+    10:p(L,88)+p(R,88)+p(C,109)+p(L,130)+p(R,130)+p(L,178,true)+p(R,178,true)+p(C,199,true)+p(L,220,true)+p(R,220,true)
+  };
+  return cTop+(pips[c.n]||p(C,L3))+cBot;
 }
+
 function updDuDisplay(){document.getElementById('du-win-val').textContent=ugM;document.getElementById('du-credits').textContent=user?user.medals:0;document.getElementById('du-wager').textContent=ugM;}
 function setDuMsg(txt,cls){const e=document.getElementById('du-msg');e.textContent=txt;e.className='du-msg-txt '+(cls||'');}
 function setBtns(on){['du-btn-d','du-btn-h','du-btn-c'].forEach(id=>{document.getElementById(id).disabled=!on;});}
