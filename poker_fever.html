@@ -41,10 +41,10 @@ body{display:block !important}
 .cab{width:100vw !important;max-width:100vw !important;border-left:none !important;display:flex !important;flex-direction:column !important;min-height:100vh !important}
 .screen{min-height:calc(100vh - 90px) !important}
 .ca{gap:3px !important;padding:6px 4px 3px !important}
-.card{width:82px !important;height:116px !important;border-radius:6px !important;border-width:2px !important}
-.ct,.cb{font-size:16px !important;top:4px !important;left:5px !important;bottom:4px !important;right:5px !important}
-.cs{font-size:30px !important}
-.cw{gap:5px !important}
+.card{width:96px !important;height:136px !important;border-radius:6px !important;border-width:2px !important}
+.ct,.cb{font-size:19px !important;top:5px !important;left:6px !important;bottom:4px !important;right:5px !important}
+.cs{font-size:36px !important}
+.cw{gap:4px !important}
 .hl-lbl{font-size:11px !important}
 .pt{padding:2px 3px !important;overflow-x:auto !important}
 .pt-hb{width:22px !important;font-size:7px !important}
@@ -1596,8 +1596,8 @@ function makeCardHTML(c){
   if(c.joker){
     return '<div style="position:absolute;inset:0;border-radius:6px;overflow:hidden">'+
       FACE_SVG.JKR+
-      '<div style="position:absolute;top:3px;left:5px;font-family:Georgia,serif;font-size:13px;color:#7700aa;font-weight:900;line-height:1.2;z-index:3">J<br>★</div>'+
-      '<div style="position:absolute;bottom:3px;right:5px;font-family:Georgia,serif;font-size:13px;color:#7700aa;font-weight:900;line-height:1.2;transform:rotate(180deg);z-index:3">J<br>★</div>'+
+      '<div style="position:absolute;top:3px;left:5px;font-family:Georgia,serif;font-size:15px;color:#7700aa;font-weight:900;line-height:1.2;z-index:3">J<br>★</div>'+
+      '<div style="position:absolute;bottom:3px;right:5px;font-family:Georgia,serif;font-size:15px;color:#7700aa;font-weight:900;line-height:1.2;transform:rotate(180deg);z-index:3">J<br>★</div>'+
     '</div>';
   }
   const isRed=SR[c.s];
@@ -1619,7 +1619,7 @@ function makeCardHTML(c){
          '<div class="cb" style="color:'+col+'">'+cl(c.n)+'</div>';
 }
 function renderFD(){const a=document.getElementById('pk-ca');a.innerHTML='';for(let i=0;i<5;i++){const w=document.createElement('div');w.className='cw';const c=document.createElement('div');c.className='card dn';const l=document.createElement('div');l.className='hl-lbl hid';l.textContent='HOLD';w.appendChild(c);w.appendChild(l);a.appendChild(w);}}
-function renderC(){const a=document.getElementById('pk-ca');a.innerHTML='';hand.forEach((c,i)=>{const w=document.createElement('div');w.className='cw';const cd=document.createElement('div');let cls='card up';if(c.joker)cls+=' joker-card';else{cls+=' '+(SR[c.s]?'r':'b');if(c.n>=11||c.n===13)cls+=' face-card';}if(held[i])cls+=' hd';cd.className=cls;if(phase==='draw')cd.onclick=()=>{if(isWild(c))return;wake();held[i]?seUnhold():seHold();held[i]=!held[i];renderC();};cd.innerHTML=makeCardHTML(c);const l=document.createElement('div');l.className='hl-lbl'+(held[i]?'':' hid');l.textContent=isWild(c)?'WILD★':'HOLD';if(isWild(c))l.style.color='#FFD700';w.appendChild(cd);w.appendChild(l);a.appendChild(w);});}
+function renderC(){const a=document.getElementById('pk-ca');a.innerHTML='';hand.forEach((c,i)=>{const w=document.createElement('div');w.className='cw';const cd=document.createElement('div');let cls='card up';if(c.joker)cls+=' joker-card';else{cls+=' '+(SR[c.s]?'r':'b');if(c.n>=11||c.n===13)cls+=' face-card';}if(held[i])cls+=' hd';cd.className=cls;if(phase==='draw')cd.onclick=()=>{wake();held[i]?seUnhold():seHold();held[i]=!held[i];renderC();};cd.innerHTML=makeCardHTML(c);const l=document.createElement('div');l.className='hl-lbl'+(held[i]?'':' hid');l.textContent=isWild(c)?'WILD★':'HOLD';if(isWild(c))l.style.color='#FFD700';w.appendChild(cd);w.appendChild(l);a.appendChild(w);});}
 function dealDraw(){if(phase==='deal')doDeal();else if(phase==='draw')doDraw();}
 function doDeal(){if(!user||user.medals<bet){document.getElementById('pk-rd').innerHTML='<div class="rz">メダルが足りません！</div>';return;}wake();user.medals-=bet;win=0;updH();updLM();deck=mkD();hand=deck.splice(0,5);held=Array(5).fill(false);seDeal();phase='draw';renderC();document.getElementById('dbn').textContent='DRAW';setBB(false);const r=chkR(hand);document.getElementById('pk-rd').innerHTML='';setStatus(r?r.n:'HOLD CARDS, THEN DRAW','info');autoH();renderC();}
 function doDraw(){
@@ -2667,8 +2667,8 @@ function makeCardHTML(c){
   if(c.joker){
     return '<div style="position:absolute;inset:0;border-radius:6px;overflow:hidden">'+
       FACE_SVG.JKR+
-      '<div style="position:absolute;top:3px;left:5px;font-family:Georgia,serif;font-size:13px;color:#7700aa;font-weight:900;line-height:1.2;z-index:3">J<br>★</div>'+
-      '<div style="position:absolute;bottom:3px;right:5px;font-family:Georgia,serif;font-size:13px;color:#7700aa;font-weight:900;line-height:1.2;transform:rotate(180deg);z-index:3">J<br>★</div>'+
+      '<div style="position:absolute;top:3px;left:5px;font-family:Georgia,serif;font-size:15px;color:#7700aa;font-weight:900;line-height:1.2;z-index:3">J<br>★</div>'+
+      '<div style="position:absolute;bottom:3px;right:5px;font-family:Georgia,serif;font-size:15px;color:#7700aa;font-weight:900;line-height:1.2;transform:rotate(180deg);z-index:3">J<br>★</div>'+
     '</div>';
   }
   const isRed=SR[c.s];
