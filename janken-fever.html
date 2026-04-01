@@ -2,378 +2,326 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>グーチョキパー FEVER!!</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Barlow+Condensed:wght@400;600;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --red:#CC0000;--red2:#E53935;--red3:#FF5252;
-  --gold:#FFD700;--gold2:#FFA500;
-  --dark:#111;--dark2:#1a1a1a;--dark3:#252525;
-  --green:#00AA44;--green2:#00CC55;
-  --white:#fff;--gray:#888;--light:#F0F0F0;
-  --font-en:'Barlow Condensed','Oswald',sans-serif;
-  --font-jp:'Noto Sans JP',sans-serif;
-}
-*,::before,::after{margin:0;padding:0;box-sizing:border-box}
-body{background:#111;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;font-family:var(--font-jp);overflow-y:auto;overflow-x:hidden;padding:8px 0 24px;color:var(--white)}
-.cab{width:min(460px,99vw);background:var(--dark);border:2px solid #333;box-shadow:0 0 40px rgba(0,0,0,.8);display:flex;flex-direction:column;border-radius:4px}
-.mq-wrap{background:#0a0a0a;padding:4px 0;overflow:hidden;flex-shrink:0;border-bottom:1px solid #333}
-.mq{display:flex;width:max-content;animation:mqA 16s linear infinite}
+:root{--green:#00FF41;--gold:#FFD700;--red:#FF4444;--blue:#4488FF;--dark:#0a1a0a;--dark2:#0f2010;--card:rgba(0,0,0,.5);--border:rgba(0,200,60,.3)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans JP',sans-serif;height:100dvh;overflow:hidden;display:flex;justify-content:center}
+.cab{display:flex;flex-direction:column;width:100%;max-width:480px;height:100dvh;background:linear-gradient(180deg,#0a1a0a,#0f2010)}
+/* マーキー */
+.mq-wrap{background:#c00;padding:4px 0;overflow:hidden;flex-shrink:0}
+.mq{display:flex;width:max-content;animation:mqA 22s linear infinite}
 @keyframes mqA{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.mq span{font-family:var(--font-en);font-size:11px;font-weight:700;color:var(--gold);padding:0 24px;letter-spacing:.1em;opacity:.8}
-.tp{background:linear-gradient(180deg,#1a1a1a,#111);padding:12px 16px 10px;text-align:center;border-bottom:3px solid var(--red);flex-shrink:0}
-.led-row{display:flex;justify-content:center;gap:5px;margin-bottom:7px}
-.led{width:8px;height:8px;border-radius:50%;animation:lp 1.2s ease-in-out infinite}
-.l0{background:var(--red2)}.l1{background:var(--gold);animation-delay:.15s}.l2{background:#fff;animation-delay:.3s}.l3{background:#43A047;animation-delay:.45s}.l4{background:#1976D2;animation-delay:.6s}.l5{background:var(--red3);animation-delay:.75s}
-@keyframes lp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.2;transform:scale(.5)}}
-.cab-t{font-family:var(--font-jp);font-weight:900;font-size:clamp(20px,4.5vw,28px);color:var(--white);line-height:1.2}
-.cab-t span{color:var(--gold)}
-.cab-s{font-family:var(--font-en);font-size:11px;color:#888;letter-spacing:.2em;margin-top:2px}
-.screen{background:var(--dark);flex:1;display:flex;flex-direction:column;position:relative;overflow:hidden;min-height:500px}
-.fl{position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.04);animation:scA 7s linear infinite;pointer-events:none;z-index:201}
-@keyframes scA{0%{top:-2px;opacity:0}5%{opacity:.6}95%{opacity:.6}100%{top:110%;opacity:0}}
-.gs{display:none;flex-direction:column;flex:1;position:relative;z-index:1}
+.mq span{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:#fff;letter-spacing:.05em;padding:0 30px;white-space:nowrap}
+/* ゲームタイトルヘッダー */
+.cab-header{background:linear-gradient(180deg,#111,#1a2a1a);border-bottom:2px solid #00cc44;padding:6px 16px;text-align:center;flex-shrink:0}
+.cab-header-title{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:var(--gold)}
+/* LED */
+.led-row{display:flex;justify-content:center;gap:4px;padding:4px 0;flex-shrink:0}
+.led{width:8px;height:8px;border-radius:50%;background:#222}
+.led.on{background:var(--gold);box-shadow:0 0 6px var(--gold)}
+/* スクリーン */
+.gs{display:none;flex:1;flex-direction:column;overflow-y:auto;overflow-x:hidden}
 .gs.active{display:flex}
-
-/* ATTRACT */
-#sa{align-items:center;justify-content:flex-start;padding:0;background:var(--dark)}
-.att-logo{font-family:var(--font-jp);font-weight:900;font-size:clamp(28px,7vw,48px);text-align:center;padding:20px 16px 8px;color:var(--white);line-height:1.2;letter-spacing:-.02em}
-.att-logo span,.att-logo br+*{color:var(--gold)}
-.parade{display:flex;justify-content:center;gap:12px;font-size:32px;margin:4px 0 12px;opacity:.8}
-.att-boxes{display:flex;gap:10px;padding:0 16px;margin-bottom:10px;width:100%}
-.att-box{flex:1;background:var(--dark2);border:2px solid #444;border-radius:6px;padding:8px;text-align:center}
-.att-box.blu{border-color:var(--gold)}
-.att-box-lbl{font-family:var(--font-en);font-size:10px;font-weight:900;color:#888;letter-spacing:.15em}
-.att-box-val{font-family:var(--font-en);font-size:30px;font-weight:900;color:var(--gold);line-height:1}
-.att-cr{font-family:var(--font-en);font-size:15px;font-weight:700;color:var(--green2);letter-spacing:.1em;margin-bottom:4px;text-shadow:0 0 8px rgba(0,255,68,.4)}
-.att-ins{font-family:var(--font-en);font-size:12px;font-weight:700;color:var(--red2);letter-spacing:.12em;animation:blink .9s step-end infinite;margin-bottom:10px}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.att-btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:0 12px 14px;width:100%}
-.abtn{background:linear-gradient(180deg,#333,#222);border:2px solid #555;border-radius:6px;color:var(--light);font-family:var(--font-jp);font-size:13px;font-weight:700;padding:10px 18px;cursor:pointer;transition:all .15s;letter-spacing:.05em}
-.abtn:hover{border-color:var(--red);background:var(--red);color:var(--white)}
-
-/* GAME / JANKEN */
-#sb{align-items:stretch;background:linear-gradient(180deg,#0b1a0b,#0a0e0a)}
-.rov{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:100;pointer-events:none;opacity:0;transition:opacity .2s}
-.rov.show{opacity:1}
-.rov-bg{position:absolute;inset:-30px;border-radius:50%;filter:blur(30px);opacity:.5}
-.rov-main{font-family:var(--font-en);font-size:clamp(36px,10vw,64px);font-weight:900;text-align:center;letter-spacing:.05em;text-shadow:0 0 20px rgba(255,255,255,.6)}
-.rov-main.win{color:var(--gold);text-shadow:0 0 20px rgba(255,215,0,.8)}
-.rov-main.lose{color:var(--red3);text-shadow:0 0 20px rgba(255,80,80,.8)}
-.rov-main.draw{color:#aaa}
-.rov-sub{font-family:var(--font-jp);font-size:18px;text-align:center;margin-top:4px;color:var(--white)}
-.hud{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:linear-gradient(180deg,#000,#001200);border-bottom:2px solid #003300;flex-shrink:0;gap:6px}
-.hud-m,.hud-t{display:flex;flex-direction:column;align-items:center}
-.hud-ml,.hud-tl{font-family:var(--font-en);font-size:10px;font-weight:900;letter-spacing:.2em;color:#00FF41;text-shadow:0 0 4px rgba(0,255,65,.5)}
-.hud-mv{font-family:var(--font-en);font-size:32px;font-weight:900;color:var(--gold);line-height:1;text-shadow:0 0 8px rgba(255,215,0,.5)}
-.hud-c{font-family:var(--font-jp);font-size:12px;color:#888;text-align:center}
-.hud-tv{font-family:var(--font-en);font-size:36px;font-weight:900;color:var(--gold);line-height:1}
-.hud-tv.warn{color:var(--gold2);animation:blink .7s step-end infinite}
-.hud-tv.danger{color:var(--red3);text-shadow:0 0 10px rgba(255,80,80,.8);animation:blink .4s step-end infinite}
-.arena{flex:1;display:flex;align-items:center;justify-content:space-around;padding:14px 8px}
-.fbox{display:flex;flex-direction:column;align-items:center;gap:8px}
-.flbl{font-family:var(--font-en);font-size:12px;font-weight:900;letter-spacing:.2em;color:#00FF41}
-.p-hand{font-size:clamp(56px,14vw,80px);filter:drop-shadow(0 4px 12px rgba(0,0,0,.8));transition:all .2s;line-height:1}
-.p-hand.atk{transform:translateX(20px) scale(1.1)}
-.p-hand.win-g{filter:drop-shadow(0 0 18px rgba(255,215,0,.9))}
-.p-hand.lose-g{filter:drop-shadow(0 0 12px rgba(255,50,50,.8));opacity:.7}
-.hpbar{width:64px;height:8px;background:#333;border-radius:4px;overflow:hidden}
-.hpf{height:100%;border-radius:4px;transition:width .3s;background:linear-gradient(90deg,var(--green),var(--green2))}
-.hpf.med{background:linear-gradient(90deg,var(--gold2),var(--gold))}
-.hpf.low{background:linear-gradient(90deg,var(--red),var(--red2))}
-.vs{font-family:var(--font-en);font-size:22px;font-weight:900;color:#444}
-.sign{width:clamp(80px,20vw,110px);height:clamp(80px,20vw,110px);background:var(--dark2);border:3px solid #444;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(44px,12vw,68px);transition:all .2s;box-shadow:0 4px 16px rgba(0,0,0,.6)}
-.sign.win-d{border-color:var(--gold);box-shadow:0 0 20px rgba(255,215,0,.6)}
-.sign.lose-d{border-color:var(--red);opacity:.7}
-.vbox{font-family:var(--font-jp);font-size:16px;font-weight:700;text-align:center;padding:8px 12px;min-height:36px}
-.vbox.fever{color:var(--gold);font-size:18px;text-shadow:0 0 10px rgba(255,215,0,.8)}
-.vbox.call{color:#666}
-.vbox.win{color:var(--gold)}
-.vbox.lose{color:var(--red3)}
-.vbox.draw{color:#888}
-.btns{display:flex;gap:8px;justify-content:center;padding:6px 10px 10px;flex-shrink:0;background:linear-gradient(180deg,#001200,#000)}
-.hbtn{flex:1;background:linear-gradient(180deg,#222,#1a1a1a);border:2px solid #555;border-radius:8px;color:var(--white);font-size:clamp(28px,7vw,42px);padding:10px;cursor:pointer;transition:all .12s;box-shadow:0 3px 0 #000}
-.hbtn:hover:not(:disabled){border-color:var(--gold);background:linear-gradient(180deg,#2a2000,#1a1500);box-shadow:0 0 12px rgba(255,215,0,.3)}
-.hbtn:active:not(:disabled){transform:translateY(3px);box-shadow:0 0 0}
-.hbtn:disabled{opacity:.25;cursor:not-allowed}
-
-/* ROULETTE */
-#sr{align-items:stretch;background:linear-gradient(180deg,#0a0e1a,#111)}
-.rl-hdr{font-family:var(--font-en);font-size:22px;font-weight:900;text-align:center;color:var(--gold);letter-spacing:.2em;padding:12px 16px 6px;text-shadow:0 0 12px rgba(255,215,0,.5);flex-shrink:0}
-.rl-lbl{font-family:var(--font-jp);font-size:13px;color:#666;text-align:center;padding-bottom:8px;flex-shrink:0}
-.rl-svg-wrap{display:flex;align-items:center;justify-content:center;flex:1;padding:8px}
-.rl-btn-area{display:flex;align-items:center;justify-content:center;padding:8px 16px 14px;flex-shrink:0;background:linear-gradient(180deg,#000,#001200)}
-#stop-btn{background:linear-gradient(180deg,#CC0000,#880000);color:#fff;border:none;border-radius:8px;font-family:var(--font-en);font-size:22px;font-weight:900;padding:14px 40px;cursor:pointer;box-shadow:0 5px 0 #440000;transition:all .1s;letter-spacing:.1em}
-#stop-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #440000}
-#stop-btn:disabled{opacity:.3;cursor:not-allowed}
-.rl-num{font-family:var(--font-en);font-size:clamp(48px,12vw,72px);font-weight:900;color:var(--gold);text-align:center;text-shadow:0 0 20px rgba(255,215,0,.8);padding:4px;line-height:1}
-
-/* HI-LO */
-#shl{align-items:stretch;background:linear-gradient(180deg,#000800,#001500)}
-.hl-hdr{font-family:var(--font-en);font-size:20px;font-weight:900;text-align:center;color:var(--gold);letter-spacing:.2em;padding:12px 16px 6px;flex-shrink:0;text-shadow:0 0 10px rgba(255,215,0,.5)}
-.hl-info{display:flex;gap:10px;padding:6px 12px;align-items:stretch;flex-shrink:0}
-.hl-box{flex:1;background:var(--dark2);border:2px solid #333;border-radius:6px;padding:8px;text-align:center}
-.hl-box-lbl{font-family:var(--font-en);font-size:10px;font-weight:900;color:#555;letter-spacing:.15em}
-.hl-box-val{font-family:var(--font-en);font-size:26px;font-weight:900;color:var(--gold);line-height:1.1}
-.hl-stage{flex:1;display:flex;align-items:center;justify-content:center;gap:16px;padding:8px 16px}
-.hl-card{width:clamp(80px,20vw,110px);aspect-ratio:.68;background:linear-gradient(135deg,#fffef8,#fff9e6);border:3px solid #888;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;box-shadow:0 6px 18px rgba(0,0,0,.7)}
-.hl-card.r{color:#C00000}
-.hl-card.b{color:#0D1B8F}
-.hl-card.dn{background:radial-gradient(ellipse at 50% 50%,#1a3a7a,#0a1848);border-color:#4488ff}
-.hl-card-rank{font-family:Georgia,serif;font-size:clamp(32px,8vw,48px);font-weight:900;line-height:1}
-.hl-card-suit{font-size:clamp(36px,9vw,54px);line-height:1}
-.hl-arrow{font-size:32px;color:#444}
-#prev-card{width:clamp(60px,15vw,80px)}
-.hl-btns{display:flex;gap:10px;padding:8px 12px 14px;justify-content:center;flex-shrink:0;background:linear-gradient(180deg,#000,#001200)}
-.hl-btn{flex:1;max-width:140px;border:none;border-radius:8px;font-family:var(--font-en);font-size:18px;font-weight:900;padding:14px;cursor:pointer;transition:all .1s;letter-spacing:.05em}
-#btn-hi{background:linear-gradient(180deg,#CC0000,#880000);color:#fff;box-shadow:0 5px 0 #440000}
-#btn-lo{background:linear-gradient(180deg,#1565C0,#0D47A1);color:#fff;box-shadow:0 5px 0 #00205A}
-.hl-btn:active{transform:translateY(4px)}
-.hl-btn:disabled{opacity:.3;cursor:not-allowed}
-#hl-res{font-family:var(--font-en);font-size:clamp(20px,5vw,28px);font-weight:900;text-align:center;padding:6px;min-height:40px;flex-shrink:0;letter-spacing:.08em}
-#hl-res.win{color:var(--gold);text-shadow:0 0 16px rgba(255,215,0,.8)}
-#hl-res.lose{color:var(--red3);text-shadow:0 0 12px rgba(255,80,80,.8)}
-.hl-med{font-family:var(--font-en);font-size:14px;font-weight:700;color:#555;text-align:center;padding:2px;flex-shrink:0}
-.hl-quit,.hl-nxt{background:var(--dark2);border:2px solid #555;color:var(--gold);font-family:var(--font-en);font-size:13px;font-weight:700;padding:8px 16px;border-radius:6px;cursor:pointer;transition:all .15s}
-.hl-quit:hover,.hl-nxt:hover{border-color:var(--gold);background:rgba(255,215,0,.1)}
-.hl-qnbtn-row{display:flex;gap:8px;justify-content:center;padding:0 12px 8px;flex-shrink:0}
-
-/* RESULT */
-#sgr{align-items:center;justify-content:center;background:var(--dark);gap:12px;padding:20px}
-.stars{font-size:32px;letter-spacing:4px}
-.gr-t{font-family:var(--font-jp);font-weight:900;font-size:clamp(22px,6vw,32px);color:var(--gold);text-shadow:0 0 20px rgba(255,215,0,.8)}
-.gr-stat{font-family:var(--font-jp);font-size:15px;color:#888;text-align:center;line-height:1.8}
-.gr-stat b{color:var(--gold);font-size:22px}
-.gr-nr{font-family:var(--font-en);font-size:13px;font-weight:700;color:var(--red3);letter-spacing:.15em;display:none;text-align:center}
-.name-row{display:flex;flex-direction:column;gap:6px;align-items:center;width:100%;max-width:280px}
-.name-inp{background:var(--dark2);border:2px solid #555;border-radius:6px;color:var(--white);font-family:var(--font-jp);font-size:18px;font-weight:700;padding:10px 14px;width:100%;outline:none;text-align:center}
-.name-inp:focus{border-color:var(--gold)}
-.submit-btn{background:linear-gradient(180deg,var(--green),#007732);color:#fff;border:none;border-radius:6px;font-family:var(--font-jp);font-size:14px;font-weight:700;padding:11px 28px;cursor:pointer;box-shadow:0 4px 0 #003d1a;transition:all .1s;letter-spacing:.05em}
-.submit-btn:active{transform:translateY(3px)}
-.skip-btn{background:transparent;border:2px solid #444;color:#666;font-family:var(--font-jp);font-size:12px;padding:8px 16px;border-radius:6px;cursor:pointer;transition:all .1s}
-.skip-btn:hover{border-color:#666;color:#aaa}
-#name-score-disp{font-family:var(--font-jp);font-size:13px;color:#555;text-align:center}
-
-/* CONTROL PANEL */
-#ctrl-panel{background:#000;border-top:2px solid #333;padding:8px 12px 10px;display:flex;gap:6px;justify-content:center;flex-shrink:0}
-.ctrl-btn{border:2px solid #555;border-radius:6px;font-family:var(--font-en);font-weight:900;font-size:13px;padding:10px 20px;cursor:pointer;background:linear-gradient(180deg,#333,#222);color:#aaa;box-shadow:0 3px 0 #000;transition:all .1s;letter-spacing:.05em}
-.ctrl-btn:active{transform:translateY(3px)}
-.btn-lobby{background:linear-gradient(180deg,#333,#222);border-color:#556;color:#aac}
-.btn-lobby:hover{border-color:var(--gold);color:var(--gold)}
-.btn-coin{background:linear-gradient(180deg,#006600,#004400);border-color:#00aa00;color:#00FF41;box-shadow:0 3px 0 #002200}
-.btn-coin:hover{background:linear-gradient(180deg,#007700,#005500)}
-.btn-start{background:linear-gradient(180deg,#FFE000,#FFB300);border-color:#FFD700;color:#000;box-shadow:0 4px 0 #886000}
-.btn-start:hover:not(:disabled){filter:brightness(1.1)}
-.btn-start:disabled{opacity:.25;cursor:not-allowed}
-
-/* RANKING */
-#srank{align-items:stretch;overflow-y:auto;background:var(--dark)}
-.rank-hdr{font-family:var(--font-en);font-weight:900;font-size:20px;text-align:center;color:var(--gold);letter-spacing:.2em;padding:14px 16px 6px;text-shadow:0 0 10px rgba(255,215,0,.4);flex-shrink:0;border-bottom:2px solid var(--red)}
-.rank-status{font-size:11px;text-align:center;padding:4px;flex-shrink:0}
-.rank-list{padding:8px 12px;flex:1}
-.rank-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid #333;font-family:var(--font-jp)}
-.rank-item.gold{border-left:3px solid var(--gold);background:rgba(255,215,0,.05)}
-.rank-item.silver{border-left:3px solid #aaa;background:rgba(200,200,200,.05)}
-.rank-item.bronze{border-left:3px solid #cd7f32;background:rgba(205,127,50,.05)}
-.rank-pos{font-family:var(--font-en);font-size:18px;width:28px;flex-shrink:0;text-align:center}
-.rank-name{flex:1;font-weight:700;font-size:14px}
-.rank-score{font-family:var(--font-en);font-weight:900;font-size:16px;color:var(--gold)}
-.rank-loading,.rank-empty{text-align:center;padding:20px;color:#555;font-family:var(--font-jp);font-size:14px}
-.rank-back-btn,.rank-setup-btn{background:var(--dark2);border:2px solid #444;border-radius:6px;color:#888;font-family:var(--font-jp);font-size:12px;font-weight:700;padding:8px 16px;cursor:pointer;transition:all .15s}
-.rank-back-btn:hover,.rank-setup-btn:hover{border-color:var(--red);color:var(--red)}
-
-/* PATLAMP */
-.patlamp{width:18px;height:18px;border-radius:50%;background:#333;margin:4px auto;transition:all .1s}
-.patlamp.on{background:var(--red2);box-shadow:0 0 12px var(--red),0 0 24px rgba(255,50,50,.5);animation:pl .18s ease}
-@keyframes pl{0%{transform:scale(.8)}100%{transform:scale(1)}}
-
-/* MOBILE */
-@media(max-width:480px){
-  .p-hand{font-size:52px}
-  .sign{width:80px;height:80px;font-size:44px}
-  .hbtn{font-size:28px;padding:8px}
-  .att-box-val{font-size:24px}
-  .rl-num{font-size:48px}
-}
-.abtn.line-btn:hover{background:linear-gradient(160deg,#11dd66,#06b844)}
+/* 共通コンポーネント */
+.screen-pad{padding:12px;display:flex;flex-direction:column;gap:10px;flex:1}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px}
+.panel-title{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:8px}
+.lbl{font-size:11px;color:#888;letter-spacing:.08em;text-transform:uppercase}
+.val{font-family:'Oswald',sans-serif;font-size:32px;font-weight:700;color:var(--green)}
+.val-gold{color:var(--gold)}
+/* ボタン */
+.btn{border:none;border-radius:10px;cursor:pointer;font-family:'Oswald',sans-serif;font-weight:700;letter-spacing:.05em;transition:.1s;width:100%;padding:14px}
+.btn:active{transform:scale(.97)}
+.btn-gold{background:linear-gradient(180deg,#FFD700,#e5a800);color:#000;font-size:20px}
+.btn-green{background:linear-gradient(180deg,#00cc44,#009933);color:#fff;font-size:18px}
+.btn-red{background:linear-gradient(180deg,#ff3333,#cc0000);color:#fff;font-size:20px;box-shadow:0 4px 20px rgba(255,0,0,.4)}
+.btn-blue{background:linear-gradient(180deg,#4488ff,#0055cc);color:#fff;font-size:20px;box-shadow:0 4px 20px rgba(0,100,255,.3)}
+.btn-gray{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#aaa;font-size:15px}
+.btn:disabled{background:#2a2a2a;color:#555;box-shadow:none;cursor:not-allowed}
+.btn-sm{padding:10px;font-size:14px}
+/* ===== #sa ロビー ===== */
+#sa .lobby-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px;padding:16px}
+.jk-emoji{font-size:56px;text-align:center;line-height:1}
+.jk-title{font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;color:var(--gold);text-align:center;text-shadow:0 0 20px rgba(255,215,0,.4);line-height:1.1}
+.lobby-medals{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 32px;text-align:center;width:100%}
+.lobby-med-lbl{font-size:12px;color:#888;letter-spacing:.1em}
+.lobby-med-val{font-family:'Oswald',sans-serif;font-size:52px;font-weight:700;color:var(--green);line-height:1}
+.scores-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.score-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center}
+.score-lbl{font-size:11px;color:#888;letter-spacing:.08em}
+.score-val{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:var(--gold)}
+/* ===== #sb じゃんけん ===== */
+#sb{position:relative}
+.rov{position:absolute;inset:0;background:rgba(0,0,0,.9);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:10;padding:20px;gap:12px}
+.rov-bg{position:absolute;inset:0;background:radial-gradient(circle,rgba(255,215,0,.15) 0%,transparent 70%)}
+.rov-main{font-family:'Oswald',sans-serif;font-size:64px;font-weight:900;color:var(--gold);text-shadow:0 0 30px rgba(255,215,0,.8);text-align:center;position:relative;z-index:1;animation:rov-pulse 0.6s ease-in-out infinite alternate}
+@keyframes rov-pulse{from{transform:scale(1)}to{transform:scale(1.05)}}
+.rov-sub{font-family:'Oswald',sans-serif;font-size:22px;color:var(--green);text-align:center;position:relative;z-index:1}
+.sb-hud{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(0,0,0,.4);border-bottom:1px solid var(--border);flex-shrink:0}
+.hud-block{text-align:center}
+.hud-lbl{font-size:10px;color:#888;letter-spacing:.1em}
+.hud-val{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--green)}
+.hud-time{color:var(--red)}
+.arena{display:flex;flex-direction:column;flex:1;padding:8px 12px;gap:6px}
+.fighter{display:flex;align-items:center;gap:10px}
+.fighter-lbl{font-size:11px;color:#888;letter-spacing:.1em;width:32px;flex-shrink:0}
+.fighter-hand{font-size:56px;line-height:1;flex:0 0 auto}
+.fighter-hp-wrap{flex:1}
+.hp-bar{height:8px;background:#1a2a1a;border-radius:4px;overflow:hidden;border:1px solid rgba(0,200,60,.2)}
+.hp-fill{height:100%;background:linear-gradient(90deg,#00cc44,#00FF41);border-radius:4px;transition:.3s}
+.vs-row{display:flex;align-items:center;justify-content:center;gap:10px}
+.vs-text{font-family:'Oswald',sans-serif;font-size:18px;color:#444;font-weight:700}
+.sign-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 16px;text-align:center;flex:1}
+.vbox{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--gold);text-align:center;padding:6px 0;min-height:36px}
+.jk-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:8px 12px 12px}
+.jk-btn{background:var(--card);border:2px solid var(--border);border-radius:12px;padding:10px 4px;cursor:pointer;text-align:center;transition:.12s;font-size:40px;line-height:1}
+.jk-btn:active{transform:scale(.93);background:rgba(0,200,60,.15);border-color:var(--green)}
+.jk-btn-lbl{font-family:'Oswald',sans-serif;font-size:15px;font-weight:700;color:var(--green);margin-top:4px}
+.rlbl{font-size:13px;color:#666;text-align:center;padding:4px 0;flex-shrink:0}
+/* ===== #sr ルーレット ===== */
+#sr{align-items:center}
+.rl-hdr{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--gold);text-align:center;padding:12px 16px;text-shadow:0 0 20px rgba(255,215,0,.5);flex-shrink:0}
+.rl-wrap{position:relative;display:flex;align-items:center;justify-content:center;flex:1;width:100%}
+.rl-ring-outer{position:absolute;width:290px;height:290px;border-radius:50%;border:6px solid var(--gold);box-shadow:0 0 20px rgba(255,215,0,.4);pointer-events:none}
+.rl-ring-mask{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) translateY(-145px);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:20px solid var(--red);filter:drop-shadow(0 0 6px rgba(255,0,0,.8))}
+.rl-svg-wrap{display:flex;align-items:center;justify-content:center;width:280px;height:280px}
+.rl-svg{width:280px;height:280px}
+.rl-ctr{position:absolute;width:70px;height:70px;background:#111;border-radius:50%;border:3px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,0,0,.8)}
+.rl-cn{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--gold);line-height:1}
+.rl-cl{font-size:11px;color:#888}
+.rl-lbl{font-size:13px;color:#888;text-align:center;padding:8px 16px;flex-shrink:0}
+.stop-btn{background:linear-gradient(180deg,#ff3333,#cc0000);color:#fff;border:none;padding:16px;font-size:24px;font-weight:900;font-family:'Oswald',sans-serif;border-radius:10px;cursor:pointer;width:calc(100% - 24px);margin:0 12px 12px;letter-spacing:.1em;box-shadow:0 4px 20px rgba(255,0,0,.4);flex-shrink:0}
+.stop-btn:disabled{background:#2a2a2a;color:#555;box-shadow:none;cursor:not-allowed}
+/* ===== #shl ハイ&ロー ===== */
+#shl .screen-pad{justify-content:space-between}
+.hl-hdr{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--gold);text-align:center;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:10px}
+.hl-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hl-stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center}
+.hl-stat-lbl{font-size:11px;color:#888;letter-spacing:.08em}
+.hl-stat-val{font-family:'Oswald',sans-serif;font-size:30px;font-weight:700;color:var(--gold)}
+.card-area{display:flex;justify-content:center;align-items:center;gap:16px;padding:4px 0}
+.card-slot{background:#fff;border-radius:10px;width:80px;height:112px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,.6);position:relative}
+.card-slot.mystery{border:2px solid var(--gold);box-shadow:0 0 15px rgba(255,215,0,.3);opacity:.5}
+.card-num{font-family:'Oswald',sans-serif;font-size:24px;font-weight:900}
+.card-suit{font-size:36px;line-height:1}
+.card-arrow{font-size:28px;color:#444}
+.hl-result{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;text-align:center;min-height:36px;color:var(--gold)}
+.hl-q{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;text-align:center;color:#aaa;padding:4px 0}
+.hl-btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hl-quit{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);color:#888;padding:10px;font-size:13px;border-radius:8px;cursor:pointer;width:100%;font-family:'Barlow Condensed',sans-serif}
+/* ===== #sgr 結果 ===== */
+#sgr .inner{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px;padding:20px}
+.gr-stars{font-size:52px;text-align:center}
+.gr-title{font-family:'Oswald',sans-serif;font-size:38px;font-weight:700;color:var(--gold);text-align:center}
+.gr-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;width:100%}
+.gr-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.gr-row:last-child{border:none;padding-top:10px}
+.gr-row-lbl{color:#888;font-size:15px}
+.gr-row-val{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--green)}
+.gr-row-val.total{color:var(--gold);font-size:26px}
+.nr-badge{background:rgba(255,215,0,.15);border:1px solid var(--gold);border-radius:8px;padding:10px;text-align:center;color:var(--gold);font-weight:700;font-size:18px;width:100%}
+.gr-btns{display:flex;flex-direction:column;gap:8px;width:100%}
+/* ===== #sname 名前 ===== */
+#sname .inner{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px;padding:20px}
+.name-trophy{font-size:52px;text-align:center}
+.name-title{font-family:'Oswald',sans-serif;font-size:26px;font-weight:700;color:var(--gold);text-align:center}
+.name-score{font-family:'Oswald',sans-serif;font-size:52px;font-weight:700;color:var(--green);text-align:center}
+.name-input{background:#111;border:2px solid var(--border);color:#fff;padding:14px;font-size:20px;border-radius:8px;width:100%;text-align:center;outline:none;font-family:'Noto Sans JP',sans-serif}
+.name-input:focus{border-color:var(--gold)}
+/* ===== #srank ランキング ===== */
+#srank .screen-pad{}
+.rank-hdr{font-family:'Oswald',sans-serif;font-size:22px;color:var(--gold);text-align:center;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:10px}
+.rank-status{font-size:12px;color:#666;text-align:center;padding:6px}
+.rank-list{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;flex:1}
+.rank-item{display:flex;align-items:center;gap:8px;padding:7px 4px;border-bottom:1px solid rgba(255,255,255,.05);font-size:14px}
+.rank-item:last-child{border:none}
+.rank-pos{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:var(--gold);width:28px}
+.rank-name{flex:1;color:#ccc}
+.rank-score{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:var(--green)}
+.rank-btns{display:flex;gap:8px}
+/* ===== #ssetup セットアップ ===== */
+#ssetup .screen-pad{overflow-y:auto}
+.setup-panel{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.setup-hdr{font-size:16px;font-weight:700;color:var(--gold);text-align:center}
+.setup-inp-lbl{font-size:12px;color:#888;margin-bottom:4px}
+.setup-inp{background:#111;border:1px solid var(--border);color:#fff;padding:10px;border-radius:6px;width:100%;font-size:13px;outline:none}
+.setup-inp:focus{border-color:var(--gold)}
+.setup-status{font-size:12px;color:#888;text-align:center}
+/* ctrl-panel */
+#ctrl-panel{display:flex;gap:8px;padding:10px 12px;background:#0d1a0d;border-top:1px solid var(--border);flex-shrink:0}
+#ctrl-panel.hidden{display:none}
+.ctrl-btn{flex:1;padding:12px 6px;font-size:13px;font-weight:700;font-family:'Oswald',sans-serif;border:none;border-radius:8px;cursor:pointer;letter-spacing:.03em;transition:.1s}
+.ctrl-btn:active{transform:scale(.96)}
+.btn-lobby{background:rgba(255,255,255,.08);color:#aaa;border:1px solid rgba(255,255,255,.15)}
+.btn-coin{background:linear-gradient(180deg,#00cc44,#009933);color:#fff}
+.btn-start{background:linear-gradient(180deg,var(--gold),#e5a800);color:#000}
+.btn-start:disabled{background:#2a2a2a;color:#555;cursor:not-allowed}
+/* 共通 */
+.hidden{display:none!important}
+.patlamp{display:none}
+@keyframes winAnim{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 </style>
 </head>
 <body>
 <div class="cab">
   <div class="mq-wrap"><div class="mq">
-    <span>★ グーチョキパー FEVER!! ★ じゃんけんで勝ってルーレット！ ★ ハイ＆ローで倍々ゲーム！ ★ グーチョキパー FEVER!! ★ じゃんけんで勝ってルーレット！ ★ ハイ＆ローで倍々ゲーム！ ★ </span>
-    <span>★ グーチョキパー FEVER!! ★ じゃんけんで勝ってルーレット！ ★ ハイ＆ローで倍々ゲーム！ ★ グーチョキパー FEVER!! ★ じゃんけんで勝ってルーレット！ ★ ハイ＆ローで倍々ゲーム！ ★ </span>
+    <span>★ グーチョキパー FEVER!! ★ じゃんけんで勝ってルーレット！ ★ ハイ＆ローで倍々ゲーム！ ★</span>
+    <span>★ グーチョキパー FEVER!! ★ じゃんけんで勝ってルーレット！ ★ ハイ＆ローで倍々ゲーム！ ★</span>
   </div></div>
-  <div class="tp">
-    <div class="led-row"><div class="led l0"></div><div class="led l1"></div><div class="led l2"></div><div class="led l3"></div><div class="led l4"></div><div class="led l5"></div><div class="led l4"></div><div class="led l3"></div><div class="led l2"></div><div class="led l1"></div><div class="led l0"></div></div>
-    <div class="cab-t">✊✌️🖐️ GU-CHOKI-PA<br>FEVER !!</div>
-    <div class="cab-s">じゃんけん → ルーレット → ハイ＆ロー</div>
+  <div class="led-row" id="patlamp"><div class="led l0"></div><div class="led l1"></div><div class="led l2"></div><div class="led l3"></div><div class="led l4"></div><div class="led l5"></div><div class="led l6"></div><div class="led l7"></div><div class="led l8"></div><div class="led l9"></div><div class="led la"></div><div class="led lb"></div></div>
+
+  <!-- ロビー -->
+  <div id="sa" class="gs active">
+    <div class="lobby-inner">
+      <div class="jk-emoji">✊✌️🖐️</div>
+      <div class="jk-title">GU-CHOKI-PA<br>FEVER !!</div>
+      <div class="lobby-medals">
+        <div class="lobby-med-lbl">MEDALS</div>
+        <div class="lobby-med-val" id="lobby-med">0</div>
+      </div>
+      <div class="scores-row">
+        <div class="score-box"><div class="score-lbl">HI-SCORE</div><div class="score-val" id="hi-v">0</div></div>
+        <div class="score-box"><div class="score-lbl">TOTAL</div><div class="score-val" id="tot-v">0</div></div>
+      </div>
+    </div>
   </div>
-  <div class="screen">
-    <div class="fl"></div>
-    <div class="patlamp" id="patlamp"></div>
 
-    <!-- ATTRACT -->
-    <div id="sa" class="gs active">
-      <div class="att-logo">✊✌️🖐️<br>GU-CHOKI-PA<br>FEVER !!</div>
-      <div class="parade"><span>✊</span><span>✌️</span><span>🖐️</span></div>
-      <div class="att-boxes">
-        <div class="att-box"><div class="att-box-lbl">HI-SCORE</div><div class="att-box-val" id="hi-v">0</div></div>
-        <div class="att-box blu"><div class="att-box-lbl">TOTAL</div><div class="att-box-val" id="tot-v">0</div></div>
-      </div>
-      <div class="att-cr">CREDIT : <span id="cr-v">0</span></div>
-      <div class="att-ins">▶▶ コインをいれてください ◀◀</div>
-      <div class="att-btns">
-        <button class="abtn" onclick="showRanking()" style="font-size:14px;padding:11px 20px">🏆 ランキング</button>
-        <button class="abtn line-btn" onclick="shareToLINE()" style="font-size:14px;padding:11px 20px">📲 LINEで共有</button>
-      </div>
+  <!-- じゃんけん -->
+  <div id="sb" class="gs">
+    <div class="rov" id="rov"><div class="rov-bg"></div><div class="rov-main" id="rov-main">WIN!</div><div class="rov-sub" id="rov-sub"></div></div>
+    <div class="sb-hud">
+      <div class="hud-block"><div class="hud-lbl">MEDALS</div><div class="hud-val" id="med-v">0</div></div>
+      <div class="hud-block"><div class="hud-lbl">ROUND</div><div class="hud-val" style="font-size:16px;padding-top:4px">じゃんけん</div></div>
+      <div class="hud-block"><div class="hud-lbl">TIME</div><div class="hud-val hud-time" id="tmr">05</div></div>
     </div>
-
-    <!-- RANKING -->
-    <div id="srank" class="gs">
-      <div class="rank-hdr">🏆 オンラインランキング 🏆</div>
-      <div class="rank-status" id="rank-status">⚙️ Supabase未設定 — ローカルのみ</div>
-      <div class="rank-list" id="rank-list"><div class="rank-loading">読み込み中…</div></div>
-      <div style="display:flex;gap:8px;justify-content:center;padding:4px 0 2px">
-        <button class="rank-back-btn" onclick="show('sa')">← もどる</button>
-        <button class="rank-setup-btn" onclick="show('ssetup')">⚙️ オンライン設定</button>
+    <div class="arena">
+      <div class="fighter">
+        <div class="fighter-lbl">YOU</div>
+        <div class="fighter-hand" id="p-hand">✊</div>
+        <div class="fighter-hp-wrap"><div class="hp-bar"><div class="hp-fill" id="p-hp" style="width:100%"></div></div></div>
       </div>
-    </div>
-
-    <!-- SUPABASE SETUP -->
-    <div id="ssetup" class="gs">
-      <div class="setup-inner">
-        <div class="setup-hdr">🌐 オンラインランキング設定</div>
-
-        <div class="setup-step" style="background:rgba(255,150,0,.12);border-color:rgba(255,150,0,.4)">
-          <div class="setup-step-num" style="color:#ffaa44">⚠️ 重要：公開URLが必要です</div>
-          <p>このゲームをLINEで共有してオンラインランキングを使うには、<strong style="color:#ffdd00">GitHub Pages などでウェブ公開</strong>する必要があります。<br><br>
-          Claude.aiのArtifact画面から直接では外部接続がブロックされます。</p>
+      <div class="vs-row">
+        <div class="sign-box">
+          <div style="font-size:13px;color:#888;margin-bottom:2px">CPU</div>
+          <div class="sign" id="sign"><span style="font-size:44px;line-height:1" id="sh">❓</span><div style="font-size:12px;color:#888;margin-top:2px" id="sl">？？？</div></div>
+          <div class="hp-bar" style="margin-top:6px"><div class="hp-fill" id="e-hp" style="width:100%;background:linear-gradient(90deg,#ff4444,#ff8888)"></div></div>
         </div>
-
-        <div class="setup-step">
-          <div class="setup-step-num">STEP 1 — GitHubアカウントを作る（無料）</div>
-          <p>① <code>github.com</code> でアカウント作成<br>
-          ② 新しいリポジトリを作成（Public・名前は何でもOK）<br>
-          ③ このHTMLファイルを <code>index.html</code> という名前でアップロード</p>
-        </div>
-
-        <div class="setup-step">
-          <div class="setup-step-num">STEP 2 — GitHub Pagesで公開</div>
-          <p>① リポジトリの <code>Settings → Pages</code> を開く<br>
-          ② Source を <code>main branch</code> に設定<br>
-          ③ <code>https://あなたのID.github.io/リポジトリ名/</code> でアクセス可能になる</p>
-        </div>
-
-        <div class="setup-step">
-          <div class="setup-step-num">STEP 3 — SupabaseのURLとkeyをここに入力して保存</div>
-          <p>公開したHTMLを開いた状態でこの画面から設定すると、そのブラウザに保存されます。<br>
-          友達にも同じURLを開いてもらい、同じURLとkeyを入力してもらえば全員で共有できます。</p>
-          <input class="setup-input" id="setup-url" placeholder="https://xxxxxxxx.supabase.co" />
-          <input class="setup-input" id="setup-key" placeholder="eyJhbGciOiJIUzI1NiIsInR..." style="margin-top:8px"/>
-        </div>
-
-        <div class="setup-step" style="background:rgba(68,255,136,.08);border-color:rgba(68,255,136,.3)">
-          <div class="setup-step-num" style="color:#44ff88">💡 いちばん簡単な方法</div>
-          <p>HTMLファイルの <code>SUPABASE_URL</code> と <code>SUPABASE_KEY</code> の部分を<br>
-          テキストエディタで書き換えてからGitHubにアップすれば、<br>
-          誰でも自動的にオンラインランキングに繋がります。</p>
-          <p style="margin-top:6px;color:#44ff88">下のボタンで設定済みHTMLをダウンロードできます：</p>
-        </div>
-
-        <div class="setup-status" id="setup-status"></div>
-        <button class="setup-save" onclick="saveAndDownload()">💾 保存してHTMLをダウンロード</button>
-        <button class="setup-save" style="background:linear-gradient(160deg,#8844ff,#1e3a6e);box-shadow:0 4px 0 #330088;margin-top:4px" onclick="saveSupabaseConfig()">📡 この端末だけに保存</button>
-        <button class="rank-back-btn" style="align-self:center" onclick="showRanking()">← ランキングに戻る</button>
       </div>
-    </div>
-
-    <!-- BATTLE -->
-    <div id="sb" class="gs">
-      <div class="rov" id="rov"><div class="rov-bg"></div><div class="rov-main" id="rov-main">WIN</div><div class="rov-sub" id="rov-sub"></div></div>
-      <div class="hud">
-        <div class="hud-m"><div class="hud-ml">MEDALS</div><div class="hud-mv" id="med-v">0</div></div>
-        <div class="hud-c">勝ったらルーレット！</div>
-        <div class="hud-t"><div class="hud-tl">TIME</div><span class="hud-tv" id="tmr">05</span></div>
-      </div>
-      <div class="arena">
-        <div class="fbox"><div class="flbl">YOU</div><div class="p-hand" id="p-hand">🙂</div><div class="hpbar"><div class="hpf" id="p-hp" style="width:100%"></div></div></div>
-        <div class="vs-b">VS</div>
-        <div class="fbox"><div class="flbl">CPU</div><div class="sign" id="sign"><span class="sh" id="sh">❓</span><div class="sl" id="sl">？？？</div></div><div class="hpbar" style="margin-top:5px"><div class="hpf" id="e-hp" style="width:100%"></div></div></div>
-      </div>
-      <div class="vbox call" id="vbox">じゃーん　けーん</div>
+      <div class="vbox" id="vbox">じゃーん　けーん</div>
       <div class="rlbl">勝ったらルーレット！</div>
-      <div class="hbtns">
-        <button class="hbtn hbtn-r" id="b-r" onclick="pick('rock')"><span class="ic">✊</span><span class="lb">グー</span></button>
-        <button class="hbtn hbtn-s" id="b-s" onclick="pick('scissors')"><span class="ic">✌️</span><span class="lb">チョキ</span></button>
-        <button class="hbtn hbtn-p" id="b-p" onclick="pick('paper')"><span class="ic">🖐️</span><span class="lb">パー</span></button>
-      </div>
     </div>
-
-    <!-- ROULETTE -->
-    <div id="sr" class="gs">
-      <div class="rl-hdr" id="rl-hdr">フィーバー！！</div>
-      <div class="rl-wrap">
-        <div class="rl-ring-outer"></div><div class="rl-ring-mask"></div>
-        <div class="rl-svg-wrap"><svg class="rl-svg" id="rl-svg" viewBox="0 0 280 280"></svg></div>
-        <div class="rl-ctr"><div class="rl-cn" id="rl-num">?</div><div class="rl-cl">枚</div></div>
-      </div>
-      <div class="rl-lbl" id="rl-lbl">ボタンを押してストップ！</div>
-      <button class="stop-btn" id="stop-btn" onclick="stopRl()" disabled>STOP！</button>
+    <div class="jk-btns">
+      <button class="jk-btn" id="b-r" onclick="pick('rock')">✊<div class="jk-btn-lbl">グー</div></button>
+      <button class="jk-btn" id="b-s" onclick="pick('scissors')">✌️<div class="jk-btn-lbl">チョキ</div></button>
+      <button class="jk-btn" id="b-p" onclick="pick('paper')">🖐️<div class="jk-btn-lbl">パー</div></button>
     </div>
+  </div>
 
-    <!-- HIGH & LOW -->
-    <div id="shl" class="gs">
+  <!-- ルーレット -->
+  <div id="sr" class="gs">
+    <div class="rl-hdr" id="rl-hdr">フィーバー！！</div>
+    <div class="rl-wrap">
+      <div class="rl-ring-outer"></div>
+      <div class="rl-ring-mask"></div>
+      <div class="rl-svg-wrap"><svg class="rl-svg" id="rl-svg" viewBox="0 0 280 280"></svg></div>
+      <div class="rl-ctr"><div class="rl-cn" id="rl-num">?</div><div class="rl-cl">枚</div></div>
+    </div>
+    <div class="rl-lbl" id="rl-lbl">ボタンを押してストップ！</div>
+    <button class="stop-btn" id="stop-btn" onclick="stopRl()" disabled>STOP！</button>
+  </div>
+
+  <!-- ハイ&ロー -->
+  <div id="shl" class="gs">
+    <div class="screen-pad">
       <div class="hl-hdr">🃏 ハイ＆ロー 🃏</div>
-      <div class="hl-info">
-        <div class="hl-box"><div class="hl-box-lbl">現在</div><div class="hl-box-val" style="font-size:24px;color:#ffdd00;text-shadow:0 0 8px rgba(255,220,0,.6)" id="hl-med">0枚</div></div>
-        <div class="hl-box"><div class="hl-box-lbl">当たれば</div><div class="hl-box-val" style="font-size:24px;color:#44ff88;text-shadow:0 0 8px rgba(68,255,136,.6)" id="hl-nxt">0枚</div></div>
+      <div class="hl-stats">
+        <div class="hl-stat"><div class="hl-stat-lbl">現在</div><div class="hl-stat-val" id="hl-med">0枚</div></div>
+        <div class="hl-stat" style="border-color:rgba(255,215,0,.4)"><div class="hl-stat-lbl">当たれば</div><div class="hl-stat-val" style="color:var(--green)" id="hl-nxt">0枚</div></div>
       </div>
-      <div class="cards-row">
-        <div class="card up" id="prev-card"><div class="c-num" id="prev-num">?</div><div class="c-suit" id="prev-suit"></div></div>
-        <div style="font-size:24px;color:rgba(200,160,255,.5)">→</div>
-        <div class="card dn" id="next-card"><div class="c-num" id="next-num"></div><div class="c-suit" id="next-suit"></div></div>
+      <div class="card-area">
+        <div class="card-slot" id="prev-card"><div class="card-num" id="prev-num">?</div><div class="card-suit" id="prev-suit">?</div></div>
+        <div class="card-arrow">→</div>
+        <div class="card-slot mystery" id="next-card"><div class="card-num" id="next-num">?</div><div class="card-suit" id="next-suit">?</div></div>
       </div>
-      <div class="hl-res" id="hl-res">HIGH か LOW か？</div>
-      <div class="hl-btns">
-        <button class="hl-btn btn-hi" id="btn-hi" onclick="hlGuess('hi')"><span class="bic">⬆️</span><span class="blt">HIGH</span><span class="bls">次が高い</span></button>
-        <button class="hl-btn btn-lo" id="btn-lo" onclick="hlGuess('lo')"><span class="bic">⬇️</span><span class="blt">LOW</span><span class="bls">次が低い</span></button>
+      <div class="hl-result" id="hl-res"></div>
+      <div class="hl-q">HIGH か LOW か？</div>
+      <div class="hl-btn-row">
+        <button class="btn btn-red" id="btn-hi" onclick="pickHL('hi')">⬆ HIGH<br><span style="font-size:13px;font-weight:400">次が高い</span></button>
+        <button class="btn btn-blue" id="btn-lo" onclick="pickHL('lo')">⬇ LOW<br><span style="font-size:13px;font-weight:400">次が低い</span></button>
       </div>
-      <button class="hl-quit" id="hl-quit" onclick="hlQuit()">💰 やめてメダルをもらう (0枚)</button>
+      <button class="hl-quit" id="hl-quit" onclick="quitHL()">💰 やめてメダルをもらう</button>
     </div>
+  </div>
 
-    <!-- NAME ENTRY -->
-    <div id="sname" class="gs">
-      <div class="stars">🏆</div>
-      <div class="name-hdr">ハイスコア！<br>名前を登録しよう</div>
+  <!-- 結果 -->
+  <div id="sgr" class="gs">
+    <div class="inner">
+      <div class="gr-stars">⭐⭐⭐</div>
+      <div class="gr-title" id="gr-t">メダルゲット！</div>
+      <div class="gr-panel">
+        <div class="gr-row"><span class="gr-row-lbl">今回</span><span class="gr-row-val"><b id="gr-got">0</b>枚</span></div>
+        <div class="gr-row"><span class="gr-row-lbl">トータル</span><span class="gr-row-val total"><b id="gr-tot">0</b>枚</span></div>
+      </div>
+      <div class="nr-badge" id="gr-nr" style="display:none">★ NEW RECORD! ★</div>
+      <div class="gr-btns">
+        <button class="btn btn-gold" onclick="show('sa')">🔄 もう一度プレイ</button>
+        <button class="btn btn-gray btn-sm" onclick="show('srank')">🏆 ランキングを見る</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 名前入力 -->
+  <div id="sname" class="gs">
+    <div class="inner">
+      <div class="name-trophy">🏆</div>
+      <div class="name-title">ハイスコア！<br>名前を登録しよう</div>
       <div class="name-score" id="name-score-disp">0枚</div>
       <input class="name-input" id="name-input" type="text" maxlength="10" placeholder="なまえをいれてね"/>
-      <button class="name-submit" onclick="submitScore()">登録する！</button>
-      <button class="name-skip" onclick="showResult()">スキップ</button>
+      <button class="btn btn-gold" onclick="submitName()">✅ 登録する</button>
+      <button class="btn btn-gray btn-sm" onclick="show('sgr')">スキップ</button>
     </div>
+  </div>
 
-    <!-- RESULT -->
-    <div id="sgr" class="gs">
-      <div class="stars">⭐⭐⭐</div>
-      <div class="gr-t" id="gr-t">メダルゲット！</div>
-      <div class="gr-stat">今回：<b id="gr-got">0</b>枚<br>トータル：<b id="gr-tot">0</b>枚</div>
-      <div class="nr" id="gr-nr" style="display:none">★ NEW RECORD! ★</div>
-      <div class="btn-row">
-        <button class="abtn" onclick="startGame()">もう一度！</button>
-        <button class="abtn" onclick="goAttract()">タイトルへ</button><button class="abtn" onclick="location.href='poker_fever.html'" style="background:linear-gradient(160deg,#FFD700,#FF8C00);box-shadow:0 5px 0 #8B4500;color:#0a0e1a;font-weight:bold">🏰 王国へ</button>
-        <button class="abtn" onclick="showRanking()">ランキング</button>
-        <button class="abtn line-btn" onclick="shareToLINE()">📲 LINE</button>
+  <!-- ランキング -->
+  <div id="srank" class="gs">
+    <div class="screen-pad">
+      <div class="rank-hdr">🏆 オンラインランキング</div>
+      <div class="rank-status" id="rank-status">読み込み中…</div>
+      <div class="rank-list" id="rank-list"></div>
+      <div class="rank-btns">
+        <button class="btn btn-gray btn-sm" style="flex:1" onclick="loadRank()">🔄 更新</button>
+        <button class="btn btn-gray btn-sm" style="flex:1" onclick="show('sgr')">← 戻る</button>
+        <button class="btn btn-gray btn-sm" style="flex:1" onclick="show('ssetup')">⚙️</button>
       </div>
     </div>
   </div>
 
-  <div class="ctrl" id="ctrl-panel">
-    <button class="ctrl-btn btn-lobby" onclick="openPoker()">🏰 ポーカーへ</button>     <button class="ctrl-btn btn-coin" onclick="insertCoin()">🪙 コイン投入</button>
+  <!-- セットアップ -->
+  <div id="ssetup" class="gs">
+    <div class="screen-pad">
+      <div class="rank-hdr" style="font-size:18px">🌐 ランキング設定</div>
+      <div class="setup-panel">
+        <div><div class="setup-inp-lbl">Supabase URL</div><input class="setup-inp" id="setup-url" type="text" placeholder="https://xxx.supabase.co"/></div>
+        <div><div class="setup-inp-lbl">Anon Key</div><input class="setup-inp" id="setup-key" type="text" placeholder="eyJ..."/></div>
+        <div class="setup-status" id="setup-status"></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-green btn-sm" style="flex:1" onclick="saveSetup()">💾 保存</button>
+          <button class="btn btn-gray btn-sm" style="flex:1" onclick="show('srank')">← 戻る</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ctrl-panel (ロビーのみ) -->
+  <div id="ctrl-panel" style="display:flex;gap:8px;padding:10px 12px;background:#0d1a0d;border-top:1px solid var(--border);flex-shrink:0">
+    <button class="ctrl-btn btn-lobby" onclick="openPoker()">🏰 ポーカーへ</button>
+    <button class="ctrl-btn btn-coin" onclick="insertCoin()">🪙 コイン投入</button>
     <button class="ctrl-btn btn-start" id="start-btn" onclick="startGame()" disabled>▶ スタート</button>
   </div>
 </div>
-
 <script>
 'use strict';
 
@@ -663,8 +611,13 @@ let pendingScore=0;
 function show(id){
   document.querySelectorAll('.gs').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if(id==='sa') document.getElementById('ctrl-panel').classList.remove('hidden');
-  else           document.getElementById('ctrl-panel').classList.add('hidden');
+  if(id==='sa'){
+    document.getElementById('ctrl-panel').classList.remove('hidden');
+    var lm=document.getElementById('lobby-med');
+    if(lm){var u=JSON.parse(localStorage.getItem('hkg_user')||'null');lm.textContent=(u?u.medals:credits)||0;}
+  } else {
+    document.getElementById('ctrl-panel').classList.add('hidden');
+  }
   if(id==='ssetup') initSetupScreen();
 }
 function setV(txt,cls){const el=document.getElementById('vbox');el.textContent=txt;el.className='vbox '+(cls||'');}
