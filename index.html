@@ -9,44 +9,60 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
 
-/* ログイン */
+/* ===== ログイン ===== */
 #login{width:100%;max-width:380px;padding:24px 20px;display:flex;flex-direction:column;align-items:center}
-.logo-en{font-family:'Russo One',sans-serif;font-size:11px;letter-spacing:.3em;color:rgba(0,200,255,.5);margin-bottom:4px}
+.logo-en{font-size:11px;letter-spacing:.3em;color:rgba(0,200,255,.5);margin-bottom:4px}
 .logo-jp{font-family:'Noto Sans JP',sans-serif;font-size:28px;font-weight:900;background:linear-gradient(135deg,#fff 0%,#88ddff 40%,#ffcc44 70%,#ff8844 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.06em;line-height:1;margin-bottom:4px}
 .logo-sub{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.2em;margin-bottom:24px}
 .box{width:100%;background:linear-gradient(135deg,rgba(0,20,40,.9),rgba(0,10,25,.95));border:1px solid rgba(0,200,255,.2);border-radius:14px;padding:22px 20px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
-.box-title{font-family:'Russo One',sans-serif;font-size:14px;color:#88ddff;letter-spacing:.08em;text-align:center;margin-bottom:4px}
+.box-title{font-size:14px;color:#88ddff;letter-spacing:.08em;text-align:center;margin-bottom:4px}
 .box-hint{font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-bottom:16px}
-.nf{width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:#fff;outline:none;margin-bottom:16px}
+.nf{width:100%;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;font-size:17px;font-weight:700;color:#fff;outline:none;margin-bottom:16px;font-family:'Barlow Condensed',sans-serif}
 .nf::placeholder{color:rgba(255,255,255,.2)}
 .nf:focus{border-color:rgba(0,200,255,.4)}
 .dots{display:flex;justify-content:center;gap:14px;margin-bottom:16px}
 .dot{width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.2);background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;transition:.15s}
 .dot.on{border-color:#00ccff;background:rgba(0,200,255,.15);box-shadow:0 0 10px rgba(0,200,255,.3)}
 .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.pb{height:52px;border:none;border-radius:10px;cursor:pointer;background:rgba(255,255,255,.07);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;border:1px solid rgba(255,255,255,.1)}
-.pb:active{transform:scale(.94);background:rgba(255,255,255,.15)}
+.pb{height:52px;border:1px solid rgba(255,255,255,.1);border-radius:10px;cursor:pointer;background:rgba(255,255,255,.07);color:#fff;font-size:22px;font-weight:700;font-family:'Barlow Condensed',sans-serif}
+.pb:active{transform:scale(.94)}
 .pb.del{font-size:14px;color:rgba(255,255,255,.5)}
-.pb.ok{background:linear-gradient(135deg,#0088cc,#0055aa);font-family:'Russo One',sans-serif;font-size:16px;box-shadow:0 3px 0 #003366}
+.pb.ok{background:linear-gradient(135deg,#0088cc,#0055aa);font-size:16px;box-shadow:0 3px 0 #003366}
 .pb.ok:active{transform:translateY(2px);box-shadow:0 1px 0 #003366}
 .pb.ok:disabled{background:rgba(40,50,70,.6);color:rgba(255,255,255,.25);box-shadow:none;cursor:not-allowed}
 .lmsg{text-align:center;font-size:12px;font-weight:700;min-height:20px;color:#aaa}
 .lmsg.err{color:#ff6666}.lmsg.ok{color:#44ff88}
-.gbtn{width:100%;padding:10px;margin-top:12px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:transparent;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,.4)}
+.gbtn{width:100%;padding:10px;margin-top:12px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:transparent;cursor:pointer;font-size:13px;font-weight:700;color:rgba(255,255,255,.4);font-family:'Barlow Condensed',sans-serif}
 .gbtn:hover{color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.3)}
 
-/* ロビー */
-#lobby{width:100%;max-width:420px;display:none;flex-direction:column}
-.mbar{padding:10px 16px;background:rgba(0,0,0,.4);border-bottom:1px solid rgba(0,200,255,.12);display:flex;align-items:center;justify-content:space-between}
-.mlbl{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.1em}
-.mcnt{font-family:'Press Start 2P',monospace;font-size:13px;color:#ffcc00}
-.uwrap{display:flex;align-items:center;gap:8px}
-.uname{font-size:14px;font-weight:700;color:rgba(255,255,255,.7)}
-.lout{background:none;border:1px solid rgba(255,255,255,.15);border-radius:5px;color:rgba(255,255,255,.4);font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;padding:3px 8px;cursor:pointer}
-.lbody{padding:16px}
+/* ===== ロビー ===== */
+#lobby{display:none;width:100%;max-width:420px;flex-direction:column}
+
+/* ヘッダー */
+.hdr{padding:12px 16px;background:rgba(0,0,0,.5);border-bottom:1px solid rgba(0,200,255,.12);display:flex;align-items:center;gap:12px}
+.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#0088cc,#005588);border:2px solid rgba(0,200,255,.4);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;flex-shrink:0;text-transform:uppercase}
+.hdr-info{flex:1}
+.hdr-name{font-size:15px;font-weight:700;color:#fff}
+.hdr-medals{font-family:'Press Start 2P',monospace;font-size:12px;color:#ffcc00}
+.lout{background:none;border:1px solid rgba(255,255,255,.15);border-radius:5px;color:rgba(255,255,255,.4);font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;padding:4px 10px;cursor:pointer;flex-shrink:0}
+
+/* デイリーボーナス */
+.bonus-bar{margin:12px 16px 0;background:linear-gradient(135deg,rgba(255,180,0,.12),rgba(255,120,0,.08));border:1px solid rgba(255,180,0,.3);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.2s}
+.bonus-bar:hover{border-color:rgba(255,180,0,.6);background:linear-gradient(135deg,rgba(255,180,0,.2),rgba(255,120,0,.12))}
+.bonus-bar.got{cursor:default;opacity:.5}
+.bonus-icon{font-size:24px;flex-shrink:0}
+.bonus-info{flex:1}
+.bonus-title{font-size:14px;font-weight:700;color:#ffcc44;letter-spacing:.05em}
+.bonus-sub{font-size:11px;color:rgba(255,200,100,.6)}
+.bonus-badge{background:linear-gradient(135deg,#ff8800,#cc5500);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0}
+.bonus-badge.done{background:rgba(255,255,255,.1);color:rgba(255,255,255,.3)}
+
+/* ゲームリスト */
+.lobby-body{padding:12px 16px 16px}
 .glbl{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.3em;text-align:center;margin-bottom:10px}
-.card{display:block;text-decoration:none;background:linear-gradient(135deg,rgba(0,20,40,.9),rgba(0,10,25,.95));border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;margin-bottom:12px;position:relative}
+.card{display:block;text-decoration:none;background:linear-gradient(135deg,rgba(0,20,40,.9),rgba(0,10,25,.95));border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;margin-bottom:12px;position:relative;transition:all .2s}
 .card:hover{border-color:rgba(0,200,255,.3);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.card:active{transform:none}
 .banner{height:80px;display:flex;align-items:center;justify-content:center;font-size:40px;letter-spacing:4px}
 .banner.sl{background:linear-gradient(135deg,#003355,#001a33);border-bottom:2px solid #0099bb}
 .banner.jk{background:linear-gradient(135deg,#1a0033,#0d001a);border-bottom:2px solid #8800cc}
@@ -60,13 +76,14 @@ body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100
 .bhot{background:rgba(255,150,0,.8);color:#fff}
 .foot{padding:12px;text-align:center;font-size:10px;color:rgba(255,255,255,.12)}
 
+/* トースト */
 .toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;color:#fff;pointer-events:none;z-index:999;opacity:0;transition:opacity .3s;white-space:nowrap}
 .toast.show{opacity:1}
 </style>
 </head>
 <body>
 
-<!-- ログイン画面（デフォルトで表示） -->
+<!-- ログイン -->
 <div id="login">
   <div class="logo-en">HYAKUSHIKI GAME KINGDOM</div>
   <div class="logo-jp">百式ゲーム王国</div>
@@ -93,27 +110,37 @@ body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100
       <button class="pb" onclick="pi('9')">9</button>
       <button class="pb del" onclick="pd()">←消す</button>
       <button class="pb" onclick="pi('0')">0</button>
-      <button class="pb ok" id="ok" onclick="login()" disabled>OK✓</button>
+      <button class="pb ok" id="ok" onclick="doLogin()" disabled>OK✓</button>
     </div>
     <div class="lmsg" id="lmsg"></div>
     <button class="gbtn" onclick="guest()">🎲 ゲストでプレイ（200枚からスタート）</button>
   </div>
 </div>
 
-<!-- ロビー画面（最初は非表示） -->
+<!-- ロビー -->
 <div id="lobby">
-  <div class="mbar">
-    <div>
-      <div class="mlbl">🪙 MEDALS</div>
-      <div class="mcnt" id="mc">00000</div>
+  <div class="hdr">
+    <div class="avatar" id="avatar">?</div>
+    <div class="hdr-info">
+      <div class="hdr-name" id="uname">--</div>
+      <div class="hdr-medals" id="mc">00000</div>
     </div>
-    <div class="uwrap">
-      <span class="uname" id="un"></span>
-      <button class="lout" onclick="logout()">ログアウト</button>
-    </div>
+    <button class="lout" onclick="doLogout()">ログアウト</button>
   </div>
-  <div class="lbody">
+
+  <!-- デイリーボーナス -->
+  <div class="bonus-bar" id="bonusBar" onclick="claimBonus()">
+    <div class="bonus-icon">🎁</div>
+    <div class="bonus-info">
+      <div class="bonus-title">デイリーボーナス</div>
+      <div class="bonus-sub" id="bonusSub">タップして50枚もらおう！</div>
+    </div>
+    <div class="bonus-badge" id="bonusBadge">+50枚</div>
+  </div>
+
+  <div class="lobby-body">
     <div class="glbl">▶ SELECT GAME ◀</div>
+
     <a class="card" href="slot.html" onclick="go(event,'slot.html')">
       <div class="banner sl">🎰🌴🌺</div>
       <div class="cinfo">
@@ -122,6 +149,7 @@ body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100
       </div>
       <span class="badge bnew">NEW</span>
     </a>
+
     <a class="card" href="janken-fever.html" onclick="go(event,'janken-fever.html')">
       <div class="banner jk">✊✌🖐</div>
       <div class="cinfo">
@@ -129,6 +157,7 @@ body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100
         <div class="cdesc">じゃんけんバトルメダルゲーム。連勝でボーナスフィーバー！</div>
       </div>
     </a>
+
     <a class="card" href="poker_fever.html" onclick="go(event,'poker_fever.html')">
       <div class="banner pk">🃏♠🃏</div>
       <div class="cinfo">
@@ -144,114 +173,112 @@ body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100
 <div class="toast" id="toast"></div>
 
 <script>
-var pin = '';
-var user = null;
+var pin='', user=null;
 
-// 起動時: 保存済みユーザーがいればロビーへ
-try {
-  var saved = JSON.parse(localStorage.getItem('hkg_user') || 'null');
-  if (saved && saved.name) {
-    user = saved;
-    openLobby();
-  }
-} catch(e) {}
+// 起動時チェック
+try{
+  var saved=JSON.parse(localStorage.getItem('hkg_user')||'null');
+  if(saved&&saved.name){user=saved;openLobby();}
+}catch(e){}
 
-function openLobby() {
-  document.getElementById('login').style.display = 'none';
-  document.getElementById('lobby').style.display = 'flex';
-  document.getElementById('un').textContent = user.name;
-  document.getElementById('mc').textContent = String(user.medals || 0).padStart(5, '0');
+function openLobby(){
+  document.getElementById('login').style.display='none';
+  document.getElementById('lobby').style.display='flex';
+  var n=user.name||'GUEST';
+  document.getElementById('uname').textContent=n;
+  document.getElementById('avatar').textContent=n==='GUEST'?'🎲':n.charAt(0).toUpperCase();
+  document.getElementById('mc').textContent='🪙 '+String(user.medals||0).padStart(5,'0');
+  checkBonus();
+}
+function openLogin(){
+  document.getElementById('login').style.display='flex';
+  document.getElementById('lobby').style.display='none';
 }
 
-function openLogin() {
-  document.getElementById('login').style.display = 'flex';
-  document.getElementById('lobby').style.display = 'none';
-}
+// PIN
+function pi(n){if(pin.length>=4)return;pin+=n;upd();if(pin.length===4)document.getElementById('ok').disabled=false;}
+function pd(){pin=pin.slice(0,-1);upd();document.getElementById('ok').disabled=true;}
+function upd(){for(var i=0;i<4;i++){var d=document.getElementById('d'+i);d.textContent=i<pin.length?'●':'';i<pin.length?d.classList.add('on'):d.classList.remove('on');}}
 
-// PIN入力
-function pi(n) {
-  if (pin.length >= 4) return;
-  pin += n;
-  upd();
-  if (pin.length === 4) document.getElementById('ok').disabled = false;
-}
-function pd() {
-  pin = pin.slice(0, -1);
-  upd();
-  document.getElementById('ok').disabled = true;
-}
-function upd() {
-  for (var i = 0; i < 4; i++) {
-    var d = document.getElementById('d' + i);
-    d.textContent = i < pin.length ? '●' : '';
-    i < pin.length ? d.classList.add('on') : d.classList.remove('on');
+function doLogin(){
+  var name=document.getElementById('nf').value.trim();
+  if(!name){msg('なまえを入力してください','err');return;}
+  if(pin.length<4){msg('4桁のPINを入力してください','err');return;}
+  var db=getDB();
+  if(db[name]){
+    if(db[name].pin===pin){user={name:name,medals:db[name].medals||0};msg('ログイン成功！','ok');save();setTimeout(openLobby,400);}
+    else msg('PINが違います','err');
+  }else{
+    db[name]={pin:pin,medals:200};saveDB(db);
+    user={name:name,medals:200};msg('新規登録しました！','ok');save();setTimeout(openLobby,400);
   }
 }
+function guest(){user={name:'GUEST',medals:200};save();openLobby();}
 
-// ログイン
-function login() {
-  var name = document.getElementById('nf').value.trim();
-  if (!name) { msg('なまえを入力してください', 'err'); return; }
-  if (pin.length < 4) { msg('4桁のPINを入力してください', 'err'); return; }
-
-  var db = getDB();
-  if (db[name]) {
-    if (db[name].pin === pin) {
-      user = { name: name, medals: db[name].medals || 0 };
-      msg('ログイン成功！', 'ok');
-      save();
-      setTimeout(openLobby, 400);
-    } else {
-      msg('PINが違います', 'err');
-    }
-  } else {
-    // 新規登録
-    db[name] = { pin: pin, medals: 200 };
-    saveDB(db);
-    user = { name: name, medals: 200 };
-    msg('新規登録しました！', 'ok');
-    save();
-    setTimeout(openLobby, 400);
-  }
-}
-
-function guest() {
-  user = { name: 'GUEST', medals: 200 };
-  save();
-  openLobby();
-}
-
-function logout() {
-  user = null;
-  localStorage.removeItem('hkg_user');
-  pin = '';
-  upd();
-  document.getElementById('nf').value = '';
-  document.getElementById('ok').disabled = true;
-  msg('', '');
+function doLogout(){
+  user=null;localStorage.removeItem('hkg_user');
+  pin='';upd();document.getElementById('nf').value='';document.getElementById('ok').disabled=true;msg('','');
   openLogin();
 }
 
-function go(e, href) {
-  e.preventDefault();
-  save();
-  location.href = href;
-}
+// ゲームへ
+function go(e,href){e.preventDefault();save();location.href=href;}
 
-window.addEventListener('pageshow', function() {
-  try {
-    var s = JSON.parse(localStorage.getItem('hkg_user') || 'null');
-    if (s && user && s.name === user.name) {
-      user = s;
-      document.getElementById('mc').textContent = String(user.medals || 0).padStart(5, '0');
+// ページ戻り時
+window.addEventListener('pageshow',function(){
+  try{
+    var s=JSON.parse(localStorage.getItem('hkg_user')||'null');
+    if(s&&user&&s.name===user.name){
+      user=s;
+      document.getElementById('mc').textContent='🪙 '+String(user.medals||0).padStart(5,'0');
     }
-  } catch(e) {}
+  }catch(e){}
 });
 
-function getDB() { try { return JSON.parse(localStorage.getItem('hkg_db') || '{}'); } catch(e) { return {}; } }
-function saveDB(db) { try { localStorage.setItem('hkg_db', JSON.stringify(db)); } catch(e) {} }
-function save() { try { localStorage.setItem('hkg_user', JSON.stringify(user)); } catch(e) {} }
-function msg(t, c) { var e = document.getElementById('lmsg'); e.textContent = t; e.className = 'lmsg' + (c ? ' ' + c : ''); }
+// ===== デイリーボーナス =====
+function checkBonus(){
+  var today=new Date().toDateString();
+  var lastBonus=localStorage.getItem('hkg_daily_bonus');
+  var bar=document.getElementById('bonusBar');
+  var badge=document.getElementById('bonusBadge');
+  var sub=document.getElementById('bonusSub');
+  if(lastBonus===today){
+    bar.classList.add('got');
+    badge.classList.add('done');
+    badge.textContent='受取済';
+    sub.textContent='また明日来てね！';
+  }else{
+    bar.classList.remove('got');
+    badge.classList.remove('done');
+    badge.textContent='+50枚';
+    sub.textContent='タップして50枚もらおう！';
+  }
+}
+
+function claimBonus(){
+  var today=new Date().toDateString();
+  var lastBonus=localStorage.getItem('hkg_daily_bonus');
+  if(lastBonus===today){toast('今日はもう受け取り済みです！');return;}
+  user.medals=(user.medals||0)+50;
+  save();
+  localStorage.setItem('hkg_daily_bonus',today);
+  document.getElementById('mc').textContent='🪙 '+String(user.medals).padStart(5,'0');
+  checkBonus();
+  toast('🎁 デイリーボーナス +50枚！');
+}
+
+// ===== DB =====
+function getDB(){try{return JSON.parse(localStorage.getItem('hkg_db')||'{}');}catch(e){return {};}}
+function saveDB(db){try{localStorage.setItem('hkg_db',JSON.stringify(db));}catch(e){}}
+function save(){
+  try{localStorage.setItem('hkg_user',JSON.stringify(user));}catch(e){}
+  if(user&&user.name&&user.name!=='GUEST'){
+    var db=getDB();if(db[user.name])db[user.name].medals=user.medals;saveDB(db);
+  }
+}
+function msg(t,c){var e=document.getElementById('lmsg');e.textContent=t;e.className='lmsg'+(c?' '+c:'');}
+var _tt;
+function toast(m){clearTimeout(_tt);var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');_tt=setTimeout(function(){t.classList.remove('show');},2500);}
 </script>
 </body>
 </html>
