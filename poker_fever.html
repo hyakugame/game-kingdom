@@ -221,6 +221,58 @@ document.addEventListener('DOMContentLoaded',function(){
   b.onclick=function(){try{localStorage.setItem('hkg_user',JSON.stringify(user));}catch(e){}location.href='index.html';};
   document.body.appendChild(b);
 });
+})()</script><script>(function(){
+var u=null;
+try{u=JSON.parse(localStorage.getItem('hkg_user')||'null');}catch(e){}
+if(!u||!u.name){location.href='index.html';return;}
+if(!u.id){u.id='hkg-'+u.name;localStorage.setItem('hkg_user',JSON.stringify(u));}
+window.__hkgUser=u;
+// ローディング画面を作成（sloginを隠す）
+var ov=document.createElement('div');
+ov.id='hkg-ov';
+ov.style.cssText='position:fixed;inset:0;background:#050810;z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;';
+ov.innerHTML='<div style="font-size:36px;">🎰</div><div style="color:#ffcc00;font-family:sans-serif;font-size:16px;">読み込み中...</div>';
+document.addEventListener('DOMContentLoaded',function(){
+  document.body.appendChild(ov);
+  var switched=false;
+  function goPoker(){
+    if(switched)return;
+    var sl=document.getElementById('slobby');
+    var sp=document.getElementById('spoker');
+    var sb=document.getElementById('sidebar');
+    if(!sl||!sp||!sl.classList.contains('active'))return;
+    switched=true;
+    document.querySelectorAll('.gs').forEach(function(e){e.classList.remove('active');});
+    sp.classList.add('active');
+    if(sb)sb.style.display='none';
+    ov.style.display='none';
+    if(!document.getElementById('hkg-back')){
+      var b=document.createElement('button');
+      b.id='hkg-back';
+      b.textContent='\u2190 \u30ed\u30d3\u30fc';
+      b.style.cssText='position:fixed;top:8px;left:8px;z-index:9999;background:rgba(0,0,0,.85);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:7px 16px;font-size:14px;cursor:pointer;';
+      b.onclick=function(){try{localStorage.setItem('hkg_user',JSON.stringify(user));}catch(e){}location.href='index.html';};
+      document.body.appendChild(b);
+    }
+  }
+  var obs=new MutationObserver(function(ms){ms.forEach(function(m){if(m.target.id==='slobby')goPoker();});});
+  document.querySelectorAll('.gs').forEach(function(el){obs.observe(el,{attributes:true,attributeFilter:['class']});});
+  setTimeout(goPoker,800);setTimeout(goPoker,1500);
+  // 名前を入力してOKを自動クリック
+  setTimeout(function(){
+    var nf=document.getElementById('lname')||document.querySelector('input[type=text]');
+    if(nf)nf.value=u.name;
+    var btns=Array.from(document.querySelectorAll('button'));
+    ['1','2','3','4'].forEach(function(n){
+      var b=btns.find(function(x){return x.textContent.trim()===n;});
+      if(b)b.click();
+    });
+    setTimeout(function(){
+      var ok=btns.find(function(x){return (x.textContent||'').indexOf('OK')>=0;});
+      if(ok)ok.click();
+    },150);
+  },400);
+});
 })()</script></head>
 <body>
 <div class="cab">
