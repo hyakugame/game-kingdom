@@ -7,28 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Barlow+Condensed:wght@700;900&family=Noto+Sans+JP:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
 body{
   background:#050810;
   font-family:'Barlow Condensed',sans-serif;
-  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-  min-height:100vh;overflow-y:auto;
-}
-.bg{position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,150,200,.12),transparent),
-    radial-gradient(ellipse 60% 40% at 20% 100%,rgba(0,80,140,.10),transparent);
-}
-.scanlines{position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.08) 3px,rgba(0,0,0,.08) 4px);
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
 }
 
 /* ===== ログイン画面 ===== */
 #loginScreen{
-  position:relative;z-index:10;
   width:100%;max-width:380px;
   padding:24px 20px;
-  display:flex;flex-direction:column;align-items:center;gap:0;
+  display:flex;flex-direction:column;align-items:center;
 }
 .logo-en{font-family:'Russo One',sans-serif;font-size:11px;letter-spacing:.3em;color:rgba(0,200,255,.5);margin-bottom:4px}
 .logo-jp{
@@ -46,136 +36,128 @@ body{
   padding:22px 20px;
   box-shadow:0 8px 32px rgba(0,0,0,.5);
 }
-.login-title{
-  font-family:'Russo One',sans-serif;font-size:14px;
-  color:#88ddff;letter-spacing:.08em;text-align:center;margin-bottom:18px;
-}
+.login-title{font-family:'Russo One',sans-serif;font-size:14px;color:#88ddff;letter-spacing:.08em;text-align:center;margin-bottom:4px}
+.login-hint{font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-bottom:16px}
+
 .name-field{
   width:100%;background:rgba(0,0,0,.4);
   border:1px solid rgba(255,255,255,.1);border-radius:8px;
-  padding:10px 12px;font-family:'Barlow Condensed',sans-serif;
-  font-size:17px;font-weight:700;color:#fff;outline:none;margin-bottom:16px;
-  transition:.15s;
+  padding:10px 12px;
+  font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;
+  color:#fff;outline:none;margin-bottom:16px;transition:.15s;
 }
-.name-field:focus{border-color:rgba(0,200,255,.4);box-shadow:0 0 12px rgba(0,200,255,.1)}
+.name-field:focus{border-color:rgba(0,200,255,.4)}
 .name-field::placeholder{color:rgba(255,255,255,.2)}
 
-/* 4桁PIN表示 */
 .pin-dots{display:flex;justify-content:center;gap:14px;margin-bottom:16px}
 .pin-dot{
   width:44px;height:44px;border-radius:50%;
-  border:2px solid rgba(255,255,255,.2);
-  background:rgba(0,0,0,.3);
+  border:2px solid rgba(255,255,255,.2);background:rgba(0,0,0,.3);
   display:flex;align-items:center;justify-content:center;
-  font-size:24px;color:#fff;transition:.15s;
+  font-size:22px;color:#fff;transition:.15s;
 }
-.pin-dot.filled{border-color:#00ccff;background:rgba(0,200,255,.15);box-shadow:0 0 10px rgba(0,200,255,.3)}
+.pin-dot.on{border-color:#00ccff;background:rgba(0,200,255,.15);box-shadow:0 0 10px rgba(0,200,255,.3)}
 
-/* テンキー */
 .numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.numpad-btn{
+.nb{
   height:52px;border:none;border-radius:10px;cursor:pointer;
-  background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.05));
-  color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;
+  background:rgba(255,255,255,.07);color:#fff;
+  font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;
   border:1px solid rgba(255,255,255,.1);transition:.1s;
-  display:flex;align-items:center;justify-content:center;
 }
-.numpad-btn:active{transform:scale(.94);background:rgba(255,255,255,.15)}
-.numpad-btn.del{font-size:16px;color:rgba(255,255,255,.5)}
-.numpad-btn.ok{
+.nb:active{transform:scale(.94);background:rgba(255,255,255,.15)}
+.nb.del{font-size:14px;color:rgba(255,255,255,.5)}
+.nb.ok{
   background:linear-gradient(135deg,#0088cc,#0055aa);
-  color:#fff;font-family:'Russo One',sans-serif;font-size:17px;
-  border-color:rgba(0,180,255,.3);
+  font-family:'Russo One',sans-serif;font-size:16px;
   box-shadow:0 3px 0 #003366;
 }
-.numpad-btn.ok:active{transform:translateY(2px);box-shadow:0 1px 0 #003366}
-.numpad-btn.ok:disabled{background:linear-gradient(180deg,#446,#334);cursor:not-allowed;box-shadow:none}
+.nb.ok:active{transform:translateY(2px);box-shadow:0 1px 0 #003366}
+.nb.ok:disabled{background:rgba(40,50,70,.6);color:rgba(255,255,255,.25);box-shadow:none;cursor:not-allowed}
 
-.login-msg{text-align:center;font-size:12px;font-weight:700;letter-spacing:.05em;min-height:20px;margin-top:4px}
-.login-msg.err{color:#ff6666}
-.login-msg.ok{color:#44ff88}
+.msg{text-align:center;font-size:12px;font-weight:700;min-height:20px}
+.msg.err{color:#ff6666}.msg.ok{color:#44ff88}
+
+.guest-btn{
+  width:100%;padding:10px;margin-top:12px;
+  border:1px solid rgba(255,255,255,.12);border-radius:8px;
+  background:transparent;cursor:pointer;
+  font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;
+  color:rgba(255,255,255,.4);transition:.15s;
+}
+.guest-btn:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.6)}
 
 /* ===== ロビー画面 ===== */
-#lobbyScreen{display:none;width:100%;max-width:420px;position:relative;z-index:10}
-
+#lobbyScreen{
+  display:none;
+  width:100%;max-width:420px;
+  flex-direction:column;
+}
 .medal-bar{
-  width:100%;padding:10px 16px;
-  background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(0,0,0,.3));
+  padding:10px 16px;
+  background:rgba(0,0,0,.4);
   border-bottom:1px solid rgba(0,200,255,.12);
   display:flex;align-items:center;justify-content:space-between;
 }
-.medal-info{display:flex;align-items:center;gap:8px}
-.medal-icon{font-size:18px}
-.medal-wrap{}
 .medal-lbl{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.1em}
-.medal-count{font-family:'Press Start 2P',monospace;font-size:13px;color:#ffcc00;text-shadow:0 0 8px rgba(255,200,0,.5)}
+.medal-count{font-family:'Press Start 2P',monospace;font-size:13px;color:#ffcc00}
 .user-wrap{display:flex;align-items:center;gap:8px}
 .user-name{font-size:14px;font-weight:700;color:rgba(255,255,255,.7)}
 .logout-btn{
   background:none;border:1px solid rgba(255,255,255,.15);border-radius:5px;
   color:rgba(255,255,255,.4);font-size:10px;font-family:'Barlow Condensed',sans-serif;
-  font-weight:700;letter-spacing:.05em;padding:3px 8px;cursor:pointer;transition:.15s;
+  font-weight:700;padding:3px 8px;cursor:pointer;
 }
-.logout-btn:hover{border-color:rgba(255,100,100,.4);color:rgba(255,120,120,.7)}
+.lobby-body{padding:16px}
+.games-lbl{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.3em;text-align:center;margin-bottom:10px}
 
-.lobby-main{padding:16px}
-.games-lbl{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.3em;text-align:center;padding:4px 0;margin-bottom:10px}
-
-.game-card{
+.card{
+  display:block;text-decoration:none;
   background:linear-gradient(135deg,rgba(0,20,40,.9),rgba(0,10,25,.95));
   border:1px solid rgba(255,255,255,.08);border-radius:14px;
-  overflow:hidden;cursor:pointer;transition:all .2s;
-  text-decoration:none;display:block;margin-bottom:12px;position:relative;
+  overflow:hidden;margin-bottom:12px;position:relative;
+  transition:all .2s;cursor:pointer;
 }
-.game-card:hover{border-color:rgba(0,200,255,.3);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.game-card:active{transform:translateY(0)}
-.game-banner{
-  width:100%;height:80px;display:flex;align-items:center;justify-content:center;
-  font-size:40px;letter-spacing:4px;position:relative;overflow:hidden;
+.card:hover{border-color:rgba(0,200,255,.3);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.card:active{transform:none}
+
+.banner{
+  height:80px;display:flex;align-items:center;justify-content:center;
+  font-size:40px;letter-spacing:4px;
 }
-.game-banner::before{
-  content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(255,255,255,.015) 20px,rgba(255,255,255,.015) 40px);
-}
-.game-banner.slot{background:linear-gradient(135deg,#003355,#001a33,#002244);border-bottom:2px solid #0099bb}
-.game-banner.janken{background:linear-gradient(135deg,#1a0033,#0d001a,#150029);border-bottom:2px solid #8800cc}
-.game-banner.poker{background:linear-gradient(135deg,#001a00,#000d00,#001500);border-bottom:2px solid #00aa44}
-.banner-emoji{position:relative;z-index:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
-.game-info{padding:12px 14px}
-.game-name{font-family:'Russo One',sans-serif;font-size:16px;color:#fff;letter-spacing:.04em;margin-bottom:3px}
-.game-name span{font-family:'Noto Sans JP',sans-serif;font-size:11px;color:rgba(255,255,255,.4);font-weight:400;letter-spacing:.04em;display:inline-block;margin-left:8px}
-.game-desc{font-size:12px;color:rgba(255,255,255,.35);letter-spacing:.02em}
-.game-badge{
-  position:absolute;top:10px;right:10px;
-  padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.05em;
-}
+.banner.slot{background:linear-gradient(135deg,#003355,#001a33);border-bottom:2px solid #0099bb}
+.banner.janken{background:linear-gradient(135deg,#1a0033,#0d001a);border-bottom:2px solid #8800cc}
+.banner.poker{background:linear-gradient(135deg,#001a00,#000d00);border-bottom:2px solid #00aa44}
+
+.card-body{padding:12px 14px}
+.card-name{font-family:'Russo One',sans-serif;font-size:16px;color:#fff;margin-bottom:3px}
+.card-name small{font-family:'Noto Sans JP',sans-serif;font-size:11px;color:rgba(255,255,255,.4);font-weight:400;margin-left:8px}
+.card-desc{font-size:12px;color:rgba(255,255,255,.35)}
+
+.badge{position:absolute;top:10px;right:10px;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700}
 .badge-new{background:rgba(255,80,80,.8);color:#fff}
 .badge-hot{background:rgba(255,150,0,.8);color:#fff}
 
-.footer{width:100%;padding:12px 16px;text-align:center;font-size:10px;color:rgba(255,255,255,.12);letter-spacing:.1em}
+.footer{padding:12px;text-align:center;font-size:10px;color:rgba(255,255,255,.12)}
 
-/* トースト */
 .toast{
-  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(8px);
+  position:fixed;bottom:60px;left:50%;transform:translateX(-50%);
   background:rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.15);border-radius:8px;
   padding:8px 16px;font-size:13px;font-weight:700;color:#fff;
-  pointer-events:none;z-index:500;opacity:0;transition:all .3s;white-space:nowrap;
+  pointer-events:none;z-index:999;opacity:0;transition:opacity .3s;white-space:nowrap;
 }
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.show{opacity:1}
 </style>
 </head>
 <body>
-<div class="bg"></div>
-<div class="scanlines"></div>
 
-<!-- ログイン画面 -->
 <div id="loginScreen">
   <div class="logo-en">HYAKUSHIKI GAME KINGDOM</div>
   <div class="logo-jp">百式ゲーム王国</div>
   <div class="logo-sub">ALL GAMES · ALL MEDALS</div>
-
   <div class="login-box">
     <div class="login-title">🎮 プレイヤー認証</div>
+    <div class="login-hint">初回は自動で新規登録されます</div>
     <input class="name-field" type="text" id="nameField" placeholder="なまえ（10文字以内）" maxlength="10" autocomplete="off">
     <div class="pin-dots">
       <div class="pin-dot" id="d0"></div>
@@ -184,229 +166,179 @@ body{
       <div class="pin-dot" id="d3"></div>
     </div>
     <div class="numpad">
-      <button class="numpad-btn" onclick="pinInput('1')">1</button>
-      <button class="numpad-btn" onclick="pinInput('2')">2</button>
-      <button class="numpad-btn" onclick="pinInput('3')">3</button>
-      <button class="numpad-btn" onclick="pinInput('4')">4</button>
-      <button class="numpad-btn" onclick="pinInput('5')">5</button>
-      <button class="numpad-btn" onclick="pinInput('6')">6</button>
-      <button class="numpad-btn" onclick="pinInput('7')">7</button>
-      <button class="numpad-btn" onclick="pinInput('8')">8</button>
-      <button class="numpad-btn" onclick="pinInput('9')">9</button>
-      <button class="numpad-btn del" onclick="pinDel()">←消す</button>
-      <button class="numpad-btn" onclick="pinInput('0')">0</button>
-      <button class="numpad-btn ok" id="okBtn" onclick="doLogin()" disabled>OK✓</button>
+      <button class="nb" onclick="pi('1')">1</button>
+      <button class="nb" onclick="pi('2')">2</button>
+      <button class="nb" onclick="pi('3')">3</button>
+      <button class="nb" onclick="pi('4')">4</button>
+      <button class="nb" onclick="pi('5')">5</button>
+      <button class="nb" onclick="pi('6')">6</button>
+      <button class="nb" onclick="pi('7')">7</button>
+      <button class="nb" onclick="pi('8')">8</button>
+      <button class="nb" onclick="pi('9')">9</button>
+      <button class="nb del" onclick="pd()">←消す</button>
+      <button class="nb" onclick="pi('0')">0</button>
+      <button class="nb ok" id="okBtn" onclick="doLogin()" disabled>OK✓</button>
     </div>
-    <div class="login-msg" id="loginMsg"></div>
+    <div class="msg" id="msg"></div>
+    <button class="guest-btn" onclick="goGuest()">🎲 ゲストでプレイ（200枚からスタート）</button>
   </div>
 </div>
 
-<!-- ロビー画面 -->
 <div id="lobbyScreen">
   <div class="medal-bar">
-    <div class="medal-info">
-      <span class="medal-icon">🪙</span>
-      <div class="medal-wrap">
-        <div class="medal-lbl">MEDALS</div>
-        <div class="medal-count" id="medalCount">00000</div>
-      </div>
+    <div>
+      <div class="medal-lbl">🪙 MEDALS</div>
+      <div class="medal-count" id="mcount">00000</div>
     </div>
     <div class="user-wrap">
-      <span class="user-name" id="dispName">--</span>
+      <span class="user-name" id="uname"></span>
       <button class="logout-btn" onclick="doLogout()">ログアウト</button>
     </div>
   </div>
-
-  <div class="lobby-main">
+  <div class="lobby-body">
     <div class="games-lbl">▶ SELECT GAME ◀</div>
-
-    <a class="game-card" href="slot.html" onclick="saveAndGo(event,'slot.html')">
-      <div class="game-banner slot">
-        <span class="banner-emoji">🎰🌴🌺</span>
+    <a class="card" href="slot.html" onclick="go(event,'slot.html')">
+      <div class="banner slot">🎰🌴🌺</div>
+      <div class="card-body">
+        <div class="card-name">OKI FEVER SLOT <small>沖縄スロット</small></div>
+        <div class="card-desc">天国モード・ドキドキモード搭載。設定1〜6で毎回変わる。</div>
       </div>
-      <div class="game-info">
-        <div class="game-name">OKI FEVER SLOT <span>沖縄スロット</span></div>
-        <div class="game-desc">天国モード・ドキドキモード搭載。設定1〜6で毎回変わる。</div>
-      </div>
-      <span class="game-badge badge-new">NEW</span>
+      <span class="badge badge-new">NEW</span>
     </a>
-
-    <a class="game-card" href="janken-fever.html" onclick="saveAndGo(event,'janken-fever.html')">
-      <div class="game-banner janken">
-        <span class="banner-emoji">✊✌🖐</span>
-      </div>
-      <div class="game-info">
-        <div class="game-name">グーチョキパー FEVER <span>じゃんけんゲーム</span></div>
-        <div class="game-desc">じゃんけんバトルメダルゲーム。連勝でボーナスフィーバー！</div>
+    <a class="card" href="janken-fever.html" onclick="go(event,'janken-fever.html')">
+      <div class="banner janken">✊✌🖐</div>
+      <div class="card-body">
+        <div class="card-name">グーチョキパー FEVER <small>じゃんけんゲーム</small></div>
+        <div class="card-desc">じゃんけんバトルメダルゲーム。連勝でボーナスフィーバー！</div>
       </div>
     </a>
-
-    <a class="game-card" href="poker_fever.html" onclick="saveAndGo(event,'poker_fever.html')">
-      <div class="game-banner poker">
-        <span class="banner-emoji">🃏♠🃏</span>
+    <a class="card" href="poker_fever.html" onclick="go(event,'poker_fever.html')">
+      <div class="banner poker">🃏♠🃏</div>
+      <div class="card-body">
+        <div class="card-name">7's WILD PLUS <small>ビデオポーカー</small></div>
+        <div class="card-desc">53枚デッキ（ジョーカー付き）。11種の役でダブルアップ。</div>
       </div>
-      <div class="game-info">
-        <div class="game-name">7's WILD PLUS <span>ビデオポーカー</span></div>
-        <div class="game-desc">53枚デッキ（ジョーカー付き）。11種の役でダブルアップ。</div>
-      </div>
-      <span class="game-badge badge-hot">HOT</span>
+      <span class="badge badge-hot">HOT</span>
     </a>
   </div>
-
-  <div class="footer">© 2025 百式ゲーム王国 · メダルはゲーム間で共通です</div>
+  <div class="footer">© 2025 百式ゲーム王国 · メダルはゲーム間で共通</div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-'use strict';
-const SB='https://gtzfcoiowdnyjvwikxku.supabase.co';
-const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
-const SH={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
+var pin='', user=null;
 
-let pin='';
-let user=null;
-
-// 起動時: localStorage確認
-try{
-  const saved=JSON.parse(localStorage.getItem('hkg_user')||'null');
-  if(saved&&saved.name&&saved.pin){
-    user=saved;
-    showLobby();
-  }
-}catch(e){}
-
-// PIN入力
-function pinInput(n){
-  if(pin.length>=4)return;
-  pin+=n;
-  updateDots();
-  if(pin.length===4)document.getElementById('okBtn').disabled=false;
-}
-function pinDel(){
-  pin=pin.slice(0,-1);
-  updateDots();
-  document.getElementById('okBtn').disabled=true;
-}
-function updateDots(){
-  for(let i=0;i<4;i++){
-    const d=document.getElementById('d'+i);
-    if(i<pin.length){d.textContent='●';d.classList.add('filled')}
-    else{d.textContent='';d.classList.remove('filled')}
-  }
-}
-
-async function doLogin(){
-  const name=document.getElementById('nameField').value.trim();
-  if(!name){setMsg('なまえを入力してください','err');return;}
-  if(pin.length<4){setMsg('4桁のPINを入力してください','err');return;}
-  setMsg('認証中...','');
-
-  // Supabaseからname+pinで検索
+/* ---- 起動時チェック ---- */
+(function init(){
   try{
-    const res=await fetch(`${SB}/rest/v1/game_users?name=eq.${encodeURIComponent(name)}&pin=eq.${pin}`,{headers:SH});
-    const data=await res.json();
-    if(data&&data.length>0){
-      // 既存ユーザー
-      user={id:data[0].id,name:data[0].name,medals:data[0].medals,pin};
-      setMsg('ログイン成功！','ok');
-      save();
-      setTimeout(showLobby,500);
-    }else{
-      // 新規 or PIN違い → nameだけで検索
-      const res2=await fetch(`${SB}/rest/v1/game_users?name=eq.${encodeURIComponent(name)}`,{headers:SH});
-      const data2=await res2.json();
-      if(data2&&data2.length>0){
-        setMsg('PINが違います','err');
-      }else{
-        // 新規登録
-        await createUser(name,pin);
-      }
-    }
-  }catch(e){
-    // Supabase失敗 → ローカルのみで動作
-    user={id:null,name,medals:200,pin};
-    save();
-    setTimeout(showLobby,300);
-  }
-}
+    var s=JSON.parse(localStorage.getItem('hkg_user')||'null');
+    if(s && s.name){ user=s; showLobby(); return; }
+  }catch(e){}
+  showLogin();
+})();
 
-async function createUser(name,pin){
-  try{
-    const res=await fetch(`${SB}/rest/v1/game_users`,{
-      method:'POST',
-      headers:{...SH,'Prefer':'return=representation'},
-      body:JSON.stringify({name,pin,medals:200})
-    });
-    const data=await res.json();
-    if(data&&data.length>0){
-      user={id:data[0].id,name:data[0].name,medals:data[0].medals,pin};
-    }else{
-      user={id:null,name,medals:200,pin};
-    }
-    setMsg('新規登録完了！','ok');
-    save();
-    setTimeout(showLobby,500);
-  }catch(e){
-    user={id:null,name,medals:200,pin};
-    save();
-    setTimeout(showLobby,300);
-  }
+function showLogin(){
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('lobbyScreen').style.display='none';
 }
-
-function save(){
-  try{localStorage.setItem('hkg_user',JSON.stringify(user));}catch(e){}
-}
-
 function showLobby(){
   document.getElementById('loginScreen').style.display='none';
-  document.getElementById('lobbyScreen').style.display='';
-  document.getElementById('dispName').textContent=user.name||'GUEST';
-  document.getElementById('medalCount').textContent=String(user.medals||0).padStart(5,'0');
+  document.getElementById('lobbyScreen').style.display='flex';
+  document.getElementById('uname').textContent=user.name;
+  document.getElementById('mcount').textContent=String(user.medals||0).padStart(5,'0');
+}
+
+/* ---- PIN入力 ---- */
+function pi(n){
+  if(pin.length>=4) return;
+  pin+=n; dots();
+  if(pin.length===4) document.getElementById('okBtn').disabled=false;
+}
+function pd(){
+  pin=pin.slice(0,-1); dots();
+  document.getElementById('okBtn').disabled=true;
+}
+function dots(){
+  for(var i=0;i<4;i++){
+    var d=document.getElementById('d'+i);
+    d.textContent=i<pin.length?'●':'';
+    d.classList.toggle('on',i<pin.length);
+  }
+}
+
+/* ---- ログイン ---- */
+function doLogin(){
+  var name=document.getElementById('nameField').value.trim();
+  if(!name){ msg('なまえを入力してください','err'); return; }
+  if(pin.length<4){ msg('4桁のPINを入力してください','err'); return; }
+
+  var db=getDB();
+  if(db[name]){
+    if(db[name].pin===pin){
+      user={name:name, medals:db[name].medals||0, pin:pin};
+      msg('ログイン成功！','ok');
+      saveUser(); setTimeout(showLobby,400);
+    }else{
+      msg('PINが違います','err');
+    }
+  }else{
+    db[name]={pin:pin, medals:200};
+    saveDB(db);
+    user={name:name, medals:200, pin:pin};
+    msg('新規登録しました！','ok');
+    saveUser(); setTimeout(showLobby,400);
+  }
+}
+
+function goGuest(){
+  user={name:'GUEST', medals:200, pin:null};
+  saveUser(); showLobby();
 }
 
 function doLogout(){
   user=null;
   localStorage.removeItem('hkg_user');
-  pin='';
-  updateDots();
+  pin=''; dots();
   document.getElementById('nameField').value='';
   document.getElementById('okBtn').disabled=true;
-  setMsg('','');
-  document.getElementById('lobbyScreen').style.display='none';
-  document.getElementById('loginScreen').style.display='';
+  msg('','');
+  showLogin();
 }
 
-function saveAndGo(e,href){
+/* ---- ゲームへ ---- */
+function go(e,href){
   e.preventDefault();
-  if(user)save();
+  if(user) saveUser();
   location.href=href;
 }
 
-// ページ戻り時にメダル更新
-window.addEventListener('pageshow',()=>{
+window.addEventListener('pageshow',function(){
   try{
-    const saved=JSON.parse(localStorage.getItem('hkg_user')||'null');
-    if(saved&&user){
-      user=saved;
-      document.getElementById('medalCount').textContent=String(user.medals||0).padStart(5,'0');
+    var s=JSON.parse(localStorage.getItem('hkg_user')||'null');
+    if(s && user && s.name===user.name){
+      user=s;
+      document.getElementById('mcount').textContent=String(user.medals||0).padStart(5,'0');
     }
   }catch(e){}
 });
 
-function setMsg(msg,type){
-  const el=document.getElementById('loginMsg');
-  el.textContent=msg;
-  el.className='login-msg'+(type?' '+type:'');
+/* ---- DB ---- */
+function getDB(){ try{ return JSON.parse(localStorage.getItem('hkg_db')||'{}'); }catch(e){ return {}; } }
+function saveDB(db){ try{ localStorage.setItem('hkg_db',JSON.stringify(db)); }catch(e){} }
+function saveUser(){
+  try{ localStorage.setItem('hkg_user',JSON.stringify(user)); }catch(e){}
+  if(user && user.name && user.name!=='GUEST'){
+    var db=getDB();
+    if(db[user.name]) db[user.name].medals=user.medals;
+    saveDB(db);
+  }
 }
 
-let _tt;
-function toast(m){
-  clearTimeout(_tt);
-  const t=document.getElementById('toast');
-  t.textContent=m;t.classList.add('show');
-  _tt=setTimeout(()=>t.classList.remove('show'),2200);
-}
+/* ---- UI ---- */
+function msg(t,c){ var e=document.getElementById('msg'); e.textContent=t; e.className='msg'+(c?' '+c:''); }
+var _tt;
+function toast(m){ clearTimeout(_tt); var t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); _tt=setTimeout(function(){t.classList.remove('show');},2200); }
 </script>
 </body>
 </html>
