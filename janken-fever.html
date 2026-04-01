@@ -622,7 +622,12 @@ function show(id){
 }
 function setV(txt,cls){const el=document.getElementById('vbox');el.textContent=txt;el.className='vbox '+(cls||'');}
 function updPHP(){const p=(php/5)*100,f=document.getElementById('p-hp');f.style.width=p+'%';f.className='hpf'+(p<=40?' low':p<=70?' med':'');}
-function updMed(){document.getElementById('med-v').textContent=sessionGained;}
+function updMed(){
+  var el=document.getElementById('med-v');
+  if(el)el.textContent=credits;
+  var lm=document.getElementById('lobby-med');
+  if(lm){var u=JSON.parse(localStorage.getItem('hkg_user')||'null');lm.textContent=(u?u.medals:credits)||0;}
+}
 function showRov(type,main,sub,ms){clearTimeout(rovTimer);document.getElementById('rov-main').textContent=main;document.getElementById('rov-main').className='rov-main '+type;document.getElementById('rov-sub').textContent=sub;document.getElementById('rov').classList.add('show');rovTimer=setTimeout(()=>document.getElementById('rov').classList.remove('show'),ms||1800);}
 function hideRov(){clearTimeout(rovTimer);document.getElementById('rov').classList.remove('show');}
 
