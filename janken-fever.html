@@ -696,7 +696,7 @@ function insertCoin(){
   document.getElementById('start-btn').disabled=false;
   seCoin(); bgmPlay('attract');
 }
-function goAttract(){stopAll();credits=0;document.getElementById('start-btn').disabled=true;var hv=document.getElementById('hi-v');if(hv)hv.textContent=hiScore;var tv=document.getElementById('tot-v');if(tv)tv.textContent=totalMedals;var lm=document.getElementById('lobby-med');if(lm)lm.textContent=hiScore;bgmPlay('attract');show('sa');loadSaRank();}
+function goAttract(){window._waitFirstPick=false;stopAll();credits=0;document.getElementById('start-btn').disabled=true;var hv=document.getElementById('hi-v');if(hv)hv.textContent=hiScore;var tv=document.getElementById('tot-v');if(tv)tv.textContent=totalMedals;var lm=document.getElementById('lobby-med');if(lm)lm.textContent=hiScore;bgmPlay('attract');show('sa');loadSaRank();}
 
 // GAME
 function startGame(){if(!credits)return;wake();credits--;bgmStop();sessionGained=0;php=5;updMed();updPHP();show('sb');startRound();}
@@ -704,7 +704,7 @@ function startRound(){document.getElementById('p-hand').textContent='🙂';docum
 function setBtns(on){inputOK=on;['b-r','b-s','b-p'].forEach(id=>document.getElementById(id).disabled=!on);}
 function autoPick(){pick(HANDS[Math.floor(Math.random()*3)].key);}
 function pick(pKey){
-  if(!inputOK)return;wake();inputOK=false;setBtns(false);timerStop();
+  if(!inputOK)return;wake();if(window._waitFirstPick){window._waitFirstPick=false;signStart();}inputOK=false;setBtns(false);timerStop();
   const cpuKey=HANDS[Math.floor(Math.random()*3)].key,ph=hByKey(pKey),ch=hByKey(cpuKey);
   const pEl=document.getElementById('p-hand');pEl.textContent=ph.ic;pEl.classList.add('atk');setTimeout(()=>pEl.classList.remove('atk'),350);
   sePon();setTimeout(()=>signFreeze(ch),300);setTimeout(()=>judge(pKey,cpuKey,ph,ch),900);
@@ -876,24 +876,25 @@ function shareToLINE(){
 })();
 document.addEventListener('click',()=>wake(),{once:true});
 document.addEventListener('touchstart',()=>wake(),{once:true});
-// 自動起動：hkg_userがあればメダルを消費してすぐゲーム開始
+// 自動起動：hkg_userがあればじゃんけん画面を即表示（タイマーは選択後スタート）
 (function(){
   var su=JSON.parse(localStorage.getItem('hkg_user')||'null');
   if(su && su.medals>0){
-    // メダルを1枚消費してゲーム開始
     su.medals=Math.max(0,su.medals-1);
     localStorage.setItem('hkg_user',JSON.stringify(su));
     credits=1;
-    totalMedals=su.medals;
-    hiScore=su.medals; // 仮
-    var sb=document.getElementById('start-btn');if(sb)sb.disabled=false;
+    sessionGained=0;
+    php=5;
     var lm=document.getElementById('lobby-med');if(lm)lm.textContent=su.medals;
-    bgmPlay('attract');
-    // すぐじゃんけん画面へ
+    updMed(); updPHP();
     show('sb');
-    startGame();
+    bgmPlay('attract');
+    // タイマー開始せず「グー・チョキ・パーを選ぼう」表示
+    setV('グー・チョキ・パーを\n選ぼう！','call');
+    setBtns(true);
+    // 最初の一手でタイマー開始するようフラグセット
+    window._waitFirstPick = true;
   } else {
-    // メダルなし→ロビーへ
     goAttract();
   }
 })();
