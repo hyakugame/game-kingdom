@@ -929,22 +929,30 @@ function judge(pKey,cpuKey,ph,ch){
 // ROULETTE
 function buildRlSVG(){
   const svg=document.getElementById('rl-svg');svg.innerHTML='';svg.setAttribute('viewBox','0 0 320 320');
-  const vals=RL_VALS,n=vals.length,cx=160,cy=160,R=148,rIn=48,seg=360/n;
+  const vals=RL_VALS,n=vals.length,cx=160,cy=160,R=150,rIn=50,seg=360/n;
+  const texts=[];
+  // 1st pass: 全pathを描画
   for(let i=0;i<n;i++){
     const v=vals[i]*betAmount,a0=(i*seg-90)*Math.PI/180,a1=((i+1)*seg-90)*Math.PI/180,lf=seg>180?1:0;
     const x1=cx+R*Math.cos(a0),y1=cy+R*Math.sin(a0),x2=cx+R*Math.cos(a1),y2=cy+R*Math.sin(a1);
     const xi1=cx+rIn*Math.cos(a0),yi1=cy+rIn*Math.sin(a0),xi2=cx+rIn*Math.cos(a1),yi2=cy+rIn*Math.sin(a1);
     const isJP=v>=25,p=document.createElementNS('http://www.w3.org/2000/svg','path');
     p.setAttribute('d',`M${xi1},${yi1} L${x1},${y1} A${R},${R} 0 ${lf} 1 ${x2},${y2} L${xi2},${yi2} A${rIn},${rIn} 0 ${lf} 0 ${xi1},${yi1} Z`);
-    p.setAttribute('fill',isJP?'#cc0033':SEG_COLS[i%SEG_COLS.length]);p.setAttribute('stroke','#220a44');p.setAttribute('stroke-width','2');p.setAttribute('id','seg'+i);p.setAttribute('opacity','0.78');svg.appendChild(p);
-    const midA=((i+0.5)*seg-90)*Math.PI/180,tR=(R+rIn)/2,tx=cx+tR*Math.cos(midA),ty=cy+tR*Math.sin(midA),ang=(i+0.5)*seg;
+    p.setAttribute('fill',isJP?'#cc0033':SEG_COLS[i%SEG_COLS.length]);
+    p.setAttribute('stroke','#111');p.setAttribute('stroke-width','2.5');
+    p.setAttribute('id','seg'+i);p.setAttribute('opacity','0.92');svg.appendChild(p);
+    const midA=((i+0.5)*seg-90)*Math.PI/180,tR=(R+rIn)/2;
+    texts.push({v,isJP,tx:cx+tR*Math.cos(midA),ty:cy+tR*Math.sin(midA),ang:(i+0.5)*seg});
+  }
+  // 2nd pass: 全textを前面に描画（lineは使わない）
+  texts.forEach(({v,isJP,tx,ty,ang})=>{
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
     t.setAttribute('x',tx);t.setAttribute('y',ty);t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','middle');
-    t.setAttribute('font-family','Oswald,sans-serif');t.setAttribute('font-size',isJP?'18':'24');t.setAttribute('font-weight','900');t.setAttribute('fill','#fff');t.setAttribute('stroke','#000');t.setAttribute('stroke-width','4');t.setAttribute('paint-order','stroke');t.setAttribute('transform',`rotate(${ang},${tx},${ty})`);
+    t.setAttribute('font-family','Oswald,sans-serif');t.setAttribute('font-size',isJP?'17':'22');t.setAttribute('font-weight','900');
+    t.setAttribute('fill','#fff');t.setAttribute('stroke','#000');t.setAttribute('stroke-width','3.5');t.setAttribute('paint-order','stroke');
+    t.setAttribute('transform',`rotate(${ang},${tx},${ty})`);
     t.textContent=v+'枚';svg.appendChild(t);
-    const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
-    ln.setAttribute('x1',xi1);ln.setAttribute('y1',yi1);ln.setAttribute('x2',x1);ln.setAttribute('y2',y1);ln.setAttribute('stroke','rgba(0,0,0,.4)');ln.setAttribute('stroke-width','2');svg.appendChild(ln);
-  }
+  });
 }
 function litSeg(i){const n=RL_VALS.length;for(let j=0;j<n;j++){const el=document.getElementById('seg'+j);if(el)el.setAttribute('opacity',j===i?'1':'0.62');}document.getElementById('rl-num').textContent=RL_VALS[i];}
 function showRl(){
