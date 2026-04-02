@@ -133,6 +133,16 @@ body{background:#0a0a14;color:#ccc;font-family:'Segoe UI',sans-serif;min-height:
         <div id="rank-list-pk" class="loading">読み込み中...</div>
         <div class="reset-section">
           <button class="btn btn-danger" onclick="resetRankings()">🔥 全ランキングリセット</button>
+        <div style="margin-top:16px">
+          <div style="font-size:13px;font-weight:700;color:#ffd040;margin-bottom:8px">🎮 ゲーム別ランキング削除</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <button class="btn btn-sm btn-danger" onclick="deleteGameRankings('janken','じゃんけん')">🪨 じゃんけん</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteGameRankings('slot','スロット')">🎰 スロット</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteGameRankings('poker','ポーカー')">🃏 ポーカー</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteGameRankings('quiz','クイズ')">🧙 クイズ</button>
+          </div>
+          <div id="deleteRankMsg" style="margin-top:8px;font-size:13px"></div>
+        </div>
           <span style="font-size:12px;color:#666;margin-left:10px">… 元に戻せません</span>
           <div class="status-msg" id="rank-status"></div>
         </div>
@@ -316,7 +326,31 @@ async function loadRankings(){
   }catch(e){elpk.innerHTML='<div class="loading" style="color:#f88">取得エラー</div>';}
 }
 
-async function resetRankings(){
+async function deleteGameRankings(game, label) {
+  if(!confirm(label + 'のランキングを全件削除しますか？')) return;
+  const msgEl = document.getElementById('deleteRankMsg');
+  msgEl.textContent = '削除中...';
+  msgEl.style.color = '#ffd040';
+  sbFetch('/rest/v1/rankings?game_type=eq.' + game, {method:'DELETE', headers:{'Prefer':'return=minimal'}})
+    .then(r => {
+      if(r.ok || r.status === 204) {
+        msgEl.textContent = '✅ ' + label + 'のランキングを削除しました';
+        msgEl.style.color = '#60ffa0';
+        loadRankings();
+      } else {
+        r.text().then(t => {
+          // game_typeカラムがない場合はgame列で試みる
+          return sbFetch('/rest/v1/rankings?game=eq.' + game, {method:'DELETE', headers:{'Prefer':'return=minimal'}});
+        }).then(r2 => {
+          msgEl.textContent = r2.ok ? '✅ ' + label + 'のランキングを削除しました' : '❌ 削除できませんでした（カラム名を確認）';
+          msgEl.style.color = r2.ok ? '#60ffa0' : '#ff8090';
+          loadRankings();
+        });
+      }
+    })
+    .catch(e => { msgEl.textContent = '❌ ' + e.message; msgEl.style.color = '#ff8090'; });
+}
+function resetRankings(){
   if(!confirm('ランキングを全件リセットしますか？\nこの操作は元に戻せません。'))return;
   try{
     await sbFetch('rankings?id=gte.0',{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({score:-1})});
