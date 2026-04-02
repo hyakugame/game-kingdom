@@ -350,7 +350,7 @@ async function deleteGameRankings(game, label) {
     })
     .catch(e => { msgEl.textContent = '❌ ' + e.message; msgEl.style.color = '#ff8090'; });
 }
-function resetRankings(){
+async function resetRankings(){
   if(!confirm('ランキングを全件リセットしますか？\nこの操作は元に戻せません。'))return;
   try{
     await sbFetch('rankings?id=gte.0',{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({score:-1})});
