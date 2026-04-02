@@ -223,7 +223,7 @@ body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans
     <div class="rov" id="rov"><div class="rov-bg"></div><div class="rov-main" id="rov-main">WIN!</div><div class="rov-sub" id="rov-sub"></div></div>
     <div class="sb-hud">
       <div class="hud-block"><div class="hud-lbl">MEDALS</div><div class="hud-val" id="med-v">0</div></div>
-      <div class="hud-block"><div class="hud-lbl">ROUND</div><div class="hud-val" style="font-size:16px;padding-top:4px">じゃんけん</div></div>
+      <div class="hud-block"><div class="hud-lbl" style="font-size:11px;letter-spacing:.08em">BET</div><div class="hud-val" id="bet-hud-v" style="color:#FFD700;font-size:38px">1</div><div style="font-size:12px;color:#888;margin-top:-4px">枚</div></div>
       <div class="hud-block"><div class="hud-lbl">TIME</div><div class="hud-val hud-time" id="tmr">05</div></div>
     </div>
     <div class="arena">
@@ -488,12 +488,18 @@ async function loadOnlineRanking(){
 
 // Supabase にスコアを保存
 async function saveOnlineScore(name, score){
-  const res = await sbFetch('rankings', {
-    method: 'POST',
-    body: JSON.stringify({name, score}),
-    prefer: 'return=minimal'
-  });
-  return res && (res.ok || res.status === 201);
+  const cfg=getSBConfig();if(!cfg)return false;
+  const H={'apikey':cfg.key,'Authorization':'Bearer '+cfg.key,'Content-Type':'application/json','Accept':'application/json'};
+  try{
+    const ex=await fetch(cfg.url+'/rest/v1/jk_scores?name=eq.'+encodeURIComponent(name)+'&select=id,score',{headers:H}).then(r=>r.json()).catch(()=>[]);
+    if(ex&&ex.length>0){
+      if(ex[0].score>=score)return true;
+      await fetch(cfg.url+'/rest/v1/jk_scores?id=eq.'+ex[0].id,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({score})});
+    }else{
+      await fetch(cfg.url+'/rest/v1/jk_scores',{method:'POST',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({name,score})});
+    }
+    return true;
+  }catch(e){return false;}
 }
 
 // 接続テスト
@@ -785,36 +791,49 @@ function showBetScreen(){
   var su=JSON.parse(localStorage.getItem('hkg_user')||'null');
   var medals=su?su.medals:0;
   var bm=document.getElementById('bet-medals');
-  if(bm) bm.textContent=medals;
-  var maxBet=Math.min(5,medals);
+  if(bm)bm.textContent=medals;
   var bb=document.getElementById('bet-btns');
   if(!bb)return;
-  bb.innerHTML='';
-  var betOptions=[1,2,3,4,5];
-  betOptions.forEach(function(n){
-    var disabled=n>maxBet;
-    var btn=document.createElement('button');
-    btn.textContent=n+'枚';
-    btn.style.cssText='background:'+(disabled?'rgba(255,255,255,.05)':'linear-gradient(180deg,'+(n>=5?'#FFD700,#e5a800':n>=3?'#ff8800,#cc5500':'#00cc44,#009933')+')')
-      +';color:'+(disabled?'#444':'#fff'+(n>=5?' !important; color:#000':''))
-      +';border:none;border-radius:10px;padding:16px 8px;font-family:Oswald,sans-serif;font-size:20px;font-weight:700;cursor:'+(disabled?'not-allowed':'pointer')
-      +';opacity:'+(disabled?'0.3':'1')
-      +';box-shadow:'+(disabled?'none':'0 4px 12px rgba(0,0,0,.4)');
-    if(n>=5) btn.style.color='#000';
-    if(!disabled){
-      btn.onclick=function(){ startWithBet(n); };
-    }
-    // ラベル
-    var multi = n;
-    var lbl=document.createElement('div');
-    lbl.textContent=disabled?'-':(Math.min(...RL_VALS)*n)+'〜'+(Math.max(...RL_VALS)*n)+'枚';
-    lbl.style.cssText='font-size:11px;color:#aaa;text-align:center;margin-top:4px';
-    var wrap=document.createElement('div');
-    wrap.style.cssText='display:flex;flex-direction:column;align-items:center';
-    wrap.appendChild(btn);
-    wrap.appendChild(lbl);
-    bb.appendChild(wrap);
-  });
+  if(medals<=0){
+    bb.style.cssText='';
+    bb.innerHTML='<div style="text-align:center;padding:24px;color:#888;font-size:16px">メダルが足りません</div>';
+    show('sbet');bgmPlay('attract');return;
+  }
+  window._betMax=medals;window._betCur=1;
+  window._updBet=function(){
+    var cb=window._betCur;
+    var bc=document.getElementById('_betN');if(bc)bc.textContent=cb;
+    var mi=Math.min(...RL_VALS)*cb,ma=Math.max(...RL_VALS)*cb;
+    var pv=document.getElementById('_betP');if(pv)pv.innerHTML='<span style="color:#FFD700;font-size:22px;font-family:Oswald,sans-serif">'+mi+'〜'+ma+'枚</span> のチャンス！';
+    var go=document.getElementById('_betG');if(go)go.textContent='▶ '+cb+'枚でスタート！';
+    var bm2=document.getElementById('_betM');if(bm2)bm2.disabled=(cb<=1);
+    var bp=document.getElementById('_betA');if(bp)bp.disabled=(cb>=window._betMax);
+  };
+  bb.style.cssText='grid-template-columns:1fr;gap:0;width:100%';
+  bb.innerHTML=
+    '<div style="display:flex;flex-direction:column;align-items:center;gap:14px;width:100%">'+
+    '<div style="display:flex;align-items:center;gap:18px">'+
+      '<button id="_betM" style="width:64px;height:64px;border-radius:50%;background:rgba(255,80,80,.15);border:2px solid rgba(255,80,80,.35);color:#ff9999;font-size:36px;cursor:pointer;font-family:Oswald;display:flex;align-items:center;justify-content:center">−</button>'+
+      '<div style="text-align:center;min-width:120px">'+
+        '<div id="_betN" style="font-family:Oswald,sans-serif;font-size:88px;font-weight:700;color:#FFD700;line-height:1">1</div>'+
+        '<div style="font-size:17px;color:#aaa;margin-top:2px">枚ベット</div>'+
+      '</div>'+
+      '<button id="_betA" style="width:64px;height:64px;border-radius:50%;background:rgba(0,200,60,.15);border:2px solid rgba(0,200,60,.35);color:#00FF41;font-size:36px;cursor:pointer;font-family:Oswald;display:flex;align-items:center;justify-content:center">＋</button>'+
+    '</div>'+
+    '<div style="display:flex;gap:10px;width:100%;justify-content:center">'+
+      '<button onclick="window._betCur=1;window._updBet()" style="flex:1;padding:12px 0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#bbb;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Oswald,sans-serif;max-width:100px">MIN</button>'+
+      '<button onclick="window._betCur=Math.max(1,Math.floor(window._betMax/2));window._updBet()" style="flex:1;padding:12px 0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#bbb;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Oswald,sans-serif;max-width:100px">HALF</button>'+
+      '<button onclick="window._betCur=window._betMax;window._updBet()" style="flex:1;padding:12px 0;background:linear-gradient(180deg,#FFD700,#c88000);border:none;color:#000;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Oswald,sans-serif;max-width:100px">ALL IN</button>'+
+    '</div>'+
+    '<div id="_betP" style="background:rgba(0,200,60,.08);border:1px solid rgba(0,200,60,.2);border-radius:12px;padding:12px 20px;text-align:center;width:100%;font-size:15px;color:#888">'+
+      '<span style="color:#FFD700;font-size:22px;font-family:Oswald,sans-serif">2〜50枚</span> のチャンス！'+
+    '</div>'+
+    '<button id="_betG" style="width:100%;padding:20px;background:linear-gradient(180deg,#00cc44,#008833);border:none;border-radius:14px;font-family:Oswald,sans-serif;font-size:26px;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 4px 20px rgba(0,200,60,.5);letter-spacing:.04em">▶ 1枚でスタート！</button>'+
+    '</div>';
+  document.getElementById('_betM').onclick=function(){if(window._betCur>1){window._betCur--;window._updBet();}};
+  document.getElementById('_betA').onclick=function(){if(window._betCur<window._betMax){window._betCur++;window._updBet();}};
+  document.getElementById('_betG').onclick=function(){startWithBet(window._betCur);};
+  window._updBet();
   show('sbet');
   bgmPlay('attract');
 }
@@ -826,6 +845,7 @@ function startWithBet(n){
   su.medals=Math.max(0,su.medals-n);
   localStorage.setItem('hkg_user',JSON.stringify(su));
   betAmount=n;
+  var _bv=document.getElementById('bet-hud-v');if(_bv)_bv.textContent=n;
   credits=1;
   sessionGained=0;
   php=5;
@@ -992,15 +1012,12 @@ function finishGame(gained){
   stopAll(); sessionGained=gained; totalMedals+=gained;
   if(gained>hiScore) hiScore=gained;
   pendingScore=gained;
-  // 同期チェック（フリーズしない）
-  if(gained>0 && isHighScoreSync(gained)){
-    document.getElementById('name-score-disp').textContent=gained+'枚';
-    document.getElementById('name-input').value='';
-    show('sname');
-    seWin(); speakAt('やったー！ハイスコア！',300);
-  } else {
-    showResult();
+  if(gained>0){
+    var _su=JSON.parse(localStorage.getItem('hkg_user')||'null');
+    var _nm=_su&&_su.name?_su.name:'？？？';
+    addScore(_nm,gained).catch(function(){});
   }
+  showResult();
 }
 async function submitScore(){
   const name=document.getElementById('name-input').value.trim()||'？？？';
