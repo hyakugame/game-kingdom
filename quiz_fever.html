@@ -309,6 +309,7 @@ body{background:var(--bg-page);color:var(--tx-body);font-family:'Noto Sans JP',s
   <!-- CPU / オンライン タブ -->
   <div class="mode-tabs" style="margin-top:8px">
     <div class="mode-tab active" id="tab-cpu" onclick="switchTab('cpu')">🤖 CPU対戦</div>
+    <div class="mode-tab" id="tab-solo" onclick="switchTab('solo')">🏅 ソロ</div>
     <div class="mode-tab" id="tab-online" onclick="switchTab('online')">🌐 オンライン</div>
   </div>
 
@@ -349,6 +350,24 @@ body{background:var(--bg-page);color:var(--tx-body);font-family:'Noto Sans JP',s
         <div style="text-align:center;font-size:14px;color:var(--tx-muted);padding:16px">読み込み中...</div>
       </div>
     </div>
+  </div>
+
+
+  <!-- ソロチャレンジ パネル -->
+  <div class="mode-panel" id="panel-solo">
+    <div class="sh-hint" style="margin:10px 0 8px">一人で挑戦！正解数でジャンル別ランキングに登録</div>
+    <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:8px">📊 問題数を選ぶ</div>
+    <div class="pts-row" id="soloQRow">
+      <button class="pts-btn sel" data-n="10" onclick="selSoloN(10)">10<small>問</small></button>
+      <button class="pts-btn" data-n="20" onclick="selSoloN(20)">20<small>問</small></button>
+      <button class="pts-btn" data-n="30" onclick="selSoloN(30)">30<small>問</small></button>
+      <button class="pts-btn" data-n="50" onclick="selSoloN(50)">50<small>問</small></button>
+    </div>
+    <div style="font-size:13px;font-weight:700;color:var(--gold);margin:12px 0 8px">📚 ジャンルを選ぶ</div>
+    <div class="genre-lib" id="soloGenreLib" style="width:100%;max-width:420px">
+      <div style="text-align:center;font-size:14px;color:var(--tx-muted);padding:16px">読み込み中...</div>
+    </div>
+    <button class="btn btn-gold btn-block" style="margin-top:16px" onclick="startSoloChallenge()">🏅 ソロで挑戦！</button>
   </div>
 
   <!-- オンライン パネル -->
@@ -568,11 +587,15 @@ body{background:var(--bg-page);color:var(--tx-body);font-family:'Noto Sans JP',s
 
 <!-- ══════ ランキング ══════ -->
 <div class="screen" id="screen-ranking">
-  <button class="back-btn" onclick="go('title')">← 戻る</button>
+  <button class="back-btn" onclick="go('mode')">← 戻る</button>
   <div style="height:64px"></div>
   <div style="font-size:50px">🏆</div>
   <div class="rank-head">魔道師ランキング</div>
-
+  <!-- ソロ/対戦切り替え -->
+  <div class="mode-tabs" style="width:100%;max-width:480px;margin-bottom:8px">
+    <div class="mode-tab active" id="rank-tab-solo" onclick="setRankMode('solo')">🏅 ソロ</div>
+    <div class="mode-tab" id="rank-tab-battle" onclick="setRankMode('battle')">⚔️ 対戦</div>
+  </div>
   <!-- カテゴリタブ -->
   <div style="width:100%;max-width:480px;overflow-x:auto;padding-bottom:4px">
     <div style="display:flex;gap:8px;min-width:max-content" id="rankCatTabs"></div>
@@ -625,7 +648,7 @@ const P_AVATARS = ['🧙','🧝','🧚','🧜'];
 // ロビーのhkg_userから名前を優先取得
 const _hkgUser = JSON.parse(localStorage.getItem('hkg_user') || 'null');
 let pName = (_hkgUser && _hkgUser.name) || localStorage.getItem('qf_name') || '魔道師';
-let winPts = 3;
+let winPts=3,_soloMode=false,_soloMaxQ=10,_soloN=10,_rankMode="solo";
 let aiQuestions = null; // AI生成問題
 let aiMerge = false;
 
@@ -821,19 +844,55 @@ function selPts(n) {
   });
 }
 
+function selSoloN(n){
+  _soloN=n;
+  document.querySelectorAll('#soloQRow .pts-btn').forEach(b=>{
+    b.classList.toggle('sel',parseInt(b.dataset.n)===n);
+  });
+}
+function renderSoloGenreLib(){
+  const el=document.getElementById('soloGenreLib');if(!el)return;
+  const bank=loadBank();const entries=Object.entries(bank);
+  if(!entries.length){el.innerHTML='<div style="text-align:center;font-size:14px;color:var(--tx-muted);padding:16px">問題バンクが空です。先に追加してください</div>';return;}
+  el.innerHTML=entries.map(([key,g])=>{
+    const total=g.questions?.length||0;
+    const isSel=_selGenre?.bankKey===key;
+    const bk=loadBank()[key]?.category||g.name||key;
+    return `<div class="genre-card${isSel?' sel':''}" onclick="_selSoloGenre('${key}')" style="${isSel?'border-color:var(--gold);background:rgba(255,208,64,.1)':''}">　<div class="genre-info"><div class="genre-name">${esc(g.name||key)}</div><div style="font-size:12px;color:var(--tx-muted)">${esc(g.category||'')} · ${total}問</div></div><div class="genre-total">${total}</div></div>`;
+  }).join('');
+}
+function _selSoloGenre(bankKey){_selGenre={type:'keyword',bankKey};renderSoloGenreLib();}
+function startSoloChallenge(){
+  if(!_selGenre){alert('ジャンルを選んでください');return;}
+  const bank=loadBank();
+  const g=_selGenre.type==='category'?{questions:_selGenre.questions,category:_selGenre.name}:bank[_selGenre.bankKey];
+  if(!g?.questions?.length){alert('このジャンルに問題がありません');return;}
+  _soloMode=true;_soloMaxQ=Math.min(_soloN,g.questions.length);
+  players=[{id:'player',name:pName,av:'🧙',score:0,isCPU:false,color:P_COLORS[0]}];
+  myPIdx=0;winPts=_soloMaxQ+999;
+  const pool=shuf([...g.questions]).slice(0,_soloMaxQ);
+  initBattle(pool);
+}
+function setRankMode(mode){
+  _rankMode=mode;
+  ['solo','battle'].forEach(m=>{const el=document.getElementById('rank-tab-'+m);if(el)el.classList.toggle('active',m===mode);});
+  _buildRankCatTabs();loadRanking();
+}
+
 // ══════════════════════════════════════
 //  モードタブ切替
 // ══════════════════════════════════════
-function switchTab(mode) {
-  ['cpu','online'].forEach(m=>{
-    document.getElementById('tab-'+m).classList.toggle('active',m===mode);
-    document.getElementById('panel-'+m).classList.toggle('active',m===mode);
+function switchTab(mode){
+  ['cpu','solo','online'].forEach(m=>{
+    const t=document.getElementById('tab-'+m);
+    const p=document.getElementById('panel-'+m);
+    if(t)t.classList.toggle('active',m===mode);
+    if(p)p.classList.toggle('active',m===mode);
   });
-  if(mode==='online' && !USE_SB) {
-    document.getElementById('onlineStatus').textContent='⚠️ Supabase未設定 — ファイル先頭のSB_URL/SB_KEYを入力してください';
-  } else {
-    document.getElementById('onlineStatus').textContent='';
-  }
+  const os=document.getElementById('onlineStatus');
+  if(os)os.textContent=(mode==='online'&&!USE_SB)?'⚠️ Supabase未設定':'';
+  if(mode==='solo')renderSoloGenreLib();
+}
 }
 
 // ══════════════════════════════════════
@@ -2173,15 +2232,54 @@ function addScore(id) {
   renderScoreboard();
 }
 
-function checkEnd(scorer) {
-  const winner = players.find(p=>p.score>=winPts);
-  if(winner) showResult(winner.name);
+function checkEnd(scorer){
+  if(_soloMode){
+    if(gs.tot>=_soloMaxQ||gs.qi>=gs.pool.length){showResult(pName);}
+    else{setTimeout(nextQ,1700);}
+    return;
+  }
+  const winner=players.find(p=>p.score>=winPts);
+  if(winner)showResult(winner.name);
   else setTimeout(nextQ,1700);
 }
 
 // ══════════════════════════════════════
 //  リザルト
 // ══════════════════════════════════════
+function showResult(winnerName){
+  clrAll();
+  const me=players[myPIdx];
+  const acc=gs.tot?Math.round((gs.ok/gs.tot)*100):0;
+  const rt=document.getElementById('rT');
+  const cat=_selGenre?(_selGenre.type==='category'?_selGenre.name:(loadBank()[_selGenre.bankKey]?.category||_selGenre.bankKey||'')):'';
+  if(_soloMode){
+    const pct=gs.ok/_soloMaxQ;
+    const label=pct>=0.8?'EXCELLENT!':pct>=0.6?'GREAT!':pct>=0.4?'GOOD':'TRY AGAIN';
+    rt.textContent=label;rt.className='result-title '+(pct>=0.8?'win':pct>=0.6?'draw':'lose');
+    document.getElementById('rI').textContent=pct>=0.8?'🏆':pct>=0.6?'⭐':pct>=0.4?'😊':'💪';
+    document.getElementById('rC').textContent=gs.ok;
+    document.getElementById('rA').textContent=acc+'%';
+    document.getElementById('rSc').textContent=gs.ok+'/'+_soloMaxQ+'問';
+    document.getElementById('rS').textContent='正解 '+gs.ok+'問 / '+_soloMaxQ+'問中 · 正解率 '+acc+'%';
+    document.getElementById('saveBtn').disabled=false;
+    document.getElementById('saveBtn').textContent='🏅 ランキングに登録';
+    const soloScore=gs.ok*100+acc;
+    window._ps={name:pName,score:soloScore,correct:gs.ok,maxQ:_soloMaxQ,acc,mode:'solo',category:cat,genre:_selGenre?.bankKey||''};
+    _soloMode=false;winPts=3;go('result');return;
+  }
+  const iWon=winnerName===pName||winnerName===me?.name;
+  const diff=players.find(p=>p.isCPU)?.diff||'normal';
+  const score=Math.floor((gs.ok*100+acc)*({easy:1,normal:1.5,hard:2.5}[diff]||(players.length>2?2:1))+(iWon?500:0));
+  document.getElementById('rC').textContent=gs.ok;
+  document.getElementById('rA').textContent=acc+'%';
+  document.getElementById('rSc').textContent=score.toLocaleString();
+  if(iWon){rt.textContent='VICTORY';rt.className='result-title win';document.getElementById('rI').textContent='🏆';}
+  else{rt.textContent='DEFEATED';rt.className='result-title lose';document.getElementById('rI').textContent='💀';}
+  document.getElementById('rS').textContent=iWon?`${winnerName}の勝利！おめでとう！`:`${winnerName}の勝利！次は負けない！`;
+  document.getElementById('saveBtn').disabled=false;document.getElementById('saveBtn').textContent='✨ 登録';
+  window._ps={name:pName,score,acc,diff,res:iWon?'win':'lose',mode:'battle',category:cat};
+  go('result');
+}
 function showResult(winnerName) {
   clrAll();
   const me = players[myPIdx];
@@ -2255,98 +2353,58 @@ function lsave(d){
 }
 let _rankCat = 'all'; // 現在選択中のカテゴリ
 
-function goRankScreen() {
+function goRankScreen(){
   go('ranking');
-  _buildRankCatTabs();
-  loadRanking();
+  ['solo','battle'].forEach(m=>{const el=document.getElementById('rank-tab-'+m);if(el)el.classList.toggle('active',m===_rankMode);});
+  _buildRankCatTabs();loadRanking();
 }
-
-function _buildRankCatTabs() {
-  const tabs = document.getElementById('rankCatTabs');
-  if(!tabs) return;
-  // カテゴリ一覧を取得
-  const bank = loadBank();
-  const cats = [...new Set(Object.values(bank).map(g=>g.category).filter(Boolean))];
-  const allCats = ['all', ...cats];
-  tabs.innerHTML = allCats.map(c => {
-    const active = _rankCat === c;
-    const label = c === 'all' ? '🌟 総合' : c;
-    return `<button onclick="_selectRankCat('${esc(c)}')"
-      style="padding:8px 14px;border-radius:20px;min-height:38px;
-        border:2px solid ${active?'var(--gold)':'var(--bd-default)'};
-        background:${active?'rgba(255,208,64,.12)':'var(--bg-card)'};
-        color:${active?'var(--gold)':'var(--tx-body)'};
-        font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;
-        -webkit-tap-highlight-color:transparent">
-      ${esc(label)}
-    </button>`;
+function _buildRankCatTabs(){
+  const tabs=document.getElementById('rankCatTabs');if(!tabs)return;
+  const scores=_getScoresByMode(_rankMode);
+  const bank=loadBank();
+  const bankCats=[...new Set(Object.values(bank).map(g=>g.category).filter(Boolean))];
+  const scoreCats=[...new Set(scores.map(s=>s.category).filter(Boolean))];
+  const cats=[...new Set([...scoreCats,...bankCats])];
+  const allCats=['all',...cats];
+  tabs.innerHTML=allCats.map(c=>{
+    const active=_rankCat===c;
+    const label=c==='all'?'🌟 総合':c;
+    return `<button onclick="_selectRankCat('${esc(c)}')" style="padding:8px 14px;border-radius:20px;min-height:38px;border:2px solid ${active?'var(--gold)':'var(--bd-default)'};background:${active?'rgba(255,208,64,.12)':'var(--bg-card)'};color:${active?'var(--gold)':'var(--tx-body)'};font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent">${esc(label)}</button>`;
   }).join('');
 }
-
-function _selectRankCat(cat) {
-  _rankCat = cat;
-  _buildRankCatTabs();
-  loadRanking();
+function _getScoresByMode(mode){
+  let all=[];try{all=JSON.parse(localStorage.getItem('qf_scores')||'[]');}catch(e){}
+  if(mode==='solo')return all.filter(s=>s.mode==='solo'||s.correct!=null);
+  return all.filter(s=>s.mode==='battle'||(!s.mode&&s.res));
 }
-
+function _selectRankCat(cat){_rankCat=cat;_buildRankCatTabs();loadRanking();}
 async function loadRanking(){
   const el=document.getElementById('rankList');
   el.innerHTML='<div class="spin"></div>';
-
-  // localStorageからスコアを取得
-  let allScores = [];
-  try { allScores = JSON.parse(localStorage.getItem('qf_scores')||'[]'); } catch(e){}
-
-  // カテゴリフィルタ
-  let filtered = _rankCat==='all'
-    ? allScores
-    : allScores.filter(s=>s.category===_rankCat);
-
-  // 名前ごとの最高スコアに集約
-  const best = {};
-  filtered.forEach(s=>{
-    const key = s.name || 'プレイヤー';
-    if(!best[key] || s.score > best[key].score) best[key] = s;
-  });
-  let rows = Object.values(best).sort((a,b)=>b.score-a.score).slice(0,10);
-
-  // Supabaseが設定されていれば上書き
-  if(USE_SB && sbClient){
-    try{
-      const q = sbClient.from('quiz_fever_scores').select('player_name,score,accuracy,difficulty,category').order('score',{ascending:false});
-      const filter = _rankCat!=='all' ? q.eq('category',_rankCat) : q;
-      const {data} = await filter.limit(10);
-      if(data&&data.length) rows = data.map(d=>({name:d.player_name,score:d.score,acc:d.accuracy,diff:d.difficulty,category:d.category}));
-    }catch(e){}
-  }
-
-  if(!rows.length){
-    const catLabel = _rankCat==='all'?'総合':_rankCat;
-    el.innerHTML=`<div style="text-align:center;padding:36px;font-size:15px;color:var(--tx-muted)">「${catLabel}」の記録がありません。<br>対戦して最初の魔道師になれ！</div>`;
+  let allScores=_getScoresByMode(_rankMode);
+  let filtered=_rankCat==='all'?allScores:allScores.filter(s=>s.category===_rankCat);
+  const de={easy:'🐣',normal:'📖',hard:'💀'};
+  const pc=['g','s','b'];const medals=['🥇','🥈','🥉'];
+  if(_rankMode==='solo'){
+    const best={};
+    filtered.forEach(s=>{const key=(s.name||'魔道師')+'|'+(s.category||'');const ok=s.correct??0;if(!best[key]||ok>(best[key].correct??0))best[key]=s;});
+    const rows=Object.values(best).sort((a,b)=>(b.correct??0)-(a.correct??0)||b.acc-a.acc).slice(0,20);
+    if(!rows.length){const cl=_rankCat==='all'?'総合':_rankCat;el.innerHTML=`<div style="text-align:center;padding:36px;font-size:15px;color:var(--tx-muted)">「${cl}」のソロ記録がありません。<br>🏅 ソロで挑戦して最初の魔道師になれ！</div>`;return;}
+    el.innerHTML=rows.map((r,i)=>{
+      const name=esc(r.name||'魔道師');const ok=r.correct??0;const mq=r.maxQ||'?';const acc=r.acc||0;const cat=r.category||'';
+      return `<div class="rank-row"><div class="rk-pos ${pc[i]||''}" style="font-size:${i<3?'24px':'16px'}">${i<3?medals[i]:i+1}</div><div style="font-size:20px">🧙</div><div class="rk-name">${name}${cat&&_rankCat==='all'?`<span style="font-size:11px;color:var(--tx-muted);margin-left:4px">${esc(cat)}</span>`:''}</div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px"><div class="rk-score" style="font-size:18px">${ok}<span style="font-size:12px;color:var(--tx-muted);">/${mq}問</span></div><div style="font-size:11px;color:var(--tx-muted)">${acc}%正解</div></div></div>`;
+    }).join('');
     return;
   }
-
-  const de={easy:'🐣',normal:'📖',hard:'💀'};
-  const pc=['g','s','b'];
-  const medals=['🥇','🥈','🥉'];
-  el.innerHTML = rows.map((r,i)=>{
-    const name = esc(r.name||r.player_name||'魔道師');
-    const score = Number(r.score||0).toLocaleString();
-    const acc = r.acc||r.accuracy||0;
-    const diff = r.diff||r.difficulty||'normal';
-    const correct = r.correct||'';
-    return `<div class="rank-row">
-      <div class="rk-pos ${pc[i]||''}" style="font-size:${i<3?'24px':'16px'}">${i<3?medals[i]:i+1}</div>
-      <div style="font-size:20px">${de[diff]||'⭐'}</div>
-      <div class="rk-name">${name}${r.category&&_rankCat==='all'?`<span style="font-size:11px;color:var(--tx-muted);margin-left:4px">${esc(r.category)}</span>`:''}</div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
-        <div class="rk-score">${score}pt</div>
-        <div style="font-size:11px;color:var(--tx-muted)">${acc}%正解</div>
-      </div>
-    </div>`;
+  const best={};
+  filtered.forEach(s=>{const key=s.name||'プレイヤー';if(!best[key]||s.score>best[key].score)best[key]=s;});
+  const rows=Object.values(best).sort((a,b)=>b.score-a.score).slice(0,10);
+  if(!rows.length){const cl=_rankCat==='all'?'総合':_rankCat;el.innerHTML=`<div style="text-align:center;padding:36px;font-size:15px;color:var(--tx-muted)">「${cl}」の対戦記録がありません。</div>`;return;}
+  el.innerHTML=rows.map((r,i)=>{
+    const name=esc(r.name||r.player_name||'魔道師');const score=Number(r.score||0).toLocaleString();const acc=r.acc||0;const diff=r.diff||'normal';
+    return `<div class="rank-row"><div class="rk-pos ${pc[i]||''}" style="font-size:${i<3?'24px':'16px'}">${i<3?medals[i]:i+1}</div><div style="font-size:20px">${de[diff]||'⭐'}</div><div class="rk-name">${name}${r.category&&_rankCat==='all'?`<span style="font-size:11px;color:var(--tx-muted);margin-left:4px">${esc(r.category)}</span>`:''}</div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px"><div class="rk-score">${score}pt</div><div style="font-size:11px;color:var(--tx-muted)">${acc}%正解</div></div></div>`;
   }).join('');
 }
-
 function shuf(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 </script>
