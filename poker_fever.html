@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>百式ゲーム王国</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Barlow+Condensed:wght@400;600;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Dots&family=Noto+Sans+JP:wght@400;700;900&family=Barlow+Condensed:wght@400;600;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--red:#D32F2F;--red2:#E53935;--red3:#FF5252;--gold:#F5A623;--gold2:#FFB300;--dark:#1A1A1A;--dark2:#222222;--dark3:#2D2D2D;--gray:#888;--light:#F5F5F5;--white:#FFFFFF;--green:#2E7D32;--green2:#43A047;--blue:#1565C0;--blue2:#1976D2;--win:#F5A623;--lose:#D32F2F;--font-jp:'Noto Sans JP',sans-serif;--font-en:'Barlow Condensed','Oswald',sans-serif;}
+:root{--red:#EF4444;--red2:#F87171;--red3:#FCA5A5;--gold:#FBBF24;--gold2:#FCD34D;--dark:#111827;--dark2:#1F2937;--dark3:#374151;--gray:#9CA3AF;--light:#F9FAFB;--white:#FFFFFF;--green:#22C55E;--green2:#4ADE80;--blue:#3B82F6;--blue2:#60A5FA;--win:#FBBF24;--lose:#EF4444;--font-jp:'Noto Sans JP',sans-serif;--font-en:'Barlow Condensed','Oswald',sans-serif;}
 *,::before,::after{margin:0;padding:0;box-sizing:border-box}
-body{background:#111;min-height:100vh;display:flex;font-family:var(--font-jp);overflow-x:hidden;color:var(--white);}
-#sidebar{width:190px;min-width:190px;background:var(--dark2);border-right:3px solid var(--red);min-height:100vh;display:flex;flex-direction:column;padding:14px 10px;gap:10px;position:sticky;top:0;flex-shrink:0;}
+body{background:#0f172a;min-height:100vh;display:flex;font-family:var(--font-jp);overflow-x:hidden;color:var(--white);}
+#sidebar{width:190px;min-width:190px;background:var(--dark2);border-right:3px solid var(--red2);min-height:100vh;display:flex;flex-direction:column;padding:14px 10px;gap:10px;position:sticky;top:0;flex-shrink:0;}
 #sidebar.hidden{display:none}
 .sb-logo{text-align:center;padding-bottom:10px;border-bottom:2px solid var(--red)}
 .sb-logo-icon{font-size:32px;line-height:1}
@@ -17,12 +17,12 @@ body{background:#111;min-height:100vh;display:flex;font-family:var(--font-jp);ov
 .sb-av{width:64px;height:64px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:28px;border:3px solid var(--gold);margin:0 auto 4px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.4)}
 .sb-name{font-family:var(--font-jp);font-weight:700;font-size:14px;color:var(--white);text-align:center;margin-bottom:2px}
 .sb-medals-box{background:var(--dark3);border:2px solid var(--gold);border-radius:8px;padding:8px 6px;text-align:center;}
-.sb-medals-lbl{font-family:var(--font-en);font-size:11px;font-weight:600;color:var(--gold);letter-spacing:.12em}
-.sb-medals-val{font-family:var(--font-en);font-size:32px;font-weight:900;color:var(--gold);line-height:1.1}
+.sb-medals-lbl{font-family:var(--font-jp);font-size:12px;font-weight:700;color:var(--gold);letter-spacing:.12em}
+.sb-medals-val{font-family:'Zen Dots',var(--font-en);font-size:32px;font-weight:900;color:var(--gold);line-height:1.1}
 .sb-medals-unit{font-family:var(--font-jp);font-size:11px;color:rgba(245,166,35,.7)}
 .sb-daily{background:var(--dark3);border:2px solid var(--green2);border-radius:6px;padding:6px 8px;text-align:center;font-family:var(--font-jp);font-size:11px;color:var(--green2);font-weight:700}
 .sb-nav{display:flex;flex-direction:column;gap:5px;flex:1}
-.sb-nav-btn{background:var(--dark3);border:2px solid #444;border-radius:6px;padding:9px 8px;cursor:pointer;transition:all .15s;font-family:var(--font-jp);font-size:13px;font-weight:700;color:var(--light);text-align:center;}
+.sb-nav-btn{background:var(--dark3);border:2px solid #555;border-radius:8px;padding:10px 8px;cursor:pointer;transition:all .15s;font-family:var(--font-jp);font-size:13px;font-weight:700;color:var(--light);text-align:center;}
 .sb-nav-btn:hover{background:var(--red);border-color:var(--red);color:var(--white)}
 .sb-logout{background:transparent;border:2px solid #555;color:#888;border-radius:6px;font-family:var(--font-jp);font-size:12px;padding:8px;cursor:pointer;transition:all .1s;width:100%}
 .sb-logout:hover{border-color:var(--red3);color:var(--red3)}
