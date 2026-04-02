@@ -277,7 +277,7 @@ body{background:var(--bg-page);color:var(--tx-body);font-family:'Noto Sans JP',s
 </div>
 
 <!-- ══════ タイトル ══════ -->
-<div class="screen active" id="screen-title">
+<div class="screen" id="screen-title">
   <span class="castle">🏰</span>
   <div class="logo-sub">クイズ魔道学院</div>
   <div class="logo-fever">FEVER</div>
@@ -622,7 +622,9 @@ const P_AVATARS = ['🧙','🧝','🧚','🧜'];
 // ══════════════════════════════════════
 //  グローバル状態
 // ══════════════════════════════════════
-let pName = localStorage.getItem('qf_name') || '魔道師';
+// ロビーのhkg_userから名前を優先取得
+const _hkgUser = JSON.parse(localStorage.getItem('hkg_user') || 'null');
+let pName = (_hkgUser && _hkgUser.name) || localStorage.getItem('qf_name') || '魔道師';
 let winPts = 3;
 let aiQuestions = null; // AI生成問題
 let aiMerge = false;
@@ -763,13 +765,21 @@ const QB_BASE=[
 // ══════════════════════════════════════
 onload = () => {
   makeStars(); initBank(); renderGenreLib(); refreshCatChips();
-  // 初回起動（名前未設定）は直接名前入力ダイアログを表示してゲームモードへ
-  if(!localStorage.getItem('qf_name')) {
-    // タイトル画面をスキップしてログイン→モード画面へ
+  // ロビーからログイン済みなら即ゲームモード画面へ（タイトル画面スキップ）
+  const _hu = JSON.parse(localStorage.getItem('hkg_user')||'null');
+  if(_hu && _hu.name) {
+    // ロビーログイン済み：名前を同期してモード画面へ
+    pName = _hu.name;
+    localStorage.setItem('qf_name', pName);
+    refreshW();
+    go('mode');
+  } else if(!localStorage.getItem('qf_name')) {
+    // 未ログイン・初回：名前ダイアログ→モード画面
     _firstLogin = true;
     openDlg();
   } else {
     refreshW();
+    go('mode');
   }
 };
 let _firstLogin = false;
