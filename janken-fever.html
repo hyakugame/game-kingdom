@@ -45,14 +45,14 @@ body{background:var(--dark);color:#F0FFF4;font-family:'Noto Sans JP','Barlow Con
 /* ===== #sa ロビー ===== */
 #sa .lobby-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px;padding:16px}
 .jk-emoji{font-size:56px;text-align:center;line-height:1}
-.jk-title{font-family:'Oswald',sans-serif;font-size:34px;font-weight:700;color:var(--gold);text-align:center;text-shadow:0 0 20px rgba(255,215,0,.4);line-height:1.1}
+.jk-title{font-family:'Noto Sans JP',sans-serif;font-size:38px;font-weight:900;color:var(--gold);letter-spacing:.06em;text-align:center;text-shadow:0 0 20px rgba(255,215,0,.4);line-height:1.1}
 .lobby-medals{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 32px;text-align:center;width:100%}
 .lobby-med-lbl{font-size:12px;color:#888;letter-spacing:.1em}
 .lobby-med-val{font-family:'Oswald',sans-serif;font-size:64px;font-weight:700;color:var(--green);line-height:1}
 .scores-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
 .score-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center}
-.score-lbl{font-size:11px;color:#888;letter-spacing:.08em}
-.score-val{text-shadow:0 2px 8px rgba(0,0,0,.6);font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:var(--gold)}
+.score-lbl{font-size:14px;color:#A8C4A8;letter-spacing:.05em;font-weight:700;font-family:'Noto Sans JP',sans-serif}
+.score-val{font-family:'Zen Dots',sans-serif;text-shadow:0 2px 8px rgba(0,0,0,.6);font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:var(--gold)}
 /* ===== #sb じゃんけん ===== */
 #sb{position:relative}
 .rov{position:absolute;inset:0;background:rgba(0,0,0,.9);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:10;padding:20px;gap:12px}
@@ -1061,7 +1061,7 @@ function showResult(){
   document.getElementById('gr-nr').style.display=(gained>0&&gained>=hiScore&&hiScore>0)?'block':'none';
   document.getElementById('hi-v').textContent=hiScore;document.getElementById('tot-v').textContent=totalMedals;
   show('sgr');bgmPlay('attract');
-  if(gained>0){seWin();speakAt('やっっぴー！！',400);}else{seLose();speakAt('ずっこー！',400);}
+  if(gained>0){seWin();speakAt('やっっぴー！！',400);}else{seLose();var _u=JSON.parse(localStorage.getItem('hkg_user')||'null');if(_u&&_u.medals>0){_u.medals=Math.max(0,_u.medals-1);localStorage.setItem('hkg_user',JSON.stringify(_u));if(typeof updateBadge==='function')updateBadge();}speakAt('ずっこー！',400);}
 }
 
 // PAT LAMP
