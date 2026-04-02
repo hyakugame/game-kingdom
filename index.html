@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>ç¾å¼ã²ã¼ã çå½</title>
+<title>百式ゲーム王国</title>
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Barlow+Condensed:wght@700;900&family=Noto+Sans+JP:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
 
-/* ===== ã­ã°ã¤ã³ ===== */
+/* ===== ログイン ===== */
 #login{width:100%;max-width:380px;padding:24px 20px;display:flex;flex-direction:column;align-items:center}
 .logo-en{font-size:11px;letter-spacing:.3em;color:rgba(0,200,255,.5);margin-bottom:4px}
 .logo-jp{font-family:'Noto Sans JP',sans-serif;font-size:28px;font-weight:900;background:linear-gradient(135deg,#fff 0%,#88ddff 40%,#ffcc44 70%,#ff8844 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.06em;line-height:1;margin-bottom:4px}
@@ -35,10 +35,10 @@ body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100
 .gbtn{width:100%;padding:10px;margin-top:12px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:transparent;cursor:pointer;font-size:13px;font-weight:700;color:rgba(255,255,255,.4);font-family:'Barlow Condensed',sans-serif}
 .gbtn:hover{color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.3)}
 
-/* ===== ã­ãã¼ ===== */
+/* ===== ロビー ===== */
 #lobby{display:none;width:100%;max-width:420px;flex-direction:column}
 
-/* ãããã¼ */
+/* ヘッダー */
 .hdr{padding:12px 16px;background:rgba(0,0,0,.5);border-bottom:1px solid rgba(0,200,255,.12);display:flex;align-items:center;gap:12px}
 .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#0088cc,#005588);border:2px solid rgba(0,200,255,.4);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;flex-shrink:0;text-transform:uppercase}
 .hdr-info{flex:1}
@@ -46,7 +46,7 @@ body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100
 .hdr-medals{font-family:'Press Start 2P',monospace;font-size:12px;color:#ffcc00}
 .lout{background:none;border:1px solid rgba(255,255,255,.15);border-radius:5px;color:rgba(255,255,255,.4);font-size:10px;font-family:'Barlow Condensed',sans-serif;font-weight:700;padding:4px 10px;cursor:pointer;flex-shrink:0}
 
-/* ãã¤ãªã¼ãã¼ãã¹ */
+/* デイリーボーナス */
 .bonus-bar{margin:12px 16px 0;background:linear-gradient(135deg,rgba(255,180,0,.12),rgba(255,120,0,.08));border:1px solid rgba(255,180,0,.3);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.2s}
 .bonus-bar:hover{border-color:rgba(255,180,0,.6);background:linear-gradient(135deg,rgba(255,180,0,.2),rgba(255,120,0,.12))}
 .bonus-bar.got{cursor:default;opacity:.5}
@@ -57,7 +57,7 @@ body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100
 .bonus-badge{background:linear-gradient(135deg,#ff8800,#cc5500);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0}
 .bonus-badge.done{background:rgba(255,255,255,.1);color:rgba(255,255,255,.3)}
 
-/* ã²ã¼ã ãªã¹ã */
+/* ゲームリスト */
 .lobby-body{padding:12px 16px 16px}
 .glbl{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.3em;text-align:center;margin-bottom:10px}
 .card{display:block;text-decoration:none;background:linear-gradient(135deg,rgba(0,20,40,.9),rgba(0,10,25,.95));border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;margin-bottom:12px;position:relative;transition:all .2s}
@@ -76,7 +76,7 @@ body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100
 .bhot{background:rgba(255,150,0,.8);color:#fff}
 .foot{padding:12px;text-align:center;font-size:10px;color:rgba(255,255,255,.12)}
 
-/* ãã¼ã¹ã */
+/* トースト */
 .toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.9);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;color:#fff;pointer-events:none;z-index:999;opacity:0;transition:opacity .3s;white-space:nowrap}
 .toast.show{opacity:1}
 
@@ -94,15 +94,15 @@ body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100
 </head>
 <body>
 
-<!-- ã­ã°ã¤ã³ -->
+<!-- ログイン -->
 <div id="login">
   <div class="logo-en">HYAKUSHIKI GAME KINGDOM</div>
-  <div class="logo-jp">ç¾å¼ã²ã¼ã çå½</div>
-  <div class="logo-sub">ALL GAMES Â· ALL MEDALS</div>
+  <div class="logo-jp">百式ゲーム王国</div>
+  <div class="logo-sub">ALL GAMES · ALL MEDALS</div>
   <div class="box">
-    <div class="box-title">ð® ãã¬ã¤ã¤ã¼èªè¨¼</div>
-    <div class="box-hint">ååã¯èªåã§æ°è¦ç»é²ããã¾ã</div>
-    <input class="nf" type="text" id="nf" placeholder="ãªã¾ãï¼10æå­ä»¥åï¼" maxlength="10" autocomplete="off">
+    <div class="box-title">🎮 プレイヤー認証</div>
+    <div class="box-hint">初回は自動で新規登録されます</div>
+    <input class="nf" type="text" id="nf" placeholder="なまえ（10文字以内）" maxlength="10" autocomplete="off">
     <div class="dots">
       <div class="dot" id="d0"></div>
       <div class="dot" id="d1"></div>
@@ -119,16 +119,16 @@ body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100
       <button class="pb" onclick="pi('7')">7</button>
       <button class="pb" onclick="pi('8')">8</button>
       <button class="pb" onclick="pi('9')">9</button>
-      <button class="pb del" onclick="pd()">âæ¶ã</button>
+      <button class="pb del" onclick="pd()">←消す</button>
       <button class="pb" onclick="pi('0')">0</button>
-      <button class="pb ok" id="ok" onclick="doLogin()" disabled>OKâ</button>
+      <button class="pb ok" id="ok" onclick="doLogin()" disabled>OK✓</button>
     </div>
     <div class="lmsg" id="lmsg"></div>
-    <button class="gbtn" onclick="guest()">ð² ã²ã¹ãã§ãã¬ã¤ï¼200æããã¹ã¿ã¼ãï¼</button>
+    <button class="gbtn" onclick="guest()">🎲 ゲストでプレイ（200枚からスタート）</button>
   </div>
 </div>
 
-<!-- ã­ãã¼ -->
+<!-- ロビー -->
 <div id="lobby">
   <div class="hdr">
     <div class="avatar" id="avatar">?</div>
@@ -136,44 +136,44 @@ body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100
       <div class="hdr-name" id="uname">--</div>
       <div class="hdr-medals" id="mc">00000</div>
     </div>
-    <button class="lout" onclick="doLogout()">ã­ã°ã¢ã¦ã</button>
+    <button class="lout" onclick="doLogout()">ログアウト</button>
   </div>
 
-  <!-- ãã¤ãªã¼ãã¼ãã¹ -->
+  <!-- デイリーボーナス -->
   <div class="bonus-bar" id="bonusBar" onclick="claimBonus()">
-    <div class="bonus-icon">ð</div>
+    <div class="bonus-icon">🎁</div>
     <div class="bonus-info">
-      <div class="bonus-title">ãã¤ãªã¼ãã¼ãã¹</div>
-      <div class="bonus-sub" id="bonusSub">ã¿ãããã¦50æããããï¼</div>
+      <div class="bonus-title">デイリーボーナス</div>
+      <div class="bonus-sub" id="bonusSub">タップして50枚もらおう！</div>
     </div>
-    <div class="bonus-badge" id="bonusBadge">+50æ</div>
+    <div class="bonus-badge" id="bonusBadge">+50枚</div>
   </div>
 
   <div class="lobby-body">
-    <div class="glbl">â¶ SELECT GAME â</div>
+    <div class="glbl">▶ SELECT GAME ◀</div>
 
     <a class="card" href="slot.html" onclick="go(event,'slot.html')">
-      <div class="banner sl">ð°ð´ðº</div>
+      <div class="banner sl">🎰🌴🌺</div>
       <div class="cinfo">
-        <div class="cname">OKI FEVER SLOT <small>æ²ç¸ã¹ã­ãã</small></div>
-        <div class="cdesc">å¤©å½ã¢ã¼ãã»ãã­ãã­ã¢ã¼ãæ­è¼ãè¨­å®1ã6ã§æ¯åå¤ããã</div>
+        <div class="cname">OKI FEVER SLOT <small>沖縄スロット</small></div>
+        <div class="cdesc">天国モード・ドキドキモード搭載。設定1〜6で毎回変わる。</div>
       </div>
       <span class="badge bnew">NEW</span>
     </a>
 
     <a class="card" href="janken-fever.html" onclick="go(event,'janken-fever.html')">
-      <div class="banner jk">ââð</div>
+      <div class="banner jk">✊✌🖐</div>
       <div class="cinfo">
-        <div class="cname">ã°ã¼ãã§ã­ãã¼ FEVER <small>ãããããã²ã¼ã </small></div>
-        <div class="cdesc">ãããããããã«ã¡ãã«ã²ã¼ã ãé£åã§ãã¼ãã¹ãã£ã¼ãã¼ï¼</div>
+        <div class="cname">グーチョキパー FEVER <small>じゃんけんゲーム</small></div>
+        <div class="cdesc">じゃんけんバトルメダルゲーム。連勝でボーナスフィーバー！</div>
       </div>
     </a>
 
     <a class="card" href="poker_fever.html" onclick="go(event,'poker_fever.html')">
-      <div class="banner pk">ðâ ð</div>
+      <div class="banner pk">🃏♠🃏</div>
       <div class="cinfo">
-        <div class="cname">7's WILD PLUS <small>ãããªãã¼ã«ã¼</small></div>
-        <div class="cdesc">53æããã­ï¼ã¸ã§ã¼ã«ã¼ä»ãï¼ã11ç¨®ã®å½¹ã§ããã«ã¢ããã</div>
+        <div class="cname">7's WILD PLUS <small>ビデオポーカー</small></div>
+        <div class="cdesc">53枚デッキ（ジョーカー付き）。11種の役でダブルアップ。</div>
       </div>
       <span class="badge bhot">HOT</span>
     </a>
@@ -187,25 +187,25 @@ body{background:#050810;font-family:'Barlow Condensed',sans-serif;min-height:100
       <span class="badge bnew">NEW</span>
     </a>
   
-  <!-- ã©ã³ã­ã³ã° -->
+  <!-- ランキング -->
   <div class="ranking-section" id="rankingSection">
-    <div class="rank-section-title">ð ãã¬ã¤ã¤ã¼ã©ã³ã­ã³ã°</div>
+    <div class="rank-section-title">🏆 プレイヤーランキング</div>
     
-    <!-- ãã¼ã«ã¼ -->
+    <!-- ポーカー -->
     <div class="rank-block">
-      <div class="rank-block-title">ð ãã¼ã«ã¼</div>
-      <div class="rank-list" id="rank-poker">èª­ã¿è¾¼ã¿ä¸­...</div>
+      <div class="rank-block-title">🃏 ポーカー</div>
+      <div class="rank-list" id="rank-poker">読み込み中...</div>
     </div>
     
-    <!-- ããããã -->
+    <!-- じゃんけん -->
     <div class="rank-block">
-      <div class="rank-block-title">â ã°ã¼ãã§ã­ãã¼ FEVER</div>
-      <div class="rank-list" id="rank-janken">èª­ã¿è¾¼ã¿ä¸­...</div>
+      <div class="rank-block-title">✊ グーチョキパー FEVER</div>
+      <div class="rank-list" id="rank-janken">読み込み中...</div>
     </div>
   </div>
 
   </div>
-  <div class="foot">Â© 2025 ç¾å¼ã²ã¼ã çå½ Â· ã¡ãã«ã¯ã²ã¼ã éã§å±é</div>
+  <div class="foot">© 2025 百式ゲーム王国 · メダルはゲーム間で共通</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -216,51 +216,51 @@ function loadRankings(){
   var SBU='https://gtzfcoiowdnyjvwikxku.supabase.co',SBK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
   var H={'apikey':SBK,'Authorization':'Bearer '+SBK};
   
-  // ãã¼ã«ã¼ã©ã³ã­ã³ã°ï¼game_usersãã¼ãã«ï¼
+  // ポーカーランキング（game_usersテーブル）
   fetch(SBU+'/rest/v1/rankings?select=name,score&name=like.[pk]%&created_at=gte.2026-04-02T02:30:00&score=gt.0&order=score.desc&limit=50',{headers:H})
     .then(r=>r.json()).then(data=>{
       var el=document.getElementById('rank-poker');if(!el)return;
-      if(!Array.isArray(data)||data.length===0){el.textContent='(ã¾ã è¨é²ãªã)';return;}
-      // [pk]ãã¬ãã£ãã¯ã¹ãé¤å»ãã¦dedup
+      if(!Array.isArray(data)||data.length===0){el.textContent='(まだ記録なし)';return;}
+      // [pk]プレフィックスを除去してdedup
       var seen={},deduped=[];
       data.forEach(function(r){
         var nm=(r.name||'').replace(/^[pk]/,'');
         if(!seen[nm]){seen[nm]=true;deduped.push({name:nm,score:r.score});}
       });
-      if(deduped.length===0){el.textContent='(ã¾ã è¨é²ãªã)';return;}
+      if(deduped.length===0){el.textContent='(まだ記録なし)';return;}
       el.innerHTML=deduped.slice(0,10).map(function(r,i){
-        var badge=i===0?'ð¥':i===1?'ð¥':i===2?'ð¥':(i+1)+'ä½';
-        return '<div class="rank-row"><span class="rank-pos">'+badge+'</span><span class="rank-name">'+((r.name||'---').slice(0,10))+'</span><span class="rank-score">'+(r.score||0)+'æ</span></div>';
+        var badge=i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'位';
+        return '<div class="rank-row"><span class="rank-pos">'+badge+'</span><span class="rank-name">'+((r.name||'---').slice(0,10))+'</span><span class="rank-score">'+(r.score||0)+'枚</span></div>';
       }).join('');
     }).catch(function(){
       var el=document.getElementById('rank-poker');
-      if(el)el.innerHTML='<div style="color:#666;font-size:12px">åå¾ã§ãã¾ããã§ãã</div>';
+      if(el)el.innerHTML='<div style="color:#666;font-size:12px">取得できませんでした</div>';
     });
     
-  // ãããããã©ã³ã­ã³ã°ï¼jk_scoresãã¼ãã«ï¼
+  // じゃんけんランキング（jk_scoresテーブル）
   fetch(SBU+'/rest/v1/rankings?select=name,score,created_at&created_at=gte.2026-04-02T02:30:00&order=score.desc&limit=50',{headers:H})
     .then(r=>r.json()).then(data=>{
       var el=document.getElementById('rank-janken');if(!el)return;
-      if(!Array.isArray(data)||data.length===0){el.textContent='(ã¾ã è¨é²ãªã)';return;}
-      // score>0ãã£ã«ã¿ + åådedupï¼ãã¤ã¹ã³ã¢åï¼
+      if(!Array.isArray(data)||data.length===0){el.textContent='(まだ記録なし)';return;}
+      // score>0フィルタ + 名前dedup（ハイスコア型）
       var seen={},deduped=[];
       data.filter(function(r){return r.score>0;}).forEach(function(r){
         if(!seen[r.name]){seen[r.name]=true;deduped.push(r);}
       });
-      if(deduped.length===0){el.textContent='(ã¾ã è¨é²ãªã)';return;}
+      if(deduped.length===0){el.textContent='(まだ記録なし)';return;}
       el.innerHTML=deduped.slice(0,10).map(function(r,i){
-        var badge=i===0?'ð¥':i===1?'ð¥':i===2?'ð¥':(i+1)+'ä½';
-        return '<div class="rank-row"><span class="rank-pos">'+badge+'</span><span class="rank-name">'+((r.name||'---').slice(0,10))+'</span><span class="rank-score">'+(r.score||0)+'æ</span></div>';
+        var badge=i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'位';
+        return '<div class="rank-row"><span class="rank-pos">'+badge+'</span><span class="rank-name">'+((r.name||'---').slice(0,10))+'</span><span class="rank-score">'+(r.score||0)+'枚</span></div>';
       }).join('');
     }).catch(function(){
       var el=document.getElementById('rank-janken');
-      if(el)el.innerHTML='<div style="color:#666;font-size:12px">åå¾ã§ãã¾ããã§ãã</div>';
+      if(el)el.innerHTML='<div style="color:#666;font-size:12px">取得できませんでした</div>';
     });
 }
 
 var pin='', user=null;
 
-// èµ·åæãã§ãã¯
+// 起動時チェック
 try{
   var saved=JSON.parse(localStorage.getItem('hkg_user')||'null');
   if(saved&&saved.name){user=saved;openLobby();}
@@ -271,8 +271,8 @@ function openLobby(){loadRankings();
   document.getElementById('lobby').style.display='flex';
   var n=user.name||'GUEST';
   document.getElementById('uname').textContent=n;
-  document.getElementById('avatar').textContent=n==='GUEST'?'ð²':n.charAt(0).toUpperCase();
-  document.getElementById('mc').textContent='ðª '+String(user.medals||0).padStart(5,'0');
+  document.getElementById('avatar').textContent=n==='GUEST'?'🎲':n.charAt(0).toUpperCase();
+  document.getElementById('mc').textContent='🪙 '+String(user.medals||0).padStart(5,'0');
   checkBonus();
 }
 function openLogin(){
@@ -283,19 +283,19 @@ function openLogin(){
 // PIN
 function pi(n){if(pin.length>=4)return;pin+=n;upd();if(pin.length===4)document.getElementById('ok').disabled=false;}
 function pd(){pin=pin.slice(0,-1);upd();document.getElementById('ok').disabled=true;}
-function upd(){for(var i=0;i<4;i++){var d=document.getElementById('d'+i);d.textContent=i<pin.length?'â':'';i<pin.length?d.classList.add('on'):d.classList.remove('on');}}
+function upd(){for(var i=0;i<4;i++){var d=document.getElementById('d'+i);d.textContent=i<pin.length?'●':'';i<pin.length?d.classList.add('on'):d.classList.remove('on');}}
 
 function doLogin(){
   var name=document.getElementById('nf').value.trim();
-  if(!name){msg('ãªã¾ããå¥åãã¦ãã ãã','err');return;}
-  if(pin.length<4){msg('4æ¡ã®PINãå¥åãã¦ãã ãã','err');return;}
+  if(!name){msg('なまえを入力してください','err');return;}
+  if(pin.length<4){msg('4桁のPINを入力してください','err');return;}
   var db=getDB();
   if(db[name]){
-    if(db[name].pin===pin){user={name:name,medals:db[name].medals||0,id:"hkg-"+name};msg('ã­ã°ã¤ã³æåï¼','ok');save();setTimeout(openLobby,400);}
-    else msg('PINãéãã¾ã','err');
+    if(db[name].pin===pin){user={name:name,medals:db[name].medals||0,id:"hkg-"+name};msg('ログイン成功！','ok');save();setTimeout(openLobby,400);}
+    else msg('PINが違います','err');
   }else{
     db[name]={pin:pin,medals:200};saveDB(db);
-    user={name:name,medals:200,id:"hkg-"+name};msg('æ°è¦ç»é²ãã¾ããï¼','ok');save();setTimeout(openLobby,400);
+    user={name:name,medals:200,id:"hkg-"+name};msg('新規登録しました！','ok');save();setTimeout(openLobby,400);
   }
 }
 function guest(){user={name:'GUEST',medals:200,id:'hkg-GUEST'};save();openLobby();}
@@ -306,21 +306,21 @@ function doLogout(){
   openLogin();
 }
 
-// ã²ã¼ã ã¸
+// ゲームへ
 function go(e,href){e.preventDefault();save();location.href=href;}
 
-// ãã¼ã¸æ»ãæ
+// ページ戻り時
 window.addEventListener('pageshow',function(){
   try{
     var s=JSON.parse(localStorage.getItem('hkg_user')||'null');
     if(s&&user&&s.name===user.name){
       user=s;
-      document.getElementById('mc').textContent='ðª '+String(user.medals||0).padStart(5,'0');
+      document.getElementById('mc').textContent='🪙 '+String(user.medals||0).padStart(5,'0');
     }
   }catch(e){}
 });
 
-// ===== ãã¤ãªã¼ãã¼ãã¹ =====
+// ===== デイリーボーナス =====
 function checkBonus(){
   var today=new Date().toDateString();
   var lastBonus=localStorage.getItem('hkg_daily_bonus');
@@ -330,26 +330,26 @@ function checkBonus(){
   if(lastBonus===today){
     bar.classList.add('got');
     badge.classList.add('done');
-    badge.textContent='ååæ¸';
-    sub.textContent='ã¾ãææ¥æ¥ã¦ã­ï¼';
+    badge.textContent='受取済';
+    sub.textContent='また明日来てね！';
   }else{
     bar.classList.remove('got');
     badge.classList.remove('done');
-    badge.textContent='+50æ';
-    sub.textContent='ã¿ãããã¦50æããããï¼';
+    badge.textContent='+50枚';
+    sub.textContent='タップして50枚もらおう！';
   }
 }
 
 function claimBonus(){
   var today=new Date().toDateString();
   var lastBonus=localStorage.getItem('hkg_daily_bonus');
-  if(lastBonus===today){toast('ä»æ¥ã¯ããåãåãæ¸ã¿ã§ãï¼');return;}
+  if(lastBonus===today){toast('今日はもう受け取り済みです！');return;}
   user.medals=(user.medals||0)+50;
   save();
   localStorage.setItem('hkg_daily_bonus',today);
-  document.getElementById('mc').textContent='ðª '+String(user.medals).padStart(5,'0');
+  document.getElementById('mc').textContent='🪙 '+String(user.medals).padStart(5,'0');
   checkBonus();
-  toast('ð ãã¤ãªã¼ãã¼ãã¹ +50æï¼');
+  toast('🎁 デイリーボーナス +50枚！');
 }
 
 // ===== DB =====
@@ -365,6 +365,6 @@ function msg(t,c){var e=document.getElementById('lmsg');e.textContent=t;e.classN
 var _tt;
 function toast(m){clearTimeout(_tt);var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');_tt=setTimeout(function(){t.classList.remove('show');},2500);}
 </script>
-<footer style="text-align:center;padding:12px;font-size:11px"><a href="admin.html" style="color:#444;text-decoration:none;opacity:0.5">ð§ ç®¡çèã­ã°ã¤ã³</a></footer>
+<footer style="text-align:center;padding:12px;font-size:11px"><a href="admin.html" style="color:#444;text-decoration:none;opacity:0.5">🔧 管理者ログイン</a></footer>
 </body>
 </html>
