@@ -87,8 +87,8 @@ body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans
 .rl-wrap{position:relative;display:flex;align-items:center;justify-content:center;flex:1;width:100%}
 .rl-ring-outer{position:absolute;width:290px;height:290px;border-radius:50%;border:6px solid var(--gold);box-shadow:0 0 20px rgba(255,215,0,.4);pointer-events:none}
 .rl-ring-mask{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) translateY(-145px);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:20px solid var(--red);filter:drop-shadow(0 0 6px rgba(255,0,0,.8))}
-.rl-svg-wrap{display:flex;align-items:center;justify-content:center;width:280px;height:280px}
-.rl-svg{width:280px;height:280px}
+.rl-svg-wrap{display:flex;align-items:center;justify-content:center;width:min(350px,94vw);height:min(350px,94vw)}
+.rl-svg{width:100%;height:100%}
 .rl-ctr{position:absolute;width:70px;height:70px;background:#111;border-radius:50%;border:3px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(0,0,0,.8)}
 .rl-cn{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--gold);line-height:1}
 .rl-cl{font-size:11px;color:#888}
@@ -326,7 +326,6 @@ body{background:var(--dark);color:#fff;font-family:'Barlow Condensed','Noto Sans
       <div class="nr-badge" id="gr-nr" style="display:none">★ NEW RECORD! ★</div>
       <div class="gr-btns">
         <button class="btn btn-gold" onclick="showBetScreen()">🔄 もう一度プレイ</button>
-        <button class="btn btn-gray btn-sm" onclick="show('srank')">🏆 ランキングを見る</button>
       </div>
     </div>
   </div>
@@ -487,17 +486,13 @@ async function loadOnlineRanking(){
 }
 
 // Supabase にスコアを保存
-async function saveOnlineScore(name, score){
+async function saveOnlineScore(name,score){
   const cfg=getSBConfig();if(!cfg)return false;
   const H={'apikey':cfg.key,'Authorization':'Bearer '+cfg.key,'Content-Type':'application/json','Accept':'application/json'};
   try{
-    const ex=await fetch(cfg.url+'/rest/v1/jk_scores?name=eq.'+encodeURIComponent(name)+'&select=id,score',{headers:H}).then(r=>r.json()).catch(()=>[]);
-    if(ex&&ex.length>0){
-      if(ex[0].score>=score)return true;
-      await fetch(cfg.url+'/rest/v1/jk_scores?id=eq.'+ex[0].id,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({score})});
-    }else{
-      await fetch(cfg.url+'/rest/v1/jk_scores',{method:'POST',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({name,score})});
-    }
+    const ex=await fetch(cfg.url+'/rest/v1/rankings?name=eq.'+encodeURIComponent(name)+'&select=id,score',{headers:H}).then(r=>r.json()).catch(()=>[]);
+    if(ex&&ex.length>0){if(ex[0].score>=score)return true;await fetch(cfg.url+'/rest/v1/rankings?id=eq.'+ex[0].id,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({score})});}
+    else{await fetch(cfg.url+'/rest/v1/rankings',{method:'POST',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({name,score})});}
     return true;
   }catch(e){return false;}
 }
@@ -714,7 +709,7 @@ function loadSaRank(){
     var cfg=JSON.parse(localStorage.getItem('gcpfever-supabase')||'null');
     if(!cfg||!cfg.url){el.textContent='(ランキング未設定)';return;}
     var H={'apikey':cfg.key,'Authorization':'Bearer '+cfg.key};
-    fetch(cfg.url+'/rest/v1/jk_scores?select=name,score&order=score.desc&limit=10',{headers:H})
+    fetch(cfg.url+'/rest/v1/rankings?select=name,score&order=score.desc&limit=10',{headers:H})
       .then(r=>r.json()).then(data=>{
         if(!Array.isArray(data)||data.length===0){el.textContent='(まだ記録なし)';return;}
         el.innerHTML=data.map((r,i)=>'<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)">'+
@@ -920,7 +915,7 @@ function judge(pKey,cpuKey,ph,ch){
 
 // ROULETTE
 function buildRlSVG(){
-  const svg=document.getElementById('rl-svg');svg.innerHTML='';
+  const svg=document.getElementById('rl-svg');svg.innerHTML='';svg.setAttribute('viewBox','0 0 280 280');
   const vals=RL_VALS,n=vals.length,cx=140,cy=140,R=128,rIn=42,seg=360/n;
   for(let i=0;i<n;i++){
     const v=vals[i]*betAmount,a0=(i*seg-90)*Math.PI/180,a1=((i+1)*seg-90)*Math.PI/180,lf=seg>180?1:0;
@@ -932,8 +927,7 @@ function buildRlSVG(){
     const midA=((i+0.5)*seg-90)*Math.PI/180,tR=(R+rIn)/2,tx=cx+tR*Math.cos(midA),ty=cy+tR*Math.sin(midA),ang=(i+0.5)*seg;
     const t=document.createElementNS('http://www.w3.org/2000/svg','text');
     t.setAttribute('x',tx);t.setAttribute('y',ty);t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','middle');
-    t.setAttribute('font-family','Zen Dots,sans-serif');t.setAttribute('font-size',isJP?'15':'20');
-    t.setAttribute('fill','#ffffff');t.setAttribute('font-weight','bold');t.setAttribute('transform',`rotate(${ang},${tx},${ty})`);
+    t.setAttribute('font-family','Oswald,sans-serif');t.setAttribute('font-size',isJP?'16':'22');t.setAttribute('font-weight','900');t.setAttribute('fill','#ffffff');t.setAttribute('stroke','rgba(0,0,0,.8)');t.setAttribute('stroke-width','3');t.setAttribute('paint-order','stroke');t.setAttribute('transform',`rotate(${ang},${tx},${ty})`);
     t.textContent=v+'枚';svg.appendChild(t);
     const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
     ln.setAttribute('x1',xi1);ln.setAttribute('y1',yi1);ln.setAttribute('x2',x1);ln.setAttribute('y2',y1);ln.setAttribute('stroke','rgba(0,0,0,.4)');ln.setAttribute('stroke-width','2');svg.appendChild(ln);
