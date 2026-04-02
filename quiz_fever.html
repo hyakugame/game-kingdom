@@ -1157,6 +1157,7 @@ function addFreestyleToBank(keyword, wikiTitle, category, questions, bankId) {
   const id=bankId||('free_'+keyword.toLowerCase().replace(/[^\w\u3040-\u9fff]/g,'_').replace(/_+/g,'_'));
   if(!bank[id]) bank[id]={name:wikiTitle||keyword,category:category||keyword,questions:[],usedArticles:[],totalGen:0};
   const b=bank[id];
+  if(!b.usedArticles) b.usedArticles=[];
   if(wikiTitle&&!b.usedArticles.includes(wikiTitle)) b.usedArticles.push(wikiTitle);
   if(category) b.category=category;
   const existing=new Set(b.questions.map(q=>q.q));
@@ -1257,7 +1258,7 @@ async function generateAI() {
     const {added,total}=addFreestyleToBank(keyword,processedArticles[0]||keyword,category,allNewQs,kwId);
     // 使用済み記事を記録
     const b2=(loadBank())[targetId];
-    if(b2){processedArticles.forEach(t=>{if(!b2.usedArticles.includes(t))b2.usedArticles.push(t);});saveBank();}
+    if(b2){if(!b2.usedArticles)b2.usedArticles=[];processedArticles.forEach(t=>{if(!b2.usedArticles.includes(t))b2.usedArticles.push(t);});saveBank();}
 
     setS(`✅ ${added}問追加！計${total}問（${processedArticles.length}記事から生成）`,'ok');
     refreshCatChips(); renderGenreLib();
