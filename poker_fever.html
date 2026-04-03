@@ -110,7 +110,7 @@ body{display:block !important}
 .fl{position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.04);animation:scA 7s linear infinite;pointer-events:none;z-index:201}
 @keyframes scA{0%{top:-2px;opacity:0}5%{opacity:.6}95%{opacity:.6}100%{top:110%;opacity:0}}
 .gs{display:none;flex-direction:column;flex:1;position:relative;z-index:1}
-.gs.active{display:flex}
+.gs.active{display:flex !important}
 #slogin{align-items:center;justify-content:center;gap:14px;padding:20px 16px;background:var(--dark)}
 .login-logo{font-family:var(--font-jp);font-weight:900;font-size:clamp(18px,5vw,24px);text-align:center;line-height:1.5;color:var(--white)}
 .login-logo span{color:var(--gold)}
@@ -231,7 +231,7 @@ body{display:block !important}
 .db:active{transform:translateY(4px);box-shadow:0 1px 0 #B37700}
 .db:disabled{opacity:.25;cursor:not-allowed}
 #supgame{display:none;flex-direction:column;flex:1;position:relative;z-index:1;background:linear-gradient(180deg,#000800 0%,#001500 60%,#000800 100%);}
-#supgame.active{display:flex}
+#supgame.active{display:flex !important}
 .du-title-bar{background:linear-gradient(90deg,#000,#001a00,#000);border-top:2px solid #00aa00;border-bottom:2px solid #00aa00;padding:5px 16px;text-align:center;flex-shrink:0;}
 .du-title{font-family:var(--font-en);font-size:clamp(16px,3.5vw,22px);font-weight:900;color:#00FF41;letter-spacing:.25em;text-shadow:0 0 12px rgba(0,255,65,.8),0 0 24px rgba(0,255,65,.4);}
 .du-win-bar{display:flex;align-items:center;justify-content:center;gap:16px;padding:8px 16px;background:rgba(0,0,0,.5);flex-shrink:0;}
