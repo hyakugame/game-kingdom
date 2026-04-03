@@ -91,7 +91,8 @@ body{background:#050810;color:#eee;font-family:'Barlow Condensed',sans-serif;min
 .rank-name{flex:1;color:#ccc}
 .rank-score{font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:#00FF41}
 </style>
-<link rel="stylesheet" href="btn_sprites.css"></head>
+<link rel="stylesheet" href="btn_sprites.css"><link rel="stylesheet" href="btn_sprites.css">
+</head>
 <body>
 
 <!-- ログイン -->
@@ -110,16 +111,16 @@ body{background:#050810;color:#eee;font-family:'Barlow Condensed',sans-serif;min
       <div class="dot" id="d3"></div>
     </div>
     <div class="pad">
-      <button class="pb" onclick="pi('1')">1</button>
-      <button class="pb" onclick="pi('2')">2</button>
-      <button class="pb" onclick="pi('3')">3</button>
-      <button class="pb" onclick="pi('4')">4</button>
-      <button class="pb" onclick="pi('5')">5</button>
-      <button class="pb" onclick="pi('6')">6</button>
-      <button class="pb" onclick="pi('7')">7</button>
-      <button class="pb" onclick="pi('8')">8</button>
-      <button class="pb" onclick="pi('9')">9</button>
-      <button class="pb del" onclick="pd()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22"><path fill="rgba(255,255,255,.7)" d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3.59 12.59L16.17 17l-4.17-4.17-4.17 4.17-1.42-1.41 4.17-4.18-4.17-4.17 1.42-1.41 4.17 4.17 4.17-4.17 1.42 1.41-4.17 4.17 4.17 4.18z"/></svg></button>
+      <button class="pb pb-1" onclick="pi('1')"><span>1</span></button>
+      <button class="pb pb-2" onclick="pi('2')"><span>2</span></button>
+      <button class="pb pb-3" onclick="pi('3')"><span>3</span></button>
+      <button class="pb pb-4" onclick="pi('4')"><span>4</span></button>
+      <button class="pb pb-5" onclick="pi('5')"><span>5</span></button>
+      <button class="pb pb-6" onclick="pi('6')"><span>6</span></button>
+      <button class="pb pb-7" onclick="pi('7')"><span>7</span></button>
+      <button class="pb pb-8" onclick="pi('8')"><span>8</span></button>
+      <button class="pb pb-9" onclick="pi('9')"><span>9</span></button>
+      <button class="pb pb-del" onclick="pd()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22"><path fill="rgba(255,255,255,.7)" d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3.59 12.59L16.17 17l-4.17-4.17-4.17 4.17-1.42-1.41 4.17-4.18-4.17-4.17 1.42-1.41 4.17 4.17 4.17-4.17 1.42 1.41-4.17 4.17 4.17 4.18z"/></svg></button>
       <button class="pb pb-0" onclick="pi('0')"><span>0</span></button>
       <button class="pb pb-ok" id="ok" onclick="doLogin()" disabled>OK✓</button>
     </div>
