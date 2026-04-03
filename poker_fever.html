@@ -112,31 +112,6 @@ body{display:block !important}
 .gs{display:none;flex-direction:column;flex:1;position:relative;z-index:1}
 .gs.active{display:flex !important}
 #slogin{align-items:center;justify-content:center;gap:14px;padding:20px 16px;background:var(--dark)}
-.login-logo{font-family:var(--font-jp);font-weight:900;font-size:clamp(18px,5vw,24px);text-align:center;line-height:1.5;color:var(--white)}
-.login-logo span{color:var(--gold)}
-.login-box{background:var(--dark2);border:3px solid var(--red);border-radius:10px;padding:18px;width:100%;max-width:320px;}
-.login-tabs{display:flex;margin-bottom:14px;border-radius:6px;overflow:hidden;border:2px solid var(--red)}
-.login-tab{flex:1;padding:11px;text-align:center;font-family:var(--font-jp);font-weight:700;font-size:14px;cursor:pointer;background:var(--dark3);color:#888;transition:all .15s}
-.login-tab.active{background:var(--red);color:var(--white)}
-.login-box-title{font-family:var(--font-jp);font-size:12px;color:#888;margin-bottom:10px;text-align:center}
-.login-input{background:var(--dark3);border:2px solid #555;border-radius:6px;color:var(--white);font-family:var(--font-jp);font-size:20px;font-weight:700;padding:11px 14px;width:100%;outline:none;margin-bottom:12px}
-.login-input:focus{border-color:var(--gold)}
-.login-input::placeholder{color:#555;font-size:14px;font-weight:400}
-.pin-row{display:flex;gap:10px;justify-content:center;margin-bottom:12px}
-.pin-dot{width:54px;height:54px;border-radius:50%;background:var(--dark3);border:2px solid #555;font-size:24px;color:#555;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.pin-dot.filled{background:var(--red);border-color:var(--red3);color:var(--white)}
-.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:240px;margin:0 auto}
-.nb{background:var(--dark3);border:2px solid #444;border-radius:6px;color:var(--white);font-family:var(--font-en);font-size:24px;font-weight:700;padding:14px;cursor:pointer;transition:all .12s}
-.nb:hover{background:#444;border-color:#666}
-.nb:active{transform:scale(.93)}
-.nb:disabled{opacity:.3;cursor:not-allowed}
-.nb-del{font-size:13px;font-family:var(--font-jp)}
-.nb-ok{background:var(--green);border-color:var(--green2);font-size:13px;font-family:var(--font-jp)}
-.login-msg{font-size:14px;text-align:center;min-height:20px;margin-top:8px;font-family:var(--font-jp);font-weight:700}
-.login-msg.ok{color:var(--green2)}
-.login-msg.err{color:var(--red3);animation:shake .35s ease}
-.login-msg.ing{color:var(--gold)}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 #slobby{align-items:center;justify-content:flex-start;overflow-y:auto;background:var(--dark)}
 .lobby-hdr{background:var(--dark2);padding:12px 16px;width:100%;display:flex;align-items:center;gap:12px;border-bottom:3px solid var(--red);flex-shrink:0}
 .lobby-av{width:50px;height:50px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid var(--gold);flex-shrink:0}
@@ -428,22 +403,6 @@ body{display:block !important}
   
 </div>
 <div class="screen"><div class="fl"></div>
-<div id="slogin" class="gs active">
-  <div class="login-logo">👑 百式ゲーム王国へ<br><span>ようこそ！</span></div>
-  <div class="login-box">
-    <div class="login-tabs"><div class="login-tab active" id="tab-l" onclick="switchTab('login')">ログイン</div><div class="login-tab" id="tab-s" onclick="switchTab('signup')">新規登録</div></div>
-    <div class="login-box-title" id="lbt">名前とPINで入場</div>
-    <input class="login-input" id="lname" placeholder="なまえ（10文字以内）" maxlength="10"/>
-    <div class="pin-row"><div class="pin-dot" id="p0">○</div><div class="pin-dot" id="p1">○</div><div class="pin-dot" id="p2">○</div><div class="pin-dot" id="p3">○</div></div>
-    <div class="numpad">
-      <button class="nb" onclick="pin('1')">1</button><button class="nb" onclick="pin('2')">2</button><button class="nb" onclick="pin('3')">3</button>
-      <button class="nb" onclick="pin('4')">4</button><button class="nb" onclick="pin('5')">5</button><button class="nb" onclick="pin('6')">6</button>
-      <button class="nb" onclick="pin('7')">7</button><button class="nb" onclick="pin('8')">8</button><button class="nb" onclick="pin('9')">9</button>
-      <button class="nb nb-del" onclick="pin('del')">←消す</button><button class="nb" onclick="pin('0')">0</button><button class="nb nb-ok" onclick="pin('ok')">OK✓</button>
-    </div>
-    <div class="login-msg" id="lmsg"></div>
-  </div>
-</div>
 <div id="slobby" class="gs">
   <div class="lobby-hdr">
     <div class="lobby-av" id="lav">?</div>
@@ -1898,23 +1857,7 @@ b.textContent='\u2190 \u30ed\u30d3\u30fc';
 b.style.cssText='position:fixed;top:8px;left:8px;z-index:99999;background:rgba(0,0,0,.9);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:7px 16px;font-size:14px;cursor:pointer;';
 b.onclick=function(){try{localStorage.setItem('hkg_user',JSON.stringify(user));}catch(e){}location.href='index.html';};
 document.body.appendChild(b);
-setTimeout(function(){
-var nf=document.getElementById('lname')||document.querySelector('input[type=text]');
-if(nf){nf.value=u.name;nf.dispatchEvent(new Event('input',{bubbles:true}));}
-var bs=Array.from(document.querySelectorAll('button'));
-['1','2','3','4'].forEach(function(n){var btn=bs.find(function(x){return x.textContent.trim()===n;});if(btn)btn.click();});
-setTimeout(function(){
-var ok=bs.find(function(x){return (x.textContent||'').trim().indexOf('OK')===0;});
-if(ok)ok.click();
-setTimeout(function(){
-var sb=document.getElementById('slobby');
-if(sb&&sb.classList.contains('active')){
-var els=Array.from(sb.querySelectorAll('*'));
-var tri=els.find(function(x){return (x.textContent||'').trim()==='\u25b6';});
-if(tri)tri.click();}
-var side=document.getElementById('sidebar');
-if(side)side.style.display='none';
-},1000);},300);},300);});
+setTimeout(function(){var u=null;try{u=JSON.parse(localStorage.getItem('hkg_user'));}catch(e){}if(!u||!u.id){location.href='./index.html';return;}user={id:u.id,name:u.name,medals:u.medals||0,pin:'',avatar:u.avatar||'_'};setTimeout(goLobby,50);},100);});
 })()</script><script>
 document.addEventListener("DOMContentLoaded",function(){
   var u=null;
