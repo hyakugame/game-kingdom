@@ -214,14 +214,14 @@ async function loadUsers(){
   try{
     const all=await sbFetch('game_users?select=*&order=created_at.asc');
     // _del_プレフィックスを除外
-    _users=(all||[]).filter(u=>!u.name.startsWith('_del_'));
+    window._users=(all||[]).filter(u=>!u.name.startsWith('_del_'));
     const sel=document.getElementById('target-user');
     sel.innerHTML='<option value="">-- 選択 --</option>';
-    _users.forEach(u=>{const o=document.createElement('option');o.value=u.id;o.textContent=u.name+' (現在'+u.medals+'枚)';sel.appendChild(o);});
-    if(!_users.length){el.innerHTML='<div class="loading">ユーザーなし</div>';return;}
+    window._users.forEach(u=>{const o=document.createElement('option');o.value=u.id;o.textContent=u.name+' (現在'+u.medals+'枚)';sel.appendChild(o);});
+    if(!window._users.length){el.innerHTML='<div class="loading">ユーザーなし</div>';return;}
     el.innerHTML=`<table class="tbl">
       <tr><th>ID</th><th>名前</th><th>PIN</th><th>メダル</th><th>登録日</th><th>操作</th></tr>
-      ${_users.map(u=>`<tr>
+      ${window._users.map(u=>`<tr>
         <td><span class="badge badge-gold">#${u.id}</span></td>
         <td><b style="color:#fff">${esc(u.name)}</b></td>
         <td><span style="color:#666;font-family:monospace">${u.pin||'-'}</span></td>
@@ -238,7 +238,7 @@ async function addMedals(){
   const amt=parseInt(document.getElementById('medal-amount').value)||0;
   if(!uid){showMsg('medal-status','ユーザーを選んでください',false);return;}
   if(amt<=0){showMsg('medal-status','枚数を正しく入力してください',false);return;}
-  const user=_users.find(u=>String(u.id)===uid);
+  const user=window._users.find(u=>String(u.id)===uid);
   if(!user)return;
   const newMedals=(user.medals||0)+amt;
   try{
@@ -253,7 +253,7 @@ async function setMedals(){
   const amt=parseInt(document.getElementById('medal-amount').value);
   if(!uid){showMsg('medal-status','ユーザーを選んでください',false);return;}
   if(isNaN(amt)||amt<0){showMsg('medal-status','枚数を入力してください',false);return;}
-  const user=_users.find(u=>String(u.id)===uid);
+  const user=window._users.find(u=>String(u.id)===uid);
   if(!user)return;
   if(!confirm(user.name+'のメダルを'+amt+'枚にセットしますか？'))return;
   try{
