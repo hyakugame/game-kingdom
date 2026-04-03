@@ -198,9 +198,9 @@ body{display:block !important}
   text-shadow:0 0 20px rgba(0,255,255,1),0 0 40px rgba(0,200,255,.6);
 }
 /* カード */
-.ca{display:flex;gap:8px;padding:14px 8px 8px;justify-content:center;flex-shrink:0}
-.cw{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:220px;min-width:220px}
-.card{width:220px;height:308px;border-radius:10px;position:relative;overflow:hidden;cursor:pointer;background:#fff;transition:all .2s;position:relative;border:3px solid #888;box-shadow:0 6px 18px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.15)}
+.ca{display:flex;gap:clamp(2px,1.2vw,8px);padding:14px 8px 8px;justify-content:center;flex-shrink:0;overflow:visible}
+.cw{display:flex;flex-direction:column;align-items:center;flex-shrink:1;width:clamp(52px,14vw,220px);min-width:0}
+.card{width:clamp(52px,14vw,220px);height:clamp(73px,19.6vw,308px);border-radius:clamp(4px,1vw,10px);position:relative;overflow:hidden;cursor:pointer;background:#fff;transition:all .2s;position:relative;border:3px solid #888;box-shadow:0 6px 18px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.15)}
 .card.up{background:linear-gradient(135deg,#fffef8,#fff9e6)}
 .card.up.r{color:#C00000}
 .card.up.b{color:#0D1B8F}
@@ -208,9 +208,9 @@ body{display:block !important}
 .card.hd{transform:translateY(-14px);border-color:#FFD700;box-shadow:0 0 20px rgba(255,215,0,.9),0 8px 20px rgba(0,0,0,.5)}
 .card.wg{animation:wgA .5s ease infinite alternate}
 @keyframes wgA{0%{box-shadow:0 0 12px rgba(255,215,0,.5)}100%{box-shadow:0 0 30px rgba(255,215,0,1),0 0 50px rgba(255,215,0,.6)}}
-.ct{position:absolute;top:5px;left:7px;font-family:Georgia,serif;font-size:18px;font-weight:900;line-height:1.1;z-index:2}
-.cs{font-size:44px;line-height:1}
-.cb{position:absolute;bottom:5px;right:7px;font-family:Georgia,serif;font-size:18px;font-weight:900;line-height:1.1;transform:rotate(180deg);z-index:2}
+.ct{position:absolute;top:clamp(2px,0.8vw,5px);left:clamp(2px,0.8vw,7px);font-family:Georgia,serif;font-size:clamp(8px,2.2vw,18px);font-weight:900;line-height:1.1;z-index:2}
+.cs{font-size:clamp(14px,3.8vw,44px);line-height:1}
+.cb{position:absolute;bottom:clamp(2px,0.8vw,5px);right:clamp(2px,0.8vw,7px);font-family:Georgia,serif;font-size:clamp(8px,2.2vw,18px);font-weight:900;line-height:1.1;transform:rotate(180deg);z-index:2}
 .hl-lbl{font-family:var(--font-en);font-size:12px;font-weight:900;color:#FFD700;min-height:16px;text-shadow:0 0 8px rgba(255,215,0,.8);letter-spacing:.1em}
 .hl-lbl.hid{visibility:hidden}
 .rd{text-align:center;padding:6px 8px;min-height:50px;display:flex;align-items:center;justify-content:center;flex-direction:column;flex-shrink:0;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,20,0,.4))}
