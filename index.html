@@ -91,6 +91,7 @@ body{background:#050810;color:#eee;font-family:'Barlow Condensed',sans-serif;min
 .rank-name{flex:1;color:#ccc}
 .rank-score{font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:#00FF41}
 .pb-ok[disabled]{opacity:.45 !important;pointer-events:none !important;filter:none !important;animation:none !important}
+.pb-ok[disabled]{opacity:.45 !important;pointer-events:none !important;filter:none !important;animation:none !important}
 </style>
 <link rel="stylesheet" href="btn_sprites.css"><link rel="stylesheet" href="btn_sprites.css">
 </head>
@@ -339,14 +340,7 @@ function openLogin(){
 // PIN
 function pi(n){if(pin.length>=4)return;pin+=n;upd();if(pin.length===4)document.getElementById('ok').disabled=false;}
 function pd(){pin=pin.slice(0,-1);upd();document.getElementById('ok').disabled=true;}
-function upd(){const n=inp.length;for(let i=0;i<4;i++){const d=document.getElementById('d'+i);if(i<n){if(!d.classList.contains('on')){d.classList.add('on');d.style.animation='none';requestAnimationFrame(()=>{requestAnimationFrame(()=>{d.style.animation='dotPop .35s cubic-bezier(.36,2,.6,1) forwards';});});}}else{d.classList.remove('on');d.style.animation='none';}}const ok=document.getElementById('ok');ok.disabled=n<4;}
-function guest(){user={name:'GUEST',medals:200,id:'hkg-GUEST'};save();openLobby();}
-
-function doLogout(){
-  user=null;localStorage.removeItem('hkg_user');
-  pin='';upd();document.getElementById('nf').value='';document.getElementById('ok').disabled=true;msg('','');
-  openLogin();
-}
+function upd(){const n=inp.length;for(let i=0;i<4;i++){const d=document.getElementById('d'+i);if(i<n){if(!d.classList.contains('on')){d.classList.add('on');d.style.animation='none';requestAnimationFrame(()=>{requestAnimationFrame(()=>{d.style.animation='dotPop .35s cubic-bezier(.36,2,.6,1) forwards';});});}}else{d.classList.remove('on');d.style.animation='none';}}document.getElementById('ok').disabled=n<4;}
 
 // ゲームへ
 function go(e,href){e.preventDefault();save();location.href=href;}
