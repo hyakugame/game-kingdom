@@ -273,7 +273,7 @@ body{background:var(--dark);color:#F0FFF4;font-family:'Noto Sans JP','Barlow Con
   </div>
 
   <!-- ハイ&ロー -->
-  <div id="srlopt" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:30px;background:#001a10;border:2px solid #00ff88;border-radius:12px;margin:10px;text-align:center;"><div style="font-size:18px;font-weight:700;color:#ffcc00;">&#x1F3B0; ルーレット獲得！</div><div style="font-size:14px;color:#aaffcc;">どうしますか？</div><button onclick="startHL()" style="width:200px;padding:14px;background:linear-gradient(135deg,#ff6600,#ff9900);color:#fff;font-size:16px;font-weight:700;border:none;border-radius:8px;cursor:pointer;margin:6px;">&#x1F0CF; ハイ＆ローへ行く</button><button onclick="saveMedalsToPoker();showBetScreen();" style="width:200px;padding:14px;background:linear-gradient(135deg,#0066cc,#0099ff);color:#fff;font-size:16px;font-weight:700;border:none;border-radius:8px;cursor:pointer;margin:6px;">&#x1F3E0; スタートへ戻る</button></div>
+  
 <div id="shl" class="gs">
     <div style="display:flex;flex-direction:column;flex:1;padding:12px;gap:10px">
       <!-- タイトル -->
@@ -910,7 +910,7 @@ function pick(pKey){
   speakAt('じゃんけーん！',0);sePon();setTimeout(()=>signFreeze(ch),300);setTimeout(()=>judge(pKey,cpuKey,ph,ch),900);
 }
 function judge(pKey,cpuKey,ph,ch){
-  const result=pKey===cpuKey?'draw':BEATS[pKey]===cpuKey?'win':'draw':BEATS[pKey]===cpuKey?'win':'draw':BEATS[pKey]===cpuKey?'win':'lose';
+  const result=pKey===cpuKey?'draw':BEATS[pKey]===cpuKey?'win':'draw':BEATS[pKey]===cpuKey?'win':'draw':BEATS[pKey]===cpuKey?'win':'draw':BEATS[pKey]===cpuKey?'win':'draw':BEATS[pKey]===cpuKey?'win':'draw':BEATS[pKey]===cpuKey?'win':'draw':BEATS[pKey]===cpuKey?'win':'draw':BEATS[pKey]===cpuKey?'win':'draw':BEATS[pKey]===cpuKey?'win':'lose';
   const pEl=document.getElementById('p-hand');
   if(result==='win'){
     document.getElementById('sign').className='sign win-d';pEl.className='p-hand win-g';
@@ -1104,6 +1104,8 @@ document.addEventListener('touchstart',()=>wake(),{once:true});
 (function(){
   showBetScreen();
 })();
+
+(function(){var el=document.createElement('div');el.id='srlopt';el.style.cssText='display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;background:#001a10;border:2px solid #00ff88;border-radius:12px;margin:10px;text-align:center;';el.innerHTML='<div style="font-size:17px;font-weight:700;color:#ffcc00;">&#127922; ルーレット獲得！</div><div style="font-size:12px;color:#aaffcc;margin:4px 0;">どうしますか？</div><button onclick="startHL()" style="width:190px;padding:12px;background:linear-gradient(135deg,#ff6600,#ff9900);color:#fff;font-size:14px;font-weight:700;border:none;border-radius:8px;cursor:pointer;display:block;margin:4px auto;">&#127183; ハイ＆ローへ行く</button><button onclick="saveMedalsToPoker();showBetScreen();" style="width:190px;padding:12px;background:linear-gradient(135deg,#0066cc,#0099ff);color:#fff;font-size:14px;font-weight:700;border:none;border-radius:8px;cursor:pointer;display:block;margin:4px auto;">&#127968; スタートへ戻る</button>';document.body.appendChild(el);})();
 </script>
 </body>
 </html>
