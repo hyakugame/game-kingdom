@@ -497,6 +497,29 @@ async function doLogin(){
     setTimeout(openLobby,300);
   }
 }
+
+async function doLogout(){
+  // Supabaseにメダルを保存してからログアウト
+  const u=JSON.parse(localStorage.getItem('hkg_user')||'{}');
+  if(u.name&&u.name!=='GUEST'&&u.medals!==undefined){
+    const SBU='https://gtzfcoiowdnyjvwikxku.supabase.co';
+    const SBK=document.querySelector('script').textContent.match(/SBK='([^']+)'/)?.[1]||'';
+    if(SBK){
+      const headers={'apikey':SBK,'Authorization':'Bearer '+SBK,'Content-Type':'application/json'};
+      try{
+        if(u.id){
+          await fetch(SBU+'/rest/v1/game_users?id=eq.'+u.id,{method:'PATCH',headers,body:JSON.stringify({medals:u.medals})});
+        } else {
+          const rows=await fetch(SBU+'/rest/v1/game_users?name=eq.'+encodeURIComponent(u.name),{headers}).then(r=>r.json());
+          if(rows&&rows[0]) await fetch(SBU+'/rest/v1/game_users?id=eq.'+rows[0].id,{method:'PATCH',headers,body:JSON.stringify({medals:u.medals})});
+        }
+      }catch(e){}
+    }
+  }
+  localStorage.removeItem('hkg_user');
+  openLogin();
+}
+
 </script>
 <footer style="text-align:center;padding:12px;font-size:11px"><a href="admin.html" style="color:#444;text-decoration:none;opacity:0.5">🔧 管理者ログイン</a></footer>
 </body>
