@@ -7,12 +7,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Barlow+Condensed:wght@700;900&family=Noto+Sans+JP:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#050810;color:#eee;font-family:'Barlow Condensed',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+body{background:#050810;color:#eee;font-family:'Barlow Condensed',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;min-height:100dvh}
 
 /* ===== ログイン ===== */
 #login{width:100%;max-width:380px;padding:24px 20px;display:flex;flex-direction:column;align-items:center}
 .logo-en{font-size:11px;letter-spacing:.3em;color:rgba(0,200,255,.5);margin-bottom:4px}
-.logo-jp{filter:drop-shadow(0 0 8px rgba(0,200,255,.9)) drop-shadow(0 0 22px rgba(0,150,255,.5));font-family:'Noto Sans JP',sans-serif;font-size:28px;font-weight:900;background:linear-gradient(135deg,#fff 0%,#88ddff 40%,#ffcc44 70%,#ff8844 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.06em;line-height:1;margin-bottom:4px}
+.logo-jp{filter:drop-shadow(0 0 10px rgba(0,200,255,1)) drop-shadow(0 0 30px rgba(0,180,255,.8)) drop-shadow(0 0 60px rgba(0,150,255,.5));text-shadow:0 0 20px rgba(0,220,255,.9),0 0 40px rgba(0,180,255,.6)}
 .logo-sub{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.2em;margin-bottom:24px}
 .box{width:100%;background:linear-gradient(135deg,rgba(0,20,40,.9),rgba(0,10,25,.95));border:1px solid rgba(0,200,255,.2);border-radius:14px;padding:22px 20px;box-shadow:0 8px 32px rgba(0,0,0,.5)}
 .box-title{font-size:14px;color:#88ddff;letter-spacing:.08em;text-align:center;margin-bottom:4px}
@@ -22,7 +22,7 @@ body{background:#050810;color:#eee;font-family:'Barlow Condensed',sans-serif;min
 .nf:focus{border-color:rgba(0,200,255,.4)}
 .dots{display:flex;justify-content:center;gap:14px;margin-bottom:16px}
 .dot{width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.2);background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;transition:.15s}
-@keyframes dotPop{0%{transform:scale(1)}50%{transform:scale(1.18)}100%{transform:scale(1)}}.dot.on{border-color:#00ccff;background:rgba(0,200,255,.2);box-shadow:0 0 14px rgba(0,200,255,.6),0 0 28px rgba(0,150,255,.3);filter:drop-shadow(0 0 6px rgba(0,200,255,.9));animation:dotPop .28s cubic-bezier(.36,2,.5,1)}
+@keyframes dotPop{0%{transform:scale(1);filter:drop-shadow(0 0 0px rgba(0,200,255,0))}40%{transform:scale(1.22);filter:drop-shadow(0 0 14px rgba(0,220,255,1))}70%{transform:scale(0.95)}100%{transform:scale(1);filter:drop-shadow(0 0 6px rgba(0,200,255,.5))}}.dot.on{border-color:#00ccff;background:rgba(0,200,255,.2);box-shadow:0 0 14px rgba(0,200,255,.6),0 0 28px rgba(0,150,255,.3);filter:drop-shadow(0 0 6px rgba(0,200,255,.9));animation:dotPop .28s cubic-bezier(.36,2,.5,1)}
 .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
 .pb{height:52px;border:1px solid rgba(255,255,255,.1);border-radius:10px;cursor:pointer;background:rgba(255,255,255,.07);color:#fff;font-size:22px;font-weight:700;font-family:'Barlow Condensed',sans-serif}
 .pb:active{transform:scale(.94)}
@@ -90,6 +90,7 @@ body{background:#050810;color:#eee;font-family:'Barlow Condensed',sans-serif;min
 .rank-pos{font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:#FFD700;min-width:24px}
 .rank-name{flex:1;color:#ccc}
 .rank-score{font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:#00FF41}
+.pb-ok[disabled]{opacity:.45 !important;pointer-events:none !important;filter:none !important;animation:none !important}
 </style>
 <link rel="stylesheet" href="btn_sprites.css"><link rel="stylesheet" href="btn_sprites.css">
 </head>
@@ -338,21 +339,7 @@ function openLogin(){
 // PIN
 function pi(n){if(pin.length>=4)return;pin+=n;upd();if(pin.length===4)document.getElementById('ok').disabled=false;}
 function pd(){pin=pin.slice(0,-1);upd();document.getElementById('ok').disabled=true;}
-function upd(){for(var i=0;i<4;i++){var d=document.getElementById('d'+i);d.textContent=i<pin.length?'●':'';if(i<pin.length){d.classList.remove('on');void d.offsetWidth;d.classList.add('on');}else{d.classList.remove('on');}}var ok=document.getElementById('ok');if(ok)ok.disabled=pin.length<4;}
-
-function doLogin(){
-  var name=document.getElementById('nf').value.trim();
-  if(!name){msg('なまえを入力してください','err');return;}
-  if(pin.length<4){msg('4桁のPINを入力してください','err');return;}
-  var db=getDB();
-  if(db[name]){
-    if(db[name].pin===pin){user={name:name,medals:db[name].medals||0,id:"hkg-"+name};msg('ログイン成功！','ok');save();setTimeout(openLobby,400);}
-    else msg('PINが違います','err');
-  }else{
-    db[name]={pin:pin,medals:200};saveDB(db);
-    user={name:name,medals:200,id:"hkg-"+name};msg('新規登録しました！','ok');save();setTimeout(openLobby,400);
-  }
-}
+function upd(){const n=inp.length;for(let i=0;i<4;i++){const d=document.getElementById('d'+i);if(i<n){if(!d.classList.contains('on')){d.classList.add('on');d.style.animation='none';requestAnimationFrame(()=>{requestAnimationFrame(()=>{d.style.animation='dotPop .35s cubic-bezier(.36,2,.6,1) forwards';});});}}else{d.classList.remove('on');d.style.animation='none';}}const ok=document.getElementById('ok');ok.disabled=n<4;}
 function guest(){user={name:'GUEST',medals:200,id:'hkg-GUEST'};save();openLobby();}
 
 function doLogout(){
