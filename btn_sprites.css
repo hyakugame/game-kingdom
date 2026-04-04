@@ -1,6 +1,6 @@
 /* Crystal Button Sprites - 百式ゲーム王国 */
 .pb:hover{filter:brightness(1.4) drop-shadow(0 0 12px rgba(100,220,255,.9)) drop-shadow(0 0 24px rgba(80,180,255,.6));transition:filter .2s}
-.pb{height:52px !important;background-size:100% 100% !important;background-repeat:no-repeat;border:none !important;box-shadow:none !important;background-color:transparent !important;transition:filter .12s,transform .12s;color:transparent !important}
+.pb{height:52px !important;width:100% !important;background-size:100% 100% !important;background-repeat:no-repeat;border:none !important;box-shadow:none !important;background-color:transparent !important;transition:filter .12s,transform .12s;color:transparent !important}
 .pb:active{transform:scale(.86) !important;filter:brightness(2.4) drop-shadow(0 0 18px rgba(100,220,255,1)) drop-shadow(0 0 36px rgba(80,180,255,1)) drop-shadow(0 0 54px rgba(60,140,255,.9)) !important;transition:filter .04s,transform .04s}
 .pb span,.pb svg{display:none !important}
 .pb.ok span,.pb.del span{display:none}
