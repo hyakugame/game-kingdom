@@ -293,55 +293,79 @@ async function deleteUser(id,name){
   }catch(e){showMsg('medal-status','エラー: '+e,false);}
 }
 
+
 function loadAdminRankings(){ loadRankings(); }
 
 async function loadRankings() {
-  var H = {apikey: ADM_SK, Authorization: 'Bearer ' + ADM_SK};
-  var tables = [
-    {url: ADM_SBU+'/rest/v1/poker_scores?select=id,player_name,medal_won&order=medal_won.desc&limit=20', el: 'rank-list-poker', col: 'medal_won', unit: '枚'},
-    {url: ADM_SBU+'/rest/v1/quiz_fever_scores?select=id,player_name,score&order=score.desc&limit=20', el: 'rank-list-quiz', col: 'score', unit: '問'},
-    {url: ADM_SBU+'/rest/v1/rankings?select=id,name,score&game=eq.janken&order=score.desc&limit=20', el: 'rank-list-jk', col: 'score', unit: '枚'}
+  var SBU = 'https://gtzfcoiowdnyjvwikxku.supabase.co';
+  var SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
+  var H = {apikey: SK, 'Authorization': 'Bearer ' + SK};
+  var cfgs = [
+    {url:SBU+'/rest/v1/poker_scores?select=id,player_name,medal_won&order=medal_won.desc&limit=20',el:'rank-list-poker',col:'medal_won',unit:'枚',nm:'player_name',tbl:'poker_scores'},
+    {url:SBU+'/rest/v1/quiz_fever_scores?select=id,player_name,score&order=score.desc&limit=20',el:'rank-list-quiz',col:'score',unit:'問',nm:'player_name',tbl:'quiz_fever_scores'},
+    {url:SBU+'/rest/v1/rankings?select=id,name,score&game=eq.janken&order=score.desc&limit=20',el:'rank-list-jk',col:'score',unit:'枚',nm:'name',tbl:'rankings'}
   ];
-  var tblMap = {'rank-list-poker': 'poker_scores', 'rank-list-quiz': 'quiz_fever_scores', 'rank-list-jk': 'rankings'};
-  for (var t of tables) {
-    (function(cfg) {
-      var el = document.getElementById(cfg.el);
-      if (!el) return;
-      el.innerHTML = '<div style="color:#aaa;padding:8px">読込中...</div>';
-      fetch(cfg.url, {headers: H})
-        .then(function(r){ return r.json(); })
-        .then(function(d) {
-          if (!el) return;
-          if (!Array.isArray(d) || !d.length) { el.innerHTML = '<div style="color:#888;padding:8px">データなし</div>'; return; }
-          var html = '';
-          for (var i = 0; i < d.length; i++) {
-            var r = d[i];
-            var nm = r.player_name || r.name || '';
-            var val = r[cfg.col] || 0;
-            var valStr = typeof val === 'number' ? val.toLocaleString() : val;
-            html += '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.06)">';
-            html += '<span style="color:#ffd700;min-width:22px">' + (i+1) + '</span>';
-            html += '<span style="flex:1">' + nm + '</span>';
-            html += '<span style="color:#39ff14;min-width:60px;text-align:right">' + valStr + cfg.unit + '</span>';
-            html += '<button class="del-btn" data-tbl="' + tblMap[cfg.el] + '" data-id="' + r.id + '" data-nm="' + nm + '" style="background:rgba(220,40,40,.8);border:none;color:#fff;padding:2px 8px;border-radius:3px;cursor:pointer;font-size:11px">削除</button>';
-            html += '</div>';
-          }
-          el.innerHTML = html;
-        })
-        .catch(function() { if (el) el.innerHTML = '<div style="color:#f66">取得エラー</div>'; });
-    })(t);
-  }
+  cfgs.forEach(function(cfg) {
+    var el = document.getElementById(cfg.el);
+    if (!el) return;
+    el.innerHTML = '<div style="color:#aaa;padding:8px">読込中...</div>';
+    fetch(cfg.url, {headers:H})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        if (!el) return;
+        if (!Array.isArray(d)||!d.length){el.innerHTML='<div style="color:#888;padding:8px">データなし</div>';return;}
+        var html='';
+        for(var i=0;i<d.length;i++){
+          var r=d[i]; var nm=r[cfg.nm]||''; var val=r[cfg.col]||0;
+          html+='<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.06)">';
+          html+='<span style="color:#ffd700;min-width:22px">'+(i+1)+'</span>';
+          html+='<span style="flex:1">'+nm+'</span>';
+          html+='<span style="color:#39ff14;min-width:60px;text-align:right">'+val.toLocaleString()+cfg.unit+'</span>';
+          html+='<button class="del-btn" data-tbl="'+cfg.tbl+'" data-id="'+r.id+'" data-nm="'+nm+'" style="background:rgba(220,40,40,.8);border:none;color:#fff;padding:2px 8px;border-radius:3px;cursor:pointer;font-size:11px">削除</button>';
+          html+='</div>';
+        }
+        el.innerHTML=html;
+      })
+      .catch(function(){if(el)el.innerHTML='<div style="color:#f66">取得エラー</div>';});
+  });
 }
 
+async function resetTable(table, label) {
+  var SBU = 'https://gtzfcoiowdnyjvwikxku.supabase.co';
+  var SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
+  if (!confirm(label+'を全件削除しますか？この操作は元に戻せません。')) return;
+  var msgId = table==='poker_scores'?'msg-poker':table==='quiz_fever_scores'?'msg-quiz':'msg-jk';
+  var el = document.getElementById(msgId);
+  if(el){el.textContent='削除中...';el.style.color='#ffd040';}
+  try{
+    var H = {apikey:SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json','Prefer':'return=minimal'};
+    var r = await fetch(SBU+'/rest/v1/'+table+'?id=gte.0',{method:'DELETE',headers:H});
+    if(r.ok||r.status===204){
+      if(el){el.textContent='✓ 削除完了';el.style.color='#60ffa0';}
+      setTimeout(function(){if(el)el.textContent='';},3000);
+      loadRankings();
+    }else{var t=await r.text();if(el){el.textContent='エラー('+r.status+'): '+t.slice(0,60);el.style.color='#ff6060';}}
+  }catch(e){if(el){el.textContent='エラー: '+e.message;el.style.color='#ff6060';}}
+}
 
-// ランキング読み込み
-// ランキング削除ボタンのイベント委譲
-document.addEventListener('click', function(e) {
-  if (e.target.classList.contains('del-btn')) {
-    var tbl = e.target.getAttribute('data-tbl');
-    var id = e.target.getAttribute('data-id');
-    var nm = e.target.getAttribute('data-nm');
-    deleteEntry(tbl, id, nm);
+async function deleteEntry(table, id, label) {
+  var SBU = 'https://gtzfcoiowdnyjvwikxku.supabase.co';
+  var SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
+  if (!confirm(label+'を削除しますか？')) return;
+  var H = {apikey:SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json','Prefer':'return=minimal'};
+  try{
+    var r = await fetch(SBU+'/rest/v1/'+table+'?id=eq.'+id,{method:'DELETE',headers:H});
+    if(r.ok||r.status===204){loadRankings();}
+    else{var t=await r.text();alert('削除エラー('+r.status+'): '+t.slice(0,60));}
+  }catch(e){alert('エラー: '+e.message);}
+}
+
+function loadStats(){}
+
+// 削除ボタンのイベント委譲
+document.addEventListener('click',function(e){
+  if(e.target.classList.contains('del-btn')){
+    deleteEntry(e.target.getAttribute('data-tbl'),e.target.getAttribute('data-id'),e.target.getAttribute('data-nm'));
   }
 });
 </script>
