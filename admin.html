@@ -293,6 +293,8 @@ async function deleteUser(id,name){
   }catch(e){showMsg('medal-status','エラー: '+e,false);}
 }
 
+function loadAdminRankings(){ loadRankings(); }
+
 async function loadRankings(){
   const RESET='2026-04-02T02:30:00';
   // じゃんけんランキング（[pk]なし）
