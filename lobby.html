@@ -191,12 +191,21 @@ var user=null;
     var s=JSON.parse(localStorage.getItem('hkg_user')||'null');
     if(!s||!s.name){location.replace('index.html');return;}
     user=s;
-    document.getElementById('lobby').style.display='flex';
-    loadRankings();
-    checkBonus();
-    loadCustomIcons();
   }catch(e){location.replace('index.html');return;}
 })();
+// ユーザー確認後にロビー初期化
+if(user){
+  document.getElementById('lobby').style.display='flex';
+  try{loadRankings();}catch(e){}
+  try{checkBonus();}catch(e){}
+  try{loadCustomIcons();}catch(e){}
+  // サイドバー更新
+  try{
+    document.getElementById('uname').textContent=user.name||'?';
+    document.getElementById('avatar').textContent=user.name==='GUEST'?'G':(user.name.charAt(0)||'?');
+    document.getElementById('mc').textContent=String(user.medals||0).padStart(5,'0');
+  }catch(e){}
+};
 
 var user=null;
 
