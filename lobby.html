@@ -191,6 +191,10 @@ var user=null;
     var s=JSON.parse(localStorage.getItem('hkg_user')||'null');
     if(!s||!s.name){location.replace('index.html');return;}
     user=s;
+    document.getElementById('lobby').style.display='flex';
+    loadRankings();
+    checkBonus();
+    loadCustomIcons();
   }catch(e){location.replace('index.html');return;}
 })();
 
