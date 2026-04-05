@@ -295,148 +295,44 @@ async function deleteUser(id,name){
 
 function loadAdminRankings(){ loadRankings(); }
 
-async function loadRankings(){
-  const RESET='2026-04-02T02:30:00';
-  // じゃんけんランキング（[pk]なし）
-  const eljk=document.getElementById('rank-list-jk');
-  try{
-    const data=await sbFetch('rankings?select=*&name=not.like.%5Bpk%5D*&created_at=gte.'+RESET+'&score=gt.0&order=score.desc&limit=50');
-    if(!data||!data.length){eljk.innerHTML='<div class="loading">ランキングなし</div>';return;}
-    // dedup by name
-    const seen={},deduped=[];
-    data.forEach(r=>{if(!seen[r.name]){seen[r.name]=true;deduped.push(r);}});
-    eljk.innerHTML=`<table class="tbl">
-      <tr><th>順位</th><th>名前</th><th>スコア</th><th>日時</th></tr>
-      ${deduped.map((r,i)=>`<tr>
-        <td>${i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'位'}</td>
-        <td>${esc(r.name)}</td>
-        <td><b style="color:#00FF41">🪙 ${r.score.toLocaleString()}枚</b></td>
-        <td style="color:#666;font-size:12px">${new Date(r.created_at).toLocaleString('ja-JP')}</td>
-      </tr>`).join('')}
-    </table>`;
-  }catch(e){eljk.innerHTML='<div class="loading" style="color:#f88">取得エラー</div>';}
-  // ポーカーランキング（[pk]プレフィックス）
-  const elpk=document.getElementById('rank-list-pk');
-  try{
-    const data=await sbFetch('rankings?select=*&name=like.%5Bpk%5D*&created_at=gte.'+RESET+'&score=gt.0&order=score.desc&limit=50');
-    if(!data||!data.length){elpk.innerHTML='<div class="loading">ランキングなし</div>';return;}
-    const seen={},deduped=[];
-    data.forEach(r=>{const nm=r.name.replace(/^\[pk\]/,'');if(!seen[nm]){seen[nm]=true;deduped.push({...r,name:nm});}});
-    elpk.innerHTML=`<table class="tbl">
-      <tr><th>順位</th><th>名前</th><th>スコア</th><th>日時</th></tr>
-      ${deduped.map((r,i)=>`<tr>
-        <td>${i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'位'}</td>
-        <td>${esc(r.name)}</td>
-        <td><b style="color:#00FF41">🪙 ${r.score.toLocaleString()}枚</b></td>
-        <td style="color:#666;font-size:12px">${new Date(r.created_at).toLocaleString('ja-JP')}</td>
-      </tr>`).join('')}
-    </table>`;
-  }catch(e){elpk.innerHTML='<div class="loading" style="color:#f88">取得エラー</div>';}
-}
-
-async function deleteGameRankings(game, label) {
-  if(!confirm(label + 'のランキングを全件削除しますか？')) return;
-  const msgEl = document.getElementById('deleteRankMsg');
-  msgEl.textContent = '削除中...';
-  msgEl.style.color = '#ffd040';
-  sbFetch('/rest/v1/rankings?game_type=eq.' + game, {method:'DELETE', headers:{'Prefer':'return=minimal'}})
-    .then(r => {
-      if(r.ok || r.status === 204) {
-        msgEl.textContent = '✅ ' + label + 'のランキングを削除しました';
-        msgEl.style.color = '#60ffa0';
-        loadRankings();
-      } else {
-        r.text().then(t => {
-          // game_typeカラムがない場合はgame列で試みる
-          return sbFetch('/rest/v1/rankings?game=eq.' + game, {method:'DELETE', headers:{'Prefer':'return=minimal'}});
-        }).then(r2 => {
-          msgEl.textContent = r2.ok ? '✅ ' + label + 'のランキングを削除しました' : '❌ 削除できませんでした（カラム名を確認）';
-          msgEl.style.color = r2.ok ? '#60ffa0' : '#ff8090';
-          loadRankings();
-        });
-      }
-    })
-    .catch(e => { msgEl.textContent = '❌ ' + e.message; msgEl.style.color = '#ff8090'; });
-}
-async function resetRankings(){
-  if(!confirm('ランキングを全件リセットしますか？\nこの操作は元に戻せません。'))return;
-  try{
-    await sbFetch('rankings?id=gte.0',{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({score:-1})});
-    showMsg('rank-status','ランキングをリセットしました',true);
-    loadRankings();loadStats();
-  }catch(e){showMsg('rank-status','エラーが発生しました',false);}
-}
-
-async function loadStats(){
-  try{
-    const [users,ranks]=await Promise.all([
-      sbFetch('game_users?select=medals'),
-      sbFetch('rankings?select=id&score=gt.0')
-    ]);
-    document.getElementById('stat-users').textContent=users?users.length:0;
-    document.getElementById('stat-medals').textContent=users?(users.reduce((s,u)=>s+(u.medals||0),0)).toLocaleString():0;
-    document.getElementById('stat-ranks').textContent=ranks?ranks.length:0;
-  }catch(e){}
-}
-
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
-// 起動時にログイン済みなら自動表示
-if(sessionStorage.getItem('admin_ok')==='1'){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('main-screen').style.display='block';
-  loadAll();
-}
-
-// ゲーム別ランキングテーブル全削除
-// ===== ランキング管理 =====
-var ADM_SBU = 'https://gtzfcoiowdnyjvwikxku.supabase.co';
-var ADM_SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
-
-function adm_headers() {
-  return {
-    'apikey': ADM_SK,
-    'Authorization': 'Bearer ' + ADM_SK,
-    'Content-Type': 'application/json',
-    'Prefer': 'return=minimal'
-  };
-}
-
-// テーブルの全件削除
-async function resetTable(table, label) {
-  if (!confirm(label + 'を削除しますか？この操作は元に戻せません。')) return;
-  var msgId = table === 'poker_scores' ? 'msg-poker' : table === 'quiz_fever_scores' ? 'msg-quiz' : 'msg-jk';
-  var el = document.getElementById(msgId);
-  if (el) { el.textContent = '削除中...'; el.style.color = '#ffd040'; }
-  try {
-    var url = ADM_SBU + '/rest/v1/' + table + '?id=gte.0';
-    if (table === 'rankings') url = ADM_SBU + '/rest/v1/rankings?id=gte.0';
-    var r = await fetch(url, { method: 'DELETE', headers: adm_headers() });
-    if (r.ok || r.status === 204) {
-      if (el) { el.textContent = '✓ 削除完了'; el.style.color = '#60ffa0'; }
-      setTimeout(() => { if(el) el.textContent=''; }, 3000);
-      loadRankings();
-    } else {
-      var txt = await r.text();
-      if (el) { el.textContent = 'エラー(' + r.status + '): ' + txt.slice(0,60); el.style.color = '#ff6060'; }
-    }
-  } catch(e) {
-    if (el) { el.textContent = 'エラー: ' + e.message; el.style.color = '#ff6060'; }
+async function loadRankings() {
+  var H = {apikey: ADM_SK, Authorization: 'Bearer ' + ADM_SK};
+  var tables = [
+    {url: ADM_SBU+'/rest/v1/poker_scores?select=id,player_name,medal_won&order=medal_won.desc&limit=20', el: 'rank-list-poker', col: 'medal_won', unit: '枚'},
+    {url: ADM_SBU+'/rest/v1/quiz_fever_scores?select=id,player_name,score&order=score.desc&limit=20', el: 'rank-list-quiz', col: 'score', unit: '問'},
+    {url: ADM_SBU+'/rest/v1/rankings?select=id,name,score&game=eq.janken&order=score.desc&limit=20', el: 'rank-list-jk', col: 'score', unit: '枚'}
+  ];
+  var tblMap = {'rank-list-poker': 'poker_scores', 'rank-list-quiz': 'quiz_fever_scores', 'rank-list-jk': 'rankings'};
+  for (var t of tables) {
+    (function(cfg) {
+      var el = document.getElementById(cfg.el);
+      if (!el) return;
+      el.innerHTML = '<div style="color:#aaa;padding:8px">読込中...</div>';
+      fetch(cfg.url, {headers: H})
+        .then(function(r){ return r.json(); })
+        .then(function(d) {
+          if (!el) return;
+          if (!Array.isArray(d) || !d.length) { el.innerHTML = '<div style="color:#888;padding:8px">データなし</div>'; return; }
+          var html = '';
+          for (var i = 0; i < d.length; i++) {
+            var r = d[i];
+            var nm = r.player_name || r.name || '';
+            var val = r[cfg.col] || 0;
+            var valStr = typeof val === 'number' ? val.toLocaleString() : val;
+            html += '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.06)">';
+            html += '<span style="color:#ffd700;min-width:22px">' + (i+1) + '</span>';
+            html += '<span style="flex:1">' + nm + '</span>';
+            html += '<span style="color:#39ff14;min-width:60px;text-align:right">' + valStr + cfg.unit + '</span>';
+            html += '<button class="del-btn" data-tbl="' + tblMap[cfg.el] + '" data-id="' + r.id + '" data-nm="' + nm + '" style="background:rgba(220,40,40,.8);border:none;color:#fff;padding:2px 8px;border-radius:3px;cursor:pointer;font-size:11px">削除</button>';
+            html += '</div>';
+          }
+          el.innerHTML = html;
+        })
+        .catch(function() { if (el) el.innerHTML = '<div style="color:#f66">取得エラー</div>'; });
+    })(t);
   }
 }
 
-// 個別エントリー削除
-async function deleteEntry(table, id, label) {
-  if (!confirm(label + 'を削除しますか？')) return;
-  try {
-    var r = await fetch(ADM_SBU + '/rest/v1/' + table + '?id=eq.' + id, { method: 'DELETE', headers: adm_headers() });
-    if (r.ok || r.status === 204) {
-      loadRankings();
-    } else {
-      alert('削除エラー: ' + r.status);
-    }
-  } catch(e) { alert('エラー: ' + e.message); }
-}
 
 // ランキング読み込み
 async function loadRankings() {
@@ -488,6 +384,16 @@ async function loadRankings() {
     }).catch(()=>{ var el=document.getElementById('rank-list-jk'); if(el) el.innerHTML='<div style="color:#f66">取得エラー</div>'; });
 }
 
+
+// ランキング削除ボタンのイベント委譲
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('del-btn')) {
+    var tbl = e.target.getAttribute('data-tbl');
+    var id = e.target.getAttribute('data-id');
+    var nm = e.target.getAttribute('data-nm');
+    deleteEntry(tbl, id, nm);
+  }
+});
 </script>
 </body>
 </html>
