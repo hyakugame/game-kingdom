@@ -422,6 +422,14 @@ async function doLogout(){
   openLogin();
 }
 
+
+// localStorageにユーザーがいればロビーを自動表示
+(function(){
+  try{
+    var _s=JSON.parse(localStorage.getItem('hkg_user')||'null');
+    if(_s&&_s.name){user=_s;openLobby();}
+  }catch(e){}
+})();
 </script>
 <footer style="text-align:center;padding:12px;font-size:11px"><a href="admin.html" style="color:#444;text-decoration:none;opacity:0.5">🔧 管理者ログイン</a></footer>
 </body>
