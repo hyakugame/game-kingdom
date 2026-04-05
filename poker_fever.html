@@ -491,6 +491,16 @@ async function sbPatch(p,b){try{const r=await fetch(SB+'/rest/v1/'+p,{method:'PA
 async function getUser(n){const r=await sbGet('game_users?select=*&name=eq.'+encodeURIComponent(n));return r&&r.length>0?r[0]:null;}
 async function createUser(n,pin){const ok=await sbPost('game_users',{name:n,pin:pin,medals:100,avatar:'👑'});if(!ok)return null;for(let i=0;i<8;i++){await new Promise(r=>setTimeout(r,500));const u=await getUser(n);if(u)return u;}return{id:null,name:n,pin:pin,medals:100,avatar:'👑'};}
 async function saveMedals(id,m){if(!id)return;return sbPatch('game_users?id=eq.'+id,{medals:m});}
+function savePokerScore(u){
+  if(!u||!u.name||u.name==='GUEST')return;
+  var SBU='https://gtzfcoiowdnyjvwikxku.supabase.co';
+  var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
+  fetch(SBU+'/rest/v1/poker_scores',{
+    method:'POST',
+    headers:{'apikey':SK,'Authorization':'Bearer '+SK,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify({player_name:u.name,medal_won:u.medals||0})
+  }).catch(function(){});
+}
 async function saveAvatar(id,av){if(!id)return;return sbPatch('game_users?id=eq.'+id,{avatar:av});}
 const AC=new(window.AudioContext||window.webkitAudioContext)();
 function wake(){if(AC.state==='suspended')AC.resume();}
@@ -1647,7 +1657,7 @@ function doDraw(){
       if(el)countUp(el,0,m,Math.min(1200,m*18),()=>{
         win=m;user.medals+=m;
         updH();updLM();
-        saveMedals(user.id,user.medals);
+        saveMedals(user.id,user.medals);savePokerScore(user);
         phase='deal';document.getElementById('dbn').textContent='DEAL';setBB(true);
         setTimeout(()=>{
           document.querySelectorAll('.card.blink').forEach(c=>c.classList.remove('blink'));
@@ -1659,7 +1669,7 @@ function doDraw(){
     seLose();
     document.getElementById('pk-rd').innerHTML='';setStatus('NO WIN','idle');
     phase='deal';document.getElementById('dbn').textContent='DEAL';setBB(true);
-    updH();saveMedals(user.id,user.medals);
+    updH();saveMedals(user.id,user.medals);savePokerScore(user);
     setTimeout(()=>bgmPlay('poker'),600);
   }
 }
@@ -1804,7 +1814,7 @@ function judgeDU(i){
       setTimeout(()=>backP(),2500);
     }else{
       const sv=Math.floor(ugM/2);ugM=sv;
-      user.medals+=sv;saveMedals(user.id,user.medals);updLM();
+      user.medals+=sv;saveMedals(user.id,user.medals);savePokerScore(user);updLM();
       const wv=document.getElementById('du-win-val');
       countUp(wv,ugM*2,sv,600,()=>{
         document.getElementById('du-wager').textContent=sv;
@@ -1814,7 +1824,7 @@ function judgeDU(i){
     }
   }
 }
-function duCollect(){wake();seDuCollect();user.medals+=ugM;saveMedals(user.id,user.medals);updLM();setDuMsg('COLLECT: '+ugM+' MEDALS!','win');setTimeout(()=>backP(),1200);}
+function duCollect(){wake();seDuCollect();user.medals+=ugM;saveMedals(user.id,user.medals);savePokerScore(user);updLM();setDuMsg('COLLECT: '+ugM+' MEDALS!','win');setTimeout(()=>backP(),1200);}
 function backP(){phase='deal';win=0;hand=[];held=Array(5).fill(false);updH();renderFD();document.getElementById('pk-rd').innerHTML='';setStatus('DEAL TO BEGIN','idle');const _wb3=document.getElementById('pk-win-bar');if(_wb3)_wb3.style.display='none';document.getElementById('dbn').textContent='DEAL';setBB(true);bgmPlay('poker');show('spoker');}
 updPT();
 </script>
