@@ -601,6 +601,7 @@ body::before{
 
 undefined
 
+
 <script>
 // 星生成
 (function(){
@@ -638,7 +639,7 @@ function noData(elId){
   if(el)el.innerHTML='<div class="rank-empty">まだ記録がありません</div>';
 }
 
-<script>
+
 // 星を生成
 (function(){
   var stars = document.getElementById('stars');
@@ -687,9 +688,7 @@ function noData(elId) {
   var el = document.getElementById(elId);
   if (el) el.innerHTML = '<div class="rank-empty">まだ記録がありません</div>';
 }
-</script>
 
-<script>
 var user=null;
 (function(){
   try{
@@ -910,10 +909,7 @@ async function doLogout(){
   localStorage.removeItem('hkg_user');
   openLogin();
 }
-
-
-
 </script>
-</script>
+
 </body>
 </html>
