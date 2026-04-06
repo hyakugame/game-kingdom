@@ -286,10 +286,17 @@ async function doLogin() {
   const name = document.getElementById('nf').value.trim();
   if (!name) { msg('名前を入力してください', 'err'); return; }
   if (pin.length < 4) { msg('4桁のPINを入力してください', 'err'); return; }
-  msg('Supabase確認中...', '');
+  msg('確認中...', '');
   const pinStr = pin.join('');
+  const SBU = 'https://gtzfcoiowdnyjvwikxku.supabase.co';
+  const SBK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
+  const H = {
+    'apikey': SBK,
+    'Authorization': 'Bearer ' + SBK,
+    'Content-Type': 'application/json'
+  };
   try {
-    const res = await fetch(SB + '/rest/v1/game_users?name=eq.' + encodeURIComponent(name) + '&pin=eq.' + pinStr, { headers: SH });
+    const res = await fetch(SBU + '/rest/v1/game_users?name=eq.' + encodeURIComponent(name) + '&pin=eq.' + pinStr, { headers: H });
     const data = await res.json();
     if (data && data.length > 0) {
       user = { id: data[0].id, name: data[0].name, medals: data[0].medals, pin: pinStr };
@@ -297,8 +304,7 @@ async function doLogin() {
       save();
       setTimeout(() => location.replace('lobby.html'), 300);
     } else {
-      // PINが違う or 名前が存在するか確認
-      const res2 = await fetch(SB + '/rest/v1/game_users?name=eq.' + encodeURIComponent(name), { headers: SH });
+      const res2 = await fetch(SBU + '/rest/v1/game_users?name=eq.' + encodeURIComponent(name), { headers: H });
       const data2 = await res2.json();
       if (data2 && data2.length > 0) {
         msg('PINが違います', 'err');
