@@ -486,7 +486,7 @@ async function saveOnlineScore(name,score){
   try{
     const ex=await fetch(cfg.url+'/rest/v1/rankings?name=eq.'+encodeURIComponent(name)+'&created_at=gte.'+RANK_RESET+'&select=id,score',{headers:H}).then(r=>r.json()).catch(()=>[]);
     if(ex&&ex.length>0){if(ex[0].score>=score)return true;await fetch(cfg.url+'/rest/v1/rankings?id=eq.'+ex[0].id,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({score})});}
-    else{await fetch(cfg.url+'/rest/v1/rankings',{method:'POST',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({name,score})});}
+    else{await fetch(cfg.url+'/rest/v1/rankings',{method:'POST',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({name,score,game:'janken'})});}
     return true;
   }catch(e){return false;}
 }
