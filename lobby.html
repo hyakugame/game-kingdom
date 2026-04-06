@@ -26,9 +26,11 @@ body{
   font-family:'Noto Sans JP',sans-serif;
   color:#eef;
   overflow-x:hidden;
-  overflow-y:auto;
   position:relative;
   width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 
 /* ===== BACKGROUND: 夜の遊園地 ===== */
@@ -85,7 +87,6 @@ body::after{
   z-index:1;
   max-width:480px;
   width:100%;
-  margin:0 auto;
   min-height:100vh;
   padding-bottom:40px;
   display:block !important;
@@ -103,6 +104,7 @@ body::after{
   z-index:100;
   backdrop-filter:blur(12px);
   border-bottom:1px solid rgba(180,100,255,0.15);
+  width:100%;
 }
 
 .avatar{
@@ -547,9 +549,6 @@ body::after{
 .card:nth-child(1){animation:float 6s ease-in-out infinite;}
 .card:nth-child(2){animation:float 7s ease-in-out infinite .5s;}
 .card:nth-child(3){animation:float 5.5s ease-in-out infinite 1s;}
-
-/* lobby は常にblock */
-#lobby { display:block !important; }
 </style>
 </head>
 <body>
