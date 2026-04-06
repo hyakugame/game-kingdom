@@ -287,7 +287,7 @@ async function doLogin() {
   if (!name) { msg('名前を入力してください', 'err'); return; }
   if (pin.length < 4) { msg('4桁のPINを入力してください', 'err'); return; }
   msg('確認中...', '');
-  const pinStr = pin.join('');
+  const pinStr = pin;
   const SBU = 'https://gtzfcoiowdnyjvwikxku.supabase.co';
   const SBK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
   const H = {
