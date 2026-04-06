@@ -576,7 +576,7 @@ body{background:var(--bg-page);color:var(--tx-body);font-family:'Noto Sans JP',s
   </div>
   <div class="save-card">
     <p>スコアを記録してランキングへ挑戦！</p>
-    <button class="btn btn-gold" style="width:100%" id="saveBtn" onclick="saveScore()">✨ 登録</button>
+    <button class="btn btn-gold" style="width:100%" id="saveBtn" style="display:none"></button>
   </div>
   <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;justify-content:center">
     <button class="btn btn-purple" onclick="go('mode')">⚔️ もう一度</button>
@@ -2264,6 +2264,7 @@ function showResult(winnerName){
     document.getElementById('saveBtn').textContent='🏅 ランキングに登録';
     const soloScore=gs.ok*100+acc;
     window._ps={name:pName,score:soloScore,correct:gs.ok,maxQ:_soloMaxQ,acc,mode:'solo',category:cat,genre:_selGenre?.bankKey||''};
+  saveScore();
     _soloMode=false;winPts=3;go('result');return;
   }
   const iWon=winnerName===pName||winnerName===me?.name;
@@ -2277,6 +2278,7 @@ function showResult(winnerName){
   document.getElementById('rS').textContent=iWon?`${winnerName}の勝利！おめでとう！`:`${winnerName}の勝利！次は負けない！`;
   document.getElementById('saveBtn').disabled=false;document.getElementById('saveBtn').textContent='✨ 登録';
   window._ps={name:pName,score,acc,diff,res:iWon?'win':'lose',mode:'battle',category:cat};
+  saveScore();
   go('result');
 }
 function showResult(winnerName) {
@@ -2335,16 +2337,32 @@ function clearAllCPU(){gs.cTo?.forEach(t=>clearTimeout(t));gs.cTo=[];}
 // ══════════════════════════════════════
 //  ランキング保存・読込
 // ══════════════════════════════════════
-async function saveScore(){
-  const d=window._ps;if(!d)return;
-  const btn=document.getElementById('saveBtn');btn.disabled=true;btn.textContent='⏳...';
-  if(USE_SB&&sbClient){
-    try{
-      const r=await sbClient.from('quiz_fever_scores').insert({player_name:d.name,score:d.score,accuracy:d.acc,difficulty:d.diff,outcome:d.res});
-      btn.textContent=r.error?'✅ ローカル保存':'✅ 登録完了！';if(r.error)lsave(d);
-    }catch(e){lsave(d);btn.textContent='✅ ローカル保存';}
-  }else{lsave(d);btn.textContent='✅ ローカル保存';}
+async function saveScore() {
+  const d = window._ps;
+  if (!d || !d.name) return;
+  const SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
+  const SBU_URL = 'https://gtzfcoiowdnyjvwikxku.supabase.co';
+  const H = {
+    'apikey': SK,
+    'Authorization': 'Bearer ' + SK,
+    'Content-Type': 'application/json',
+    'Prefer': 'return=minimal'
+  };
+  // mode: 'solo' or 'battle' (CPU対戦)
+  const table = 'quiz_fever_scores';
+  const body = JSON.stringify({
+    player_name: d.name,
+    score: d.score || 0,
+    accuracy: d.acc || 0,
+    difficulty: d.diff || null,
+    outcome: d.res || null,
+    mode: d.mode || 'solo'
+  });
+  try {
+    await fetch(SBU_URL + '/rest/v1/' + table, { method:'POST', headers:H, body });
+  } catch(e) { /* silent fail */ }
 }
+
 function lsave(d){
   const a=JSON.parse(localStorage.getItem('qf_scores')||'[]');
   a.push({...d,date:new Date().toISOString()});a.sort((x,y)=>y.score-x.score);a.splice(20);
