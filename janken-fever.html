@@ -444,13 +444,7 @@ const SB_CFG_KEY = 'gcpfever-supabase';
 const MAX_RANK = 20;
 
 // Supabase設定を読み込む
-function getSBConfig(){
-  try{
-    const v = localStorage.getItem(SB_CFG_KEY);
-    if(v) return JSON.parse(v);
-  }catch(e){}
-  return null;
-}
+function getSBConfig(){return {url:'https://gtzfcoiowdnyjvwikxku.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg'};}
 function setSBConfig(url, key){
   try{ localStorage.setItem(SB_CFG_KEY, JSON.stringify({url: url.trim().replace(/\/$/, ''), key: key.trim()})); }catch(e){}
 }
@@ -864,7 +858,7 @@ function goBackLobby(){
       fetch('https://gtzfcoiowdnyjvwikxku.supabase.co/rest/v1/game_users?id=eq.'+su.id,{method:'PATCH',headers:{'apikey':_K,'Authorization':'Bearer '+_K,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({medals:su.medals})});
     }
   }
-  location.href='index.html';
+  location.href='lobby.html';
 }
 function openPoker(){
   const su=JSON.parse(localStorage.getItem('hkg_user')||'null');
