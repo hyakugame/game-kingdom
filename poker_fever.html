@@ -1148,6 +1148,19 @@ const PAY=[
   {id:'3ok',n:'THREE OF A KIND',       base:2,  jack:20,  flat:false},
 ];
 // BETに応じた配当を取得
+
+// ── ポーカーXP付与 ──
+function addPokerXP(payId){
+  var xpMap={nrf:200,fa5:150,wrf:100,'5ok':80,sf:60,'4ok':40,fh:25,fl:20,st:15,'3ok':10};
+  var xp=xpMap[payId]||10;
+  try{
+    var d=new Date(),dow=d.getDay(),mon=new Date(d);mon.setDate(d.getDate()-dow+1);
+    var wk='hkg_wxp_'+mon.toISOString().slice(0,10);
+    localStorage.setItem(wk,(parseInt(localStorage.getItem(wk)||'0')+xp));
+    localStorage.setItem('hkg_total_xp',(parseInt(localStorage.getItem('hkg_total_xp')||'0')+xp));
+  }catch(e){}
+}
+
 // ── 選択的HOLD（役に関係するカードのみ） ──
 function autoHold(hand, r) {
   held = Array(5).fill(false);
@@ -1713,6 +1726,7 @@ function doDraw(){
     if(m>=500)bgmPlay('jackpot');else if(m>=100)bgmPlay('bigwin');else bgmPlay('win');
     seWin(m);
     _missionUpdate('poker_hand',1);
+    addPokerXP(r.id);
     _missionUpdate('poker_win',m);
     _missionUpdate('any_play',1);
     playMilestone(win);
