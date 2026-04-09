@@ -442,7 +442,7 @@ html{opacity:0;transition:opacity .12s}
   <button class="btn btn-gold btn-lg" id="genBtn" onclick="generateAI()" style="width:100%;max-width:480px">
     🔍 検索して追加！
   </button>
-  <div class="ai-status" id="aiStatus"></div>
+  <div class="ai-status" id="aiStatus" style="cursor:pointer" onclick="openApiKeyModal()"></div>
 
   <div style="width:100%;max-width:480px;margin-top:16px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
@@ -1184,6 +1184,81 @@ function makeWrong(sentence) {
 
 // Wikipedia記事から問題を生成
 // Wikipedia記事から問題を生成（existingQで重複除外）
+
+// ══════════════════════════════════════
+//  Claude AI クイズ生成
+// ══════════════════════════════════════
+function getClaudeKey(){return localStorage.getItem('hkg_claude_key')||'';}
+function setClaudeKey(k){localStorage.setItem('hkg_claude_key',k.trim());}
+
+async function buildQuestionsWithClaude(keyword, title, text, cnt, existingQ){
+  var apiKey = getClaudeKey();
+  if(!apiKey) return buildQuestionsFromText(keyword, title, text, cnt, existingQ);
+  var existingSet = existingQ || new Set();
+  var prompt = '以下のWikipedia記事「'+title+'」から、クイズゲームの面白い4択問題を'+cnt+'問生成してください。\n\n'
+    +'【ルール】\n'
+    +'- 年号・日付問題は10%以下にすること\n'
+    +'- 概念・特徴・理由・仕組み・比較に関する問題を多く作ること\n'
+    +'- 文章を校正して自然で正確な日本語にすること\n'
+    +'- 難易度を設定: level 1=初級(誰でも答えられる) 2=中級 3=マニアック(詳しい人向け)\n'
+    +'- 正解の位置(a)は0〜3でランダムにすること\n'
+    +'- 不正解の選択肢も紛らわしくリアルにすること\n\n'
+    +'【記事本文】\n'+text.substring(0,3500)+'\n\n'
+    +'【出力】JSONのみ返すこと（説明・マークダウン不要）:\n'
+    +'[{"q":"問題文","c":["答え","ダミー1","ダミー2","ダミー3"],"a":0,"level":1,"g":"🔍 '+keyword+'"}]';
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:3000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    if(res.status===401){throw new Error('APIキーが無効です');}
+    if(res.status===403){throw new Error('APIアクセスが拒否されました');}
+    var data=await res.json();
+    if(!data.content||!data.content[0])throw new Error('レスポンスが空です');
+    var jsonStr=data.content[0].text.replace(/```json|```/g,'').trim();
+    // JSON部分だけ抽出
+    var m=jsonStr.match(/\[.*\]/s);
+    if(m)jsonStr=m[0];
+    var questions=JSON.parse(jsonStr);
+    return questions.filter(function(q){return !existingSet.has(q.q);}).slice(0,cnt);
+  }catch(e){
+    console.warn('Claude API error:',e.message,', フォールバック使用');
+    return buildQuestionsFromText(keyword, title, text, cnt, existingQ);
+  }
+}
+
+// APIキー設定UI
+function openApiKeyModal(){
+  var cur=getClaudeKey();
+  var masked=cur?cur.substring(0,10)+'...':'未設定';
+  var html='<div style="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px" id="apiKeyModal">'
+    +'<div style="background:linear-gradient(135deg,#0a0520,#050818);border:2px solid rgba(160,100,255,.5);border-radius:18px;padding:24px;width:100%;max-width:400px">'
+    +'<h3 style="color:#c084fc;font-size:15px;margin-bottom:8px">🤖 Claude API キー設定</h3>'
+    +'<p style="color:rgba(200,180,255,.6);font-size:11px;margin-bottom:14px;line-height:1.6">'
+    +'Anthropic APIキー（sk-ant-...）を入力するとAIが直接クイズを生成します。<br>'
+    +'キーはこのデバイスのみに保存されます。<br>'
+    +'現在: <span style="color:#67e8f9">'+masked+'</span></p>'
+    +'<input id="apiKeyInput" type="password" placeholder="sk-ant-api03-..." '
+    +'style="width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(160,100,255,.4);border-radius:8px;padding:10px 12px;color:#eee;font-size:13px;font-family:monospace;box-sizing:border-box;margin-bottom:12px">'
+    +'<div style="display:flex;gap:8px">'
+    +'<button onclick="document.getElementById('apiKeyModal').remove()" '
+    +'style="flex:1;padding:9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#aaa;cursor:pointer;font-family:inherit">キャンセル</button>'
+    +'<button onclick="var k=document.getElementById('apiKeyInput').value;if(k){setClaudeKey(k);document.getElementById('apiKeyModal').remove();alert('✅ APIキーを保存しました！');}else{alert('キーを入力してください');}" '
+    +'style="flex:2;padding:9px;background:linear-gradient(135deg,#7c3aed,#4f46e5);border:none;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;font-family:inherit">💾 保存</button>'
+    +'</div></div></div>';
+  document.body.insertAdjacentHTML('beforeend',html);
+}
+
 function buildQuestionsFromText(keyword, title, text, cnt, existingQ) {
   const qs = [];
   existingQ = existingQ || new Set();
@@ -1327,7 +1402,7 @@ async function generateAI() {
         const page=Object.values(pageData.query.pages)[0];
         const rawText=(page.extract||'').trim();
         if(rawText.length<80) continue;
-        const qs=buildQuestionsFromText(keyword,articleTitle,rawText,cnt-allNewQs.length,existingQ);
+        const qs=await buildQuestionsWithClaude(keyword,articleTitle,rawText,cnt-allNewQs.length,existingQ);
         qs.forEach(q=>existingQ.add(q.q));
         allNewQs.push(...qs); processedArticles.push(articleTitle);
       }catch(e){continue;}
@@ -1346,7 +1421,7 @@ async function generateAI() {
             const pg=Object.values(pd.query.pages)[0];
             const txt=(pg.extract||'').trim();
             if(txt.length<60) continue;
-            const qs=buildQuestionsFromText(keyword,lt,txt,cnt-allNewQs.length,existingQ);
+            const qs=await buildQuestionsWithClaude(keyword,lt,txt,cnt-allNewQs.length,existingQ);
             qs.forEach(q=>existingQ.add(q.q));
             allNewQs.push(...qs); processedArticles.push(lt);
           }catch(e){continue;}
@@ -2990,7 +3065,7 @@ async function generateAI() {
         const page=Object.values(pageData.query.pages)[0];
         const rawText=(page.extract||'').trim();
         if(rawText.length<80) continue;
-        const qs=buildQuestionsFromText(keyword,articleTitle,rawText,cnt-allNewQs.length,existingQ);
+        const qs=await buildQuestionsWithClaude(keyword,articleTitle,rawText,cnt-allNewQs.length,existingQ);
         qs.forEach(q=>existingQ.add(q.q));
         allNewQs.push(...qs); processedArticles.push(articleTitle);
       }catch(e){continue;}
@@ -3009,7 +3084,7 @@ async function generateAI() {
             const pg=Object.values(pd.query.pages)[0];
             const txt=(pg.extract||'').trim();
             if(txt.length<60) continue;
-            const qs=buildQuestionsFromText(keyword,lt,txt,cnt-allNewQs.length,existingQ);
+            const qs=await buildQuestionsWithClaude(keyword,lt,txt,cnt-allNewQs.length,existingQ);
             qs.forEach(q=>existingQ.add(q.q));
             allNewQs.push(...qs); processedArticles.push(lt);
           }catch(e){continue;}
