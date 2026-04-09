@@ -469,7 +469,7 @@ function _getStones(){try{return parseInt(localStorage.getItem('hkg_stones')||'0
 function _addStones(n){var s=_getStones()+n;localStorage.setItem('hkg_stones',s);document.getElementById('stones-num').textContent=s;document.getElementById('stones-badge').style.display='flex';}
 function _getMissions(){
   var today=new Date().toDateString();
-  try{var d=JSON.parse(localStorage.getItem('hkg_missions')||'{}');if(d.date!==today){d=_newMissions(today);}return d;}
+  try{var d=JSON.parse(localStorage.getItem('hkg_missions')||'{}');if(d.date!==today||!d.missions||d.missions.some(function(m){return !m.name;})){d=_newMissions(today);}return d;}
   catch{return _newMissions(today);}
 }
 function _newMissions(today){
