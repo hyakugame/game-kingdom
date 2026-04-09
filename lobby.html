@@ -296,10 +296,11 @@ if(user){
   document.getElementById('cs-slot').addEventListener('touchstart',function(e){csTx=e.touches[0].clientX;},{passive:true});
   document.getElementById('cs-slot').addEventListener('touchend',function(e){if(csTx===null)return;var dx=csTx-e.changedTouches[0].clientX;if(Math.abs(dx)>35)csMove(dx>0?1:-1);csTx=null;},{passive:true});
   try{loadRankings();}catch(e){}
+  try{loadLeague();}catch(e){}
   try{checkBonus();}catch(e){}
   try{initRetention();}catch(e){console.error('retention:',e);}
 }
-window.addEventListener('pageshow',function(){try{initRetention();}catch(e){};try{_renderShieldBadge();}catch(e){};
+window.addEventListener('pageshow',function(){try{initRetention();}catch(e){};try{_renderShieldBadge();}catch(e){};try{loadLeague();}catch(e){};
   try{var s=JSON.parse(localStorage.getItem('hkg_user')||'null');if(s&&user&&s.name===user.name){user=s;document.getElementById('mc').textContent=String(user.medals||0).padStart(5,'0');}}catch(e){}
 });
 var SBU='https://gtzfcoiowdnyjvwikxku.supabase.co';
