@@ -172,6 +172,14 @@ body{background:var(--dark);color:#F0FFF4;font-family:'Noto Sans JP','Barlow Con
 .card.hl-red #prev-num,.card.hl-red #next-num{color:#CC0000}
 .card.hl-blk #prev-num,.card.hl-blk #next-num{color:#111}
 .card.red,.card.blk,.card.up{background:#fff}
+
+.xp-popup{position:fixed;font-family:'Oswald',monospace;font-size:20px;font-weight:900;
+  color:#ffd700;text-shadow:0 0 12px rgba(255,215,0,.9);pointer-events:none;z-index:9999;
+  animation:xpFloat 1.3s ease-out forwards}
+@keyframes xpFloat{
+  0%{opacity:1;transform:translateY(0) scale(1)}
+  40%{opacity:1;transform:translateY(-30px) scale(1.2)}
+  100%{opacity:0;transform:translateY(-80px) scale(0.8)}}
 </style>
 </head>
 <body>
@@ -564,6 +572,16 @@ async
 // ── ミッション進捗追跡ユーティリティ ──
 
 // ── じゃんけんXP付与 ──
+function showJankenXPPopup(xp){
+  var el=document.createElement('div');
+  el.style.cssText='position:fixed;top:35%;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none;font-size:22px;font-weight:900;color:#ffd700;text-shadow:0 0 12px rgba(255,215,0,.9);white-space:nowrap';
+  el.textContent='+'+xp+' XP ⚡';
+  document.body.appendChild(el);
+  setTimeout(function(){
+    el.style.transition='opacity .4s';el.style.opacity='0';
+    setTimeout(function(){el.remove();},400);
+  },900);
+}
 function addJankenXP(amount){
   try{
     var d=new Date(),dow=d.getDay(),mon=new Date(d);mon.setDate(d.getDate()-dow+1);
