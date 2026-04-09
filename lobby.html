@@ -165,13 +165,35 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .shield-badge{display:flex;align-items:center;gap:3px;background:rgba(50,150,255,.15);border:1px solid rgba(100,180,255,.35);border-radius:10px;padding:3px 7px;cursor:pointer}
 .shield-num{font-family:'Zen Dots',monospace;font-size:11px;color:#93c5fd;font-weight:700}
 
+
+.prof-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:800;display:flex;align-items:flex-start;justify-content:center;padding:20px;animation:fadeIn .2s}
+.prof-modal{background:linear-gradient(160deg,rgba(15,8,45,.98),rgba(5,12,35,.98));border:2px solid rgba(160,100,255,.45);border-radius:20px;width:100%;max-width:420px;overflow:hidden}
+.prof-hdr{background:linear-gradient(135deg,rgba(80,40,160,.6),rgba(40,20,100,.4));padding:20px;text-align:center;position:relative}
+.prof-av{font-size:52px;margin-bottom:6px;filter:drop-shadow(0 0 16px rgba(180,120,255,.7))}
+.prof-name{font-size:18px;font-weight:900;color:#eef;letter-spacing:.05em}
+.prof-lv{font-size:12px;color:#c084fc;margin-top:4px}
+.prof-xp-wrap{margin:8px auto 0;width:80%;height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
+.prof-xp-fill{height:100%;background:linear-gradient(90deg,#a855f7,#60a5fa);border-radius:3px;transition:width .6s}
+.prof-close{position:absolute;top:12px;right:14px;background:rgba(255,255,255,.1);border:none;border-radius:50%;width:28px;height:28px;color:#aaa;font-size:16px;cursor:pointer;line-height:28px;text-align:center}
+.prof-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.06)}
+.prof-stat{padding:14px 12px;background:rgba(8,12,35,.9);text-align:center}
+.prof-stat-val{font-family:'Zen Dots',monospace;font-size:20px;font-weight:900;color:#ffd700}
+.prof-stat-lbl{font-size:9px;color:rgba(200,180,255,.5);margin-top:3px;letter-spacing:.08em}
+.prof-badges{padding:12px 14px}
+.prof-badges-ttl{font-size:10px;font-weight:700;color:rgba(200,180,255,.6);letter-spacing:.12em;margin-bottom:8px}
+.prof-badge-row{display:flex;flex-wrap:wrap;gap:6px}
+.prof-badge{font-size:10px;padding:3px 9px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(220,220,255,.7)}
+.prof-badge.earned{background:rgba(180,100,255,.15);border-color:rgba(180,100,255,.4);color:#d4a0ff}
+.prof-footer{padding:12px 14px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:8px}
+.prof-footer button{flex:1;padding:9px;border-radius:9px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#ccc;cursor:pointer;font-size:11px;font-family:inherit}
+
 </style>
 </head>
 <body>
 <div class="stars" id="stars"></div>
 <div id="lobby">
   <div class="hdr">
-    <div class="avatar" id="avatar">?</div>
+    <div class="avatar" id="avatar" onclick="openProfile()" style="cursor:pointer" title="プロフィール">?</div>
     <div class="hdr-info">
       <div class="hdr-name" id="uname">--</div>
       <div class="hdr-medals" id="mc">00000</div>
@@ -227,6 +249,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="foot">© 2025 百式ゲーム王国・メダルはゲーム間で共通<br><a href="admin.html">⚙ 管理</a></div>
 </div>
 <div class="toast" id="toast"></div>
+<div class="prof-overlay" id="profOverlay" style="display:none" onclick="if(event.target===this)closeProfModal()"><div class="prof-modal"><div class="prof-hdr"><button class="prof-close" onclick="closeProfModal()">×</button><div class="prof-av" id="prof-av">🧙</div><div class="prof-name" id="prof-name">---</div><div class="prof-lv" id="prof-lv">Lv.1 見習い魔道師</div><div class="prof-xp-wrap"><div class="prof-xp-fill" id="prof-xp-fill" style="width:0%"></div></div></div><div class="prof-stats"><div class="prof-stat"><div class="prof-stat-val" id="ps-medals">0</div><div class="prof-stat-lbl">🪙 メダル</div></div><div class="prof-stat"><div class="prof-stat-val" id="ps-streak">0</div><div class="prof-stat-lbl">🔥 連続ログイン日数</div></div><div class="prof-stat"><div class="prof-stat-val" id="ps-wxp">0</div><div class="prof-stat-lbl">⚡ 今週のXP</div></div><div class="prof-stat"><div class="prof-stat-val" id="ps-stones">0</div><div class="prof-stat-lbl">💎 魔石</div></div></div><div class="prof-badges"><div class="prof-badges-ttl">🏅 獲得称号</div><div class="prof-badge-row" id="prof-badge-row"></div></div><div class="prof-footer"><button onclick="closeProfModal()">閉じる</button><button onclick="closeProfModal();openCalendar()">📅 カレンダー</button></div></div></div>
 <div class="cal-overlay" id="calOverlay" style="display:none" onclick="if(event.target===this)closeCalendar()"><div class="cal-modal"><div class="cal-hd"><h2>📅 月間ログインカレンダー</h2><p id="cal-subtitle">今月のログイン日数を確認しよう</p></div><div class="cal-grid" id="cal-grid"></div><div class="cal-footer"><button class="cal-close-btn" onclick="closeCalendar()">閉じる</button><button class="cal-claim-btn" id="cal-claim-btn" onclick="claimTodayBonus()">✨ 本日の報酬を受取る</button></div></div></div>
 <script>
 var GAMES=[
@@ -298,7 +321,8 @@ if(user){
   try{loadRankings();}catch(e){}
   try{loadLeague();}catch(e){}
   try{checkBonus();}catch(e){}
-  try{initRetention();}catch(e){console.error('retention:',e);}
+  try{checkMissionCompleted();}catch(e){}
+try{initRetention();}catch(e){console.error('retention:',e);}
 }
 window.addEventListener('pageshow',function(){try{initRetention();}catch(e){};try{_renderShieldBadge();}catch(e){};try{loadLeague();}catch(e){};
   try{var s=JSON.parse(localStorage.getItem('hkg_user')||'null');if(s&&user&&s.name===user.name){user=s;document.getElementById('mc').textContent=String(user.medals||0).padStart(5,'0');}}catch(e){}
@@ -638,6 +662,75 @@ function _getLvName(){
   if(xp>=200)return '魔法博士リーグ';
   if(xp>=50)return '賢者リーグ';
   return '魔法使いリーグ';
+}
+
+
+// ══════ プロフィールモーダル ══════
+var LV_NAMES=['見習い魔道師','初等魔道師','中等魔道師','上等魔道師','魔法学士','魔法修士','呪術師','魔導師','賢者','大魔導師','魔法博士','古代魔法士','天空の魔道師','魔界の賢者','神代魔道師','伝説の魔道師','時代の魔法士','世界の賢者','大魔王','創造神'];
+var XP_STEPS=[0,50,120,220,360,540,770,1060,1420,1860,2400,3050,3820,4720,5760,6960,8340,9920,11720,13760];
+function openProfile(){
+  var sk=_getStreak();
+  var wxp=_getWeekXP();
+  var stones=_getStones();
+  var shields=_getShields();
+  var monthly=_getMonthly();
+  // レベル計算（クイズXPからlocalStorageで取得）
+  var totalXP=parseInt(localStorage.getItem('hkg_total_xp')||'0');
+  var lv=1;
+  for(var i=XP_STEPS.length-1;i>=0;i--){if(totalXP>=XP_STEPS[i]){lv=i+1;break;}}
+  lv=Math.min(lv,20);
+  var lvName=LV_NAMES[lv-1]||'創造神';
+  var nextXP=XP_STEPS[lv]||XP_STEPS[XP_STEPS.length-1];
+  var prevXP=XP_STEPS[lv-1]||0;
+  var pct=nextXP>prevXP?Math.round((totalXP-prevXP)/(nextXP-prevXP)*100):100;
+  // UI更新
+  document.getElementById('prof-av').textContent=user&&user.avatar?user.avatar:'🧙';
+  document.getElementById('prof-name').textContent=user?user.name:'---';
+  document.getElementById('prof-lv').textContent='Lv.'+lv+' '+lvName+' ('+totalXP+'XP)';
+  document.getElementById('prof-xp-fill').style.width=pct+'%';
+  document.getElementById('ps-medals').textContent=user?Number(user.medals).toLocaleString():0;
+  document.getElementById('ps-streak').textContent=sk.count+'日';
+  document.getElementById('ps-wxp').textContent=wxp.toLocaleString();
+  document.getElementById('ps-stones').textContent=stones;
+  // 称号バッジ
+  var badges=[
+    {name:'ログイン1日目',cond:sk.count>=1},
+    {name:'7日連続🔥',cond:sk.count>=7},
+    {name:'30日連続💫',cond:sk.count>=30},
+    {name:'月間皆勤👑',cond:monthly.claimed&&monthly.claimed.length>=30},
+    {name:'魔石持ち💎',cond:stones>=5},
+    {name:'護符の守護者🛡️',cond:shields>=3},
+  ];
+  document.getElementById('prof-badge-row').innerHTML=badges.map(b=>
+    '<span class="prof-badge'+(b.cond?' earned':'')+'">'+b.name+'</span>'
+  ).join('');
+  document.getElementById('profOverlay').style.display='flex';
+}
+function closeProfModal(){document.getElementById('profOverlay').style.display='none';}
+
+// ══════ ミッション完了通知 ══════
+function checkMissionCompleted(){
+  var md=_getMissions();
+  if(!md||!md.missions)return;
+  var completed=md.missions.filter(function(m){return m.done;}).length;
+  var key='hkg_notified_'+md.date;
+  var notified=parseInt(localStorage.getItem(key)||'0');
+  if(completed>notified){
+    localStorage.setItem(key,completed);
+    if(completed===md.missions.length&&!md.allClaimed){
+      toast('🎉 全ミッション完了！「受取」ボタンで報酬をGETしよう！');
+      var btn=document.getElementById('mission-all-btn');
+      if(btn){btn.classList.add('ready');btn.disabled=false;btn.textContent='✨ 受取る！';}
+    } else if(completed>notified){
+      toast('✅ ミッション進捗更新！ '+completed+'/'+md.missions.length+'完了');
+    }
+  }
+}
+
+// XP総合計をlocalStorageに保存（クイズから呼ばれる用）
+function addGlobalXP(xp){
+  var cur=parseInt(localStorage.getItem('hkg_total_xp')||'0');
+  localStorage.setItem('hkg_total_xp',cur+xp);
 }
 
 async function doLogout(){var u=JSON.parse(localStorage.getItem('hkg_user')||'{}');if(u.name&&u.name!=='GUEST'&&u.medals!==undefined){var headers={'apikey':SBK,'Authorization':'Bearer '+SBK,'Content-Type':'application/json'};try{if(u.id){await fetch(SBU+'/rest/v1/game_users?id=eq.'+u.id,{method:'PATCH',headers,body:JSON.stringify({medals:u.medals})});}else{var rows=await fetch(SBU+'/rest/v1/game_users?name=eq.'+encodeURIComponent(u.name),{headers}).then(function(r){return r.json();});if(rows&&rows[0])await fetch(SBU+'/rest/v1/game_users?id=eq.'+rows[0].id,{method:'PATCH',headers,body:JSON.stringify({medals:u.medals})});}}catch(e){}}localStorage.removeItem('hkg_user');location.replace('index.html');}
