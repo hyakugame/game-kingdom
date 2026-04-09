@@ -1336,22 +1336,26 @@ async function buildQuestionsWithClaude(keyword, title, text, cnt, existingQ){
 function openApiKeyModal(){
   var cur=getClaudeKey();
   var masked=cur?cur.substring(0,10)+'...':'未設定';
-  var html='<div style="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px" id="apiKeyModal">'
-    +'<div style="background:linear-gradient(135deg,#0a0520,#050818);border:2px solid rgba(160,100,255,.5);border-radius:18px;padding:24px;width:100%;max-width:400px">'
-    +'<h3 style="color:#c084fc;font-size:15px;margin-bottom:8px">🤖 Claude API キー設定</h3>'
-    +'<p style="color:rgba(200,180,255,.6);font-size:11px;margin-bottom:14px;line-height:1.6">'
-    +'Anthropic APIキー（sk-ant-...）を入力するとAIが直接クイズを生成します。<br>'
-    +'キーはこのデバイスのみに保存されます。<br>'
-    +'現在: <span style="color:#67e8f9">'+masked+'</span></p>'
-    +'<input id="apiKeyInput" type="password" placeholder="sk-ant-api03-..." '
-    +'style="width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(160,100,255,.4);border-radius:8px;padding:10px 12px;color:#eee;font-size:13px;font-family:monospace;box-sizing:border-box;margin-bottom:12px">'
+  var div=document.createElement('div');
+  div.id='apiKeyModal';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+  var inner=document.createElement('div');
+  inner.style.cssText='background:linear-gradient(135deg,#0a0520,#050818);border:2px solid rgba(160,100,255,.5);border-radius:18px;padding:24px;width:100%;max-width:400px';
+  inner.innerHTML='<h3 style="color:#c084fc;font-size:15px;margin-bottom:8px">🤖 Claude API キー設定</h3>'
+    +'<p style="color:rgba(200,180,255,.6);font-size:11px;margin-bottom:14px;line-height:1.6">APIキー（sk-ant-...）を入力するとAIが直接クイズを生成します。<br>現在: <span style="color:#67e8f9">'+masked+'</span></p>'
+    +'<input id="apiKeyInput" type="password" placeholder="sk-ant-api03-..." style="width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(160,100,255,.4);border-radius:8px;padding:10px 12px;color:#eee;font-size:13px;box-sizing:border-box;margin-bottom:12px">'
     +'<div style="display:flex;gap:8px">'
-    +'<button onclick="document.getElementById('apiKeyModal').remove()" '
-    +'style="flex:1;padding:9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#aaa;cursor:pointer;font-family:inherit">キャンセル</button>'
-    +'<button onclick="var k=document.getElementById('apiKeyInput').value;if(k){setClaudeKey(k);document.getElementById('apiKeyModal').remove();alert('✅ APIキーを保存しました！');}else{alert('キーを入力してください');}" '
-    +'style="flex:2;padding:9px;background:linear-gradient(135deg,#7c3aed,#4f46e5);border:none;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;font-family:inherit">💾 保存</button>'
-    +'</div></div></div>';
-  document.body.insertAdjacentHTML('beforeend',html);
+    +'<button id="apiKeyCancelBtn" style="flex:1;padding:9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#aaa;cursor:pointer;font-family:inherit">キャンセル</button>'
+    +'<button id="apiKeySaveBtn" style="flex:2;padding:9px;background:linear-gradient(135deg,#7c3aed,#4f46e5);border:none;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;font-family:inherit">💾 保存</button>'
+    +'</div>';
+  div.appendChild(inner);
+  document.body.appendChild(div);
+  document.getElementById('apiKeyCancelBtn').onclick=function(){document.getElementById('apiKeyModal').remove();};
+  document.getElementById('apiKeySaveBtn').onclick=function(){
+    var k=document.getElementById('apiKeyInput').value;
+    if(k){setClaudeKey(k);document.getElementById('apiKeyModal').remove();alert('✅ APIキーを保存しました！');}
+    else{alert('キーを入力してください');}
+  };
 }
 
 function buildQuestionsFromText(keyword, title, text, cnt, existingQ) {
