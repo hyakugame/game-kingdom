@@ -560,7 +560,32 @@ function updateRankStatus(){
 }
 
 // スコア登録（オンライン + ローカル）
-async function addScore(name, score){
+async 
+// ── ミッション進捗追跡ユーティリティ ──
+var _qComboCount=0;
+function _missionUpdate(type,amount){
+  try{
+    var today=new Date().toDateString();
+    var md=JSON.parse(localStorage.getItem('hkg_missions')||'{}');
+    if(!md.date||md.date!==today||!md.missions)return;
+    var changed=false;
+    md.missions.forEach(function(m){
+      if(m.done)return;
+      if(m.type===type){
+        m.current=Math.min(m.target,(m.current||0)+amount);
+        if(m.current>=m.target)m.done=true;
+        changed=true;
+      } else if(m.type==='any_play'&&type==='any_play'){
+        m.current=Math.min(m.target,(m.current||0)+1);
+        if(m.current>=m.target)m.done=true;
+        changed=true;
+      }
+    });
+    if(changed)localStorage.setItem('hkg_missions',JSON.stringify(md));
+  }catch(e){}
+}
+
+function addScore(name, score){
   // ローカル保存
   const local = loadLocalRanking();
   local.push({name: name.trim()||'？？？', score, date: new Date().toLocaleDateString('ja-JP')});
@@ -906,6 +931,8 @@ function judge(pKey,cpuKey,ph,ch){
   const result=pKey===cpuKey?'draw':BEATS[pKey]===cpuKey?'win':'lose';
   const pEl=document.getElementById('p-hand');
   if(result==='win'){
+    _missionUpdate('janken_win',1);
+    _missionUpdate('any_play',1);
     document.getElementById('sign').className='sign win-d';pEl.className='p-hand win-g';
     seWin();showRov('win','WIN！','フィーバー！！',1400);setV('フィーバー！！','fever');speakAt('フィーバー！！',500);
     setTimeout(()=>{hideRov();showRl();},1700);
