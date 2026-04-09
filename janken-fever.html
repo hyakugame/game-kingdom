@@ -562,6 +562,18 @@ function updateRankStatus(){
 // スコア登録（オンライン + ローカル）
 async 
 // ── ミッション進捗追跡ユーティリティ ──
+
+// ── じゃんけんXP付与 ──
+function addJankenXP(amount){
+  try{
+    var d=new Date(),dow=d.getDay(),mon=new Date(d);mon.setDate(d.getDate()-dow+1);
+    var wk='hkg_wxp_'+mon.toISOString().slice(0,10);
+    var xp=amount||8;
+    localStorage.setItem(wk,(parseInt(localStorage.getItem(wk)||'0')+xp));
+    localStorage.setItem('hkg_total_xp',(parseInt(localStorage.getItem('hkg_total_xp')||'0')+xp));
+  }catch(e){}
+}
+
 var _qComboCount=0;
 function _missionUpdate(type,amount){
   try{
@@ -933,6 +945,7 @@ function judge(pKey,cpuKey,ph,ch){
   if(result==='win'){
     _missionUpdate('janken_win',1);
     _missionUpdate('any_play',1);
+    addJankenXP(8);
     document.getElementById('sign').className='sign win-d';pEl.className='p-hand win-g';
     seWin();showRov('win','WIN！','フィーバー！！',1400);setV('フィーバー！！','fever');speakAt('フィーバー！！',500);
     setTimeout(()=>{hideRov();showRl();},1700);
