@@ -266,6 +266,21 @@ html{opacity:0;transition:opacity .12s}
 .sp-stars{font-size:14px;letter-spacing:2px}
 .sp-btn{font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid rgba(180,100,255,.5);background:rgba(80,20,120,.7);color:#d4a0ff;cursor:pointer;white-space:nowrap}
 .sp-btn:disabled{opacity:.35;cursor:default}
+
+/* ── フローティングXPアニメーション ── */
+.xp-popup{position:fixed;font-family:'Zen Dots',monospace;font-size:20px;font-weight:900;
+  color:#ffd700;text-shadow:0 0 12px rgba(255,215,0,.9);pointer-events:none;z-index:9999;
+  animation:xpFloat 1.3s ease-out forwards}
+.xp-popup.combo{color:#ff6b35;font-size:22px;text-shadow:0 0 15px rgba(255,100,0,.9)}
+.xp-popup.maniac{color:#c084fc;text-shadow:0 0 12px rgba(192,132,252,.9)}
+@keyframes xpFloat{0%{opacity:1;transform:translateY(0) scale(1)}
+  30%{opacity:1;transform:translateY(-25px) scale(1.3)}
+  100%{opacity:0;transform:translateY(-80px) scale(0.8)}}
+/* ── ストリークボーナス表示 ── */
+.streak-bonus-badge{position:fixed;top:54px;right:10px;background:rgba(255,100,0,.15);
+  border:1px solid rgba(255,120,0,.4);border-radius:8px;padding:3px 8px;font-size:10px;
+  color:#ff8c00;font-weight:700;z-index:100;display:none}
+
 </style>
 </head>
 <body>
@@ -650,6 +665,29 @@ const P_SPELLS = ['⚡ THUNDER!','❄️ BLIZZARD!','🔥 FIREBALL!','🌊 AQUA!
 var _qComboCount=0;
 
 // ── XP計算（難易度・ストリーク・コンボ考慮）──
+
+function showXPPopup(xp, combo, lvl){
+  var el=document.createElement('div');
+  el.className='xp-popup'+(combo>=5?' combo':lvl>=3?' maniac':'');
+  el.textContent='+'+xp+' XP'+(combo>=3?' 🔥×'+combo:'');
+  var cx=window.innerWidth/2,cy=window.innerHeight*0.55;
+  el.style.left=(cx-50)+'px';el.style.top=cy+'px';
+  document.body.appendChild(el);
+  setTimeout(function(){el.remove();},1300);
+}
+// ストリークボーナスバッジを表示
+function showStreakBonusBadge(){
+  try{
+    var sk=JSON.parse(localStorage.getItem('hkg_streak')||'{}');
+    var days=sk.count||0;
+    if(days<3)return;
+    var mult=days>=30?'×1.5':days>=14?'×1.3':days>=7?'×1.2':days>=3?'×1.1':'';
+    var el=document.getElementById('streak-bonus-badge');
+    if(!el){el=document.createElement('div');el.id='streak-bonus-badge';el.className='streak-bonus-badge';document.body.appendChild(el);}
+    el.textContent='🔥'+days+'日 XP'+mult;el.style.display='block';
+  }catch(e){}
+}
+
 function calcXP(){
   var base=10;
   var lv=(gs&&gs.q&&gs.q.level)||1;
@@ -1411,6 +1449,7 @@ function addFreestyleToBank(keyword, wikiTitle, category, questions, bankId) {
   return {added,total:b.questions.length,id};
 }
 
+showStreakBonusBadge();
 async function generateAI() {
   const keyword=document.getElementById('aiKeyword').value.trim();
   const categoryInput=document.getElementById('aiCategory').value.trim();
@@ -2372,7 +2411,7 @@ function playerAns(ci) {
     showSpell(P_SPELLS[Math.floor(Math.random()*P_SPELLS.length)],'player');
     doFlash('fg');
     spawnPtcl(document.querySelectorAll('.choice')[ci]);
-    var _xp=calcXP();setMsg('🎉 正解！+'+_xp+'XP'+(_qComboCount>=3?' 🔥コンボ×'+_qComboCount:''),'good');addPlayerXP(_xp);
+    var _xp=calcXP();setMsg('🎉 正解！+'+_xp+'XP'+(_qComboCount>=3?' 🔥コンボ×'+_qComboCount:''),'good');showXPPopup(_xp,_qComboCount,(gs&&gs.q&&gs.q.level)||1);addPlayerXP(_xp);
     addScore('player');
     setTimeout(()=>checkEnd(pName),1000);
   } else {
