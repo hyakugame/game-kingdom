@@ -273,7 +273,7 @@ body{display:block !important}
 .pk-bar-right{border-right:none;border-left:2px solid #004400;}
 .pk-bar-lbl{font-family:var(--font-en);font-size:10px;font-weight:900;color:#00AA00;letter-spacing:.2em;}
 .pk-bar-wager{font-family:var(--font-en);font-size:clamp(20px,5vw,40px);font-weight:900;color:#00FFFF;text-shadow:0 0 14px rgba(0,255,255,.9),0 0 28px rgba(0,200,255,.5);line-height:1}
-.pk-bar-credits{font-family:var(--font-en);font-size:28px;font-weight:900;color:#FFD700;text-shadow:0 0 10px rgba(255,215,0,.7);line-height:1}
+.pk-bar-credits{font-family:var(--font-en);font-size:clamp(13px,3.5vw,28px);font-weight:900;color:#FFD700;text-shadow:0 0 10px rgba(255,215,0,.7);line-height:1}
 .pk-bar-center{flex:1;display:flex;align-items:center;justify-content:center;}
 .pk-bar-status{
   font-family:var(--font-en);font-size:clamp(18px,3.5vw,28px);font-weight:900;
@@ -1148,6 +1148,45 @@ const PAY=[
   {id:'3ok',n:'THREE OF A KIND',       base:2,  jack:20,  flat:false},
 ];
 // BETに応じた配当を取得
+// ── 選択的HOLD（役に関係するカードのみ） ──
+function autoHold(hand, r) {
+  held = Array(5).fill(false);
+  if(!r) return;
+  // 全5枚HOLD系（royal/straight/flush/fullhouse/5oak）
+  var allFive=['nrf','fa5','wrf','5ok','sf','fh','fl','st'];
+  if(allFive.indexOf(r.id)>=0){held=Array(5).fill(true);return;}
+  // ワイルドの位置を特定
+  var wilds=[];hand.forEach(function(c,i){if(isWild(c))wilds.push(i);});
+  // 非ワイルドの枚数カウント
+  var cnt={};
+  hand.forEach(function(c,i){
+    if(!isWild(c)){if(!cnt[c.n])cnt[c.n]=[];cnt[c.n].push(i);}
+  });
+  // 最も多い非ワイルドのrank
+  var best=null,bestLen=0;
+  Object.keys(cnt).forEach(function(n){if(cnt[n].length>bestLen){bestLen=cnt[n].length;best=n;}});
+  // FOUR OF A KIND: 4枚のみHOLD
+  if(r.id==='4ok'){
+    if(best) cnt[best].forEach(function(i){held[i]=true;});
+    wilds.forEach(function(i){held[i]=true;});
+    // 5枚になってしまったら（フルハウスとの混在）一番弱いカードを外す
+    // held=trueが4枚になるよう調整
+    var heldIdx=[];held.forEach(function(h,i){if(h)heldIdx.push(i);});
+    while(heldIdx.length>4){
+      var remove=heldIdx.pop();
+      if(wilds.indexOf(remove)<0&&best&&cnt[best].indexOf(remove)<0){held[remove]=false;}
+    }
+    return;
+  }
+  // THREE OF A KIND: 3枚のみHOLD
+  if(r.id==='3ok'){
+    if(best) cnt[best].forEach(function(i){held[i]=true;});
+    wilds.forEach(function(i){held[i]=true;});
+    return;
+  }
+  held=Array(5).fill(true);
+}
+
 function getPayout(p,b){
   if(b>=10)return p.jack; // MAX BET → 特大ジャックポット
   if(p.flat)return p.base; // NATURAL ROYAL FLUSHはBET1-9固定800
@@ -1629,7 +1668,7 @@ function makeCardHTML(c){
 function renderFD(){const a=document.getElementById('pk-ca');a.innerHTML='';for(let i=0;i<5;i++){const w=document.createElement('div');w.className='cw';const c=document.createElement('div');c.className='card dn';const l=document.createElement('div');l.className='hl-lbl hid';l.textContent='HOLD';w.appendChild(c);w.appendChild(l);a.appendChild(w);}}
 function renderC(){const a=document.getElementById('pk-ca');a.innerHTML='';hand.forEach((c,i)=>{const w=document.createElement('div');w.className='cw';const cd=document.createElement('div');let cls='card up';if(c.joker)cls+=' joker-card';else{cls+=' '+(SR[c.s]?'r':'b');if(c.n>=11||c.n===13)cls+=' face-card';}if(held[i])cls+=' hd';cd.className=cls;if(phase==='draw')cd.onclick=()=>{wake();held[i]?seUnhold():seHold();held[i]=!held[i];renderC();};cd.innerHTML=makeCardHTML(c);const l=document.createElement('div');l.className='hl-lbl'+(held[i]?'':' hid');l.textContent='HOLD';if(isWild(c))l.style.color='#FFD700';w.appendChild(cd);w.appendChild(l);a.appendChild(w);});}
 function dealDraw(){if(phase==='deal')doDeal();else if(phase==='draw')doDraw();}
-function doDeal(){if(!user||user.medals<bet){document.getElementById('pk-rd').innerHTML='<div class="rz">メダルが足りません！</div>';return;}wake();user.medals-=bet;win=0;updH();updLM();deck=mkD();hand=deck.splice(0,5);held=Array(5).fill(false);seDeal();phase='draw';renderC();document.getElementById('dbn').textContent='DRAW';setBB(false);const r=chkR(hand);if(r){held=Array(5).fill(true);setTimeout(()=>seWin(getPayout(r,bet)),200);}document.getElementById('pk-rd').innerHTML='';setStatus(r?'♪ '+r.n+' — HOLDセット！':'HOLD CARDS, THEN DRAW',r?'win':'info');renderC();}
+function doDeal(){if(!user||user.medals<bet){document.getElementById('pk-rd').innerHTML='<div class="rz">メダルが足りません！</div>';return;}wake();user.medals-=bet;win=0;updH();updLM();deck=mkD();hand=deck.splice(0,5);held=Array(5).fill(false);seDeal();phase='draw';renderC();document.getElementById('dbn').textContent='DRAW';setBB(false);const r=chkR(hand);if(r){autoHold(hand,r);setTimeout(()=>seWin(getPayout(r,bet)),200);}document.getElementById('pk-rd').innerHTML='';setStatus(r?'♪ '+r.n+' — HOLDセット！':'HOLD CARDS, THEN DRAW',r?'win':'info');renderC();}
 function doDraw(){
   wake();seDraw();
   for(let i=0;i<5;i++)if(!held[i])hand[i]=deck.shift();
