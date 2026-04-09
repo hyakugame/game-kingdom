@@ -142,6 +142,29 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .mc-fill{height:100%;background:linear-gradient(90deg,#67e8f9,#a855f7);border-radius:2px;transition:width .5s}
 .mc-stat{font-size:11px;flex-shrink:0;min-width:28px;text-align:right}
 
+
+/* ── 週間リーグ ── */
+.league-section{margin:10px 14px 0;background:rgba(8,12,35,.75);border-radius:14px;border:1px solid rgba(255,215,0,.2);overflow:hidden}
+.league-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:linear-gradient(90deg,rgba(20,10,50,.8),rgba(10,5,30,.8));border-bottom:1px solid rgba(255,215,0,.12)}
+.league-ttl{font-size:12px;font-weight:900;color:#ffd700;letter-spacing:.1em}
+.league-refresh{font-size:10px;color:rgba(255,200,100,.4);cursor:pointer}
+.league-my{display:flex;align-items:center;gap:8px;padding:8px 13px;background:rgba(255,215,0,.05);border-bottom:1px solid rgba(255,255,255,.05)}
+.league-my-rank{font-family:'Zen Dots',monospace;font-size:18px;color:#ffd700;min-width:36px}
+.league-my-info{flex:1}
+.league-my-name{font-size:12px;font-weight:700;color:#eee}
+.league-my-xp{font-size:10px;color:rgba(200,230,255,.5);margin-top:1px}
+.league-my-badge{font-size:10px;padding:2px 8px;border-radius:6px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.3);color:#ffd700}
+.league-list{padding:4px 0}
+.league-row{display:flex;align-items:center;gap:8px;padding:6px 13px;border-bottom:1px solid rgba(255,255,255,.03)}
+.league-row:last-child{border-bottom:none}
+.lrk{font-family:'Zen Dots',monospace;font-size:12px;min-width:26px;text-align:center}
+.lrk.r1{color:#ffd700}.lrk.r2{color:#c0c0c0}.lrk.r3{color:#cd7f32}.lrk.rn{color:rgba(255,255,255,.3);font-size:10px}
+.lnm{flex:1;font-size:12px;color:rgba(220,230,255,.85);font-weight:600}
+.lxp{font-family:'Zen Dots',monospace;font-size:11px;color:#67e8f9}
+/* ── シールド ── */
+.shield-badge{display:flex;align-items:center;gap:3px;background:rgba(50,150,255,.15);border:1px solid rgba(100,180,255,.35);border-radius:10px;padding:3px 7px;cursor:pointer}
+.shield-num{font-family:'Zen Dots',monospace;font-size:11px;color:#93c5fd;font-weight:700}
+
 </style>
 </head>
 <body>
@@ -153,7 +176,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div class="hdr-name" id="uname">--</div>
       <div class="hdr-medals" id="mc">00000</div>
     </div>
-    <div id="hdr-extras" class="hdr-extras"><span id="streak-badge" class="streak-badge" style="display:none"><span class="streak-fire">🔥</span><span class="streak-num" id="streak-num">0</span><span style="font-size:9px;color:rgba(255,140,0,.6)">日</span></span><span id="stones-badge" class="stones-badge" style="display:none"><span class="stones-icon">💎</span><span class="stones-num" id="stones-num">0</span></span></div><button class="lout" onclick="doLogout()">ログアウト</button>
+    <div id="hdr-extras" class="hdr-extras"><span id="shield-badge" class="shield-badge" style="display:none" onclick="useShieldPrompt()">🛡️<span class="shield-num" id="shield-num">0</span></span><span id="streak-badge" class="streak-badge" style="display:none"><span class="streak-fire">🔥</span><span class="streak-num" id="streak-num">0</span><span style="font-size:9px;color:rgba(255,140,0,.6)">日</span></span><span id="stones-badge" class="stones-badge" style="display:none"><span class="stones-icon">💎</span><span class="stones-num" id="stones-num">0</span></span></div><button class="lout" onclick="doLogout()">ログアウト</button>
   </div>
   <div class="bonus-bar" id="bonusBar" onclick="openCalendar()">
     <div class="bonus-icon">💰</div>
@@ -181,7 +204,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div class="cs-dot" onclick="csGoTo(2)"></div>
     </div>
   </div>
-  <div class="ranking-section" id="rankingSection">
+  <div class="league-section" id="leagueSection" style="display:none"><div class="league-hdr"><span class="league-ttl">⚔️ 今週の魔道師ランキング</span><span class="league-refresh" onclick="loadLeague()">↻ 更新</span></div><div class="league-my" id="league-my"></div><div class="league-list" id="league-list"></div></div>
+<div class="ranking-section" id="rankingSection">
     <div class="ranking-title"><span>ゲーム別ランキング</span></div>
     <div class="rank-block">
       <div class="rank-block-title">🧙 クイズ FEVER ソロ <span style="font-size:10px;color:rgba(150,180,255,.5);margin-left:4px">正解数ハイスコア</span></div>
@@ -275,7 +299,7 @@ if(user){
   try{checkBonus();}catch(e){}
   try{initRetention();}catch(e){console.error('retention:',e);}
 }
-window.addEventListener('pageshow',function(){try{initRetention();}catch(e){};
+window.addEventListener('pageshow',function(){try{initRetention();}catch(e){};try{_renderShieldBadge();}catch(e){};
   try{var s=JSON.parse(localStorage.getItem('hkg_user')||'null');if(s&&user&&s.name===user.name){user=s;document.getElementById('mc').textContent=String(user.medals||0).padStart(5,'0');}}catch(e){}
 });
 var SBU='https://gtzfcoiowdnyjvwikxku.supabase.co';
@@ -506,6 +530,7 @@ function claimAllMissions(){
   user.medals+=100;save();
   document.getElementById('mc').textContent=String(user.medals).padStart(5,'0');
   _addStones(1);
+  _addShields(1);
   var btn=document.getElementById('mission-all-btn');
   btn.disabled=true;btn.textContent='受取済 ✅';btn.classList.remove('ready');
   toast('🎉 ミッション完了！ メダル+100・💎+1 獲得！');
@@ -528,6 +553,91 @@ function updateMission(type,amount){
 }
 // ログインミッションは即完了
 updateMission('login');
+
+
+// ══════ シールド（護符の石）システム ══════
+function _getShields(){return parseInt(localStorage.getItem('hkg_shields')||'0');}
+function _addShields(n){var s=Math.min(_getShields()+n,5);localStorage.setItem('hkg_shields',s);_renderShieldBadge();}
+function _renderShieldBadge(){
+  var n=_getShields();
+  var el=document.getElementById('shield-badge');
+  var sn=document.getElementById('shield-num');
+  if(el&&sn){
+    if(n>0){el.style.display='flex';sn.textContent=n;}
+    else{el.style.display='none';}
+  }
+}
+function useShieldPrompt(){
+  var n=_getShields();
+  if(n<=0){toast('護符の石がありません');return;}
+  if(confirm('🛡️ 護符の石を1個使ってストリークを守りますか？\n（残り'+n+'個）')){
+    localStorage.setItem('hkg_shields',n-1);
+    // ストリークの最終日を今日に更新
+    var sk=_getStreak();sk.last=new Date().toDateString();_saveStreak(sk);
+    _renderShieldBadge();
+    toast('🛡️ 護符の石を使用しました！ストリーク継続！');
+  }
+}
+
+// ══════ 週間XPシステム ══════
+function _getWeekKey(){
+  var d=new Date();
+  var dow=d.getDay();
+  var mon=new Date(d);mon.setDate(d.getDate()-dow+1);
+  return 'hkg_wxp_'+mon.toISOString().slice(0,10);
+}
+function _addWeekXP(amount){
+  var k=_getWeekKey();
+  var cur=parseInt(localStorage.getItem(k)||'0');
+  localStorage.setItem(k,cur+amount);
+}
+function _getWeekXP(){return parseInt(localStorage.getItem(_getWeekKey())||'0');}
+
+// ══════ 週間リーグロード ══════
+async function loadLeague(){
+  var el=document.getElementById('leagueSection');
+  var myEl=document.getElementById('league-my');
+  var listEl=document.getElementById('league-list');
+  if(!el||!user)return;
+  el.style.display='block';
+  var myXP=_getWeekXP();
+  var myStreak=_getStreak().count;
+  // Supabaseから今週のスコアを取得（game_usersテーブルを利用）
+  var SBU='https://gtzfcoiowdnyjvwikxku.supabase.co';
+  var SBK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0emZjb2lvd2RueWp2d2lreGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1ODk3MTksImV4cCI6MjA5MDE2NTcxOX0.aET6tP6-JUyRuwFOrPa-xn0RofVX4o3gRCPBm13Dbvg';
+  var SBH={'apikey':SBK,'Authorization':'Bearer '+SBK};
+  // 自分のXPを更新
+  myEl.innerHTML='<div class="league-my-rank">#?</div>'
+    +'<div class="league-my-info"><div class="league-my-name">'+user.name+'</div>'
+    +'<div class="league-my-xp">今週のXP: '+myXP.toLocaleString()+'  🔥'+myStreak+'日連続</div></div>'
+    +'<div class="league-my-badge">'+_getLvName()+'</div>';
+  // 他プレイヤーのメダル順でランキング表示（暫定）
+  try{
+    var res=await fetch(SBU+'/rest/v1/game_users?select=name,medals&order=medals.desc&limit=10',{headers:SBH});
+    var rows=await res.json();
+    if(!rows||!rows.length){listEl.innerHTML='<div style="padding:12px;text-align:center;font-size:11px;color:rgba(255,255,255,.3)">データなし</div>';return;}
+    var medals=['🥇','🥈','🥉'];
+    var clsArr=['r1','r2','r3'];
+    listEl.innerHTML=rows.map(function(r,i){
+      var cls=i<3?clsArr[i]:'rn';
+      var rnk=i<3?medals[i]:(i+1);
+      return '<div class="league-row">'
+        +'<span class="lrk '+cls+'">'+rnk+'</span>'
+        +'<span class="lnm">'+String(r.name||'？').slice(0,10)+'</span>'
+        +'<span class="lxp">🪙'+Number(r.medals||0).toLocaleString()+'</span>'
+        +'</div>';
+    }).join('');
+  }catch(e){
+    listEl.innerHTML='<div style="padding:10px;text-align:center;font-size:10px;color:rgba(255,255,255,.25)">読み込みエラー</div>';
+  }
+}
+function _getLvName(){
+  var xp=_getWeekXP();
+  if(xp>=500)return '大魔導師リーグ';
+  if(xp>=200)return '魔法博士リーグ';
+  if(xp>=50)return '賢者リーグ';
+  return '魔法使いリーグ';
+}
 
 async function doLogout(){var u=JSON.parse(localStorage.getItem('hkg_user')||'{}');if(u.name&&u.name!=='GUEST'&&u.medals!==undefined){var headers={'apikey':SBK,'Authorization':'Bearer '+SBK,'Content-Type':'application/json'};try{if(u.id){await fetch(SBU+'/rest/v1/game_users?id=eq.'+u.id,{method:'PATCH',headers,body:JSON.stringify({medals:u.medals})});}else{var rows=await fetch(SBU+'/rest/v1/game_users?name=eq.'+encodeURIComponent(u.name),{headers}).then(function(r){return r.json();});if(rows&&rows[0])await fetch(SBU+'/rest/v1/game_users?id=eq.'+rows[0].id,{method:'PATCH',headers,body:JSON.stringify({medals:u.medals})});}}catch(e){}}localStorage.removeItem('hkg_user');location.replace('index.html');}
 </script>
