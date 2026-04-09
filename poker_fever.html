@@ -231,7 +231,7 @@ body{display:block !important}
 .du-hud{display:flex;justify-content:space-between;align-items:center;padding:5px 14px 0;}
 .du-hud-col{display:flex;flex-direction:column;align-items:center}
 .du-hud-lbl{font-family:var(--font-en);font-size:11px;font-weight:900;letter-spacing:.2em;color:#00FF41}
-.du-hud-val{font-family:var(--font-en);font-size:28px;font-weight:900;color:#FFD700;text-shadow:0 0 8px rgba(255,215,0,.6);line-height:1.1}
+.du-hud-val{font-family:var(--font-en);font-size:clamp(14px,3.5vw,28px);font-weight:900;color:#FFD700;text-shadow:0 0 8px rgba(255,215,0,.6);line-height:1.1}
 @keyframes flipIn{0%{transform:rotateY(90deg) scale(.8);opacity:0}60%{transform:rotateY(-8deg) scale(1.05)}100%{transform:rotateY(0deg) scale(1);opacity:1}}
 .duc.flip{animation:flipIn .4s cubic-bezier(.25,1.4,.5,1) forwards}
 @keyframes dealerIn{0%{transform:scale(.3) rotate(-10deg);opacity:0}70%{transform:scale(1.08) rotate(2deg)}100%{transform:scale(1) rotate(0deg);opacity:1}}
@@ -266,13 +266,13 @@ body{display:block !important}
 }
 .pk-bar-left,.pk-bar-right{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:4px 16px;min-width:100px;
+  padding:4px clamp(6px,2vw,16px);min-width:clamp(70px,18vw,100px);
   background:#001a00;
   border-right:2px solid #004400;
 }
 .pk-bar-right{border-right:none;border-left:2px solid #004400;}
 .pk-bar-lbl{font-family:var(--font-en);font-size:10px;font-weight:900;color:#00AA00;letter-spacing:.2em;}
-.pk-bar-wager{font-family:var(--font-en);font-size:40px;font-weight:900;color:#00FFFF;text-shadow:0 0 14px rgba(0,255,255,.9),0 0 28px rgba(0,200,255,.5);line-height:1}
+.pk-bar-wager{font-family:var(--font-en);font-size:clamp(20px,5vw,40px);font-weight:900;color:#00FFFF;text-shadow:0 0 14px rgba(0,255,255,.9),0 0 28px rgba(0,200,255,.5);line-height:1}
 .pk-bar-credits{font-family:var(--font-en);font-size:28px;font-weight:900;color:#FFD700;text-shadow:0 0 10px rgba(255,215,0,.7);line-height:1}
 .pk-bar-center{flex:1;display:flex;align-items:center;justify-content:center;}
 .pk-bar-status{
@@ -1629,7 +1629,7 @@ function makeCardHTML(c){
 function renderFD(){const a=document.getElementById('pk-ca');a.innerHTML='';for(let i=0;i<5;i++){const w=document.createElement('div');w.className='cw';const c=document.createElement('div');c.className='card dn';const l=document.createElement('div');l.className='hl-lbl hid';l.textContent='HOLD';w.appendChild(c);w.appendChild(l);a.appendChild(w);}}
 function renderC(){const a=document.getElementById('pk-ca');a.innerHTML='';hand.forEach((c,i)=>{const w=document.createElement('div');w.className='cw';const cd=document.createElement('div');let cls='card up';if(c.joker)cls+=' joker-card';else{cls+=' '+(SR[c.s]?'r':'b');if(c.n>=11||c.n===13)cls+=' face-card';}if(held[i])cls+=' hd';cd.className=cls;if(phase==='draw')cd.onclick=()=>{wake();held[i]?seUnhold():seHold();held[i]=!held[i];renderC();};cd.innerHTML=makeCardHTML(c);const l=document.createElement('div');l.className='hl-lbl'+(held[i]?'':' hid');l.textContent='HOLD';if(isWild(c))l.style.color='#FFD700';w.appendChild(cd);w.appendChild(l);a.appendChild(w);});}
 function dealDraw(){if(phase==='deal')doDeal();else if(phase==='draw')doDraw();}
-function doDeal(){if(!user||user.medals<bet){document.getElementById('pk-rd').innerHTML='<div class="rz">メダルが足りません！</div>';return;}wake();user.medals-=bet;win=0;updH();updLM();deck=mkD();hand=deck.splice(0,5);held=Array(5).fill(false);seDeal();phase='draw';renderC();document.getElementById('dbn').textContent='DRAW';setBB(false);const r=chkR(hand);document.getElementById('pk-rd').innerHTML='';setStatus(r?r.n:'HOLD CARDS, THEN DRAW','info');renderC();}
+function doDeal(){if(!user||user.medals<bet){document.getElementById('pk-rd').innerHTML='<div class="rz">メダルが足りません！</div>';return;}wake();user.medals-=bet;win=0;updH();updLM();deck=mkD();hand=deck.splice(0,5);held=Array(5).fill(false);seDeal();phase='draw';renderC();document.getElementById('dbn').textContent='DRAW';setBB(false);const r=chkR(hand);if(r){held=Array(5).fill(true);setTimeout(()=>seWin(getPayout(r,bet)),200);}document.getElementById('pk-rd').innerHTML='';setStatus(r?'♪ '+r.n+' — HOLDセット！':'HOLD CARDS, THEN DRAW',r?'win':'info');renderC();}
 function doDraw(){
   wake();seDraw();
   for(let i=0;i<5;i++)if(!held[i])hand[i]=deck.shift();
@@ -1826,7 +1826,7 @@ function judgeDU(i){
   }
 }
 function duCollect(){wake();seDuCollect();user.medals+=ugM;saveMedals(user.id,user.medals);savePokerScore(user);updLM();setDuMsg('COLLECT: '+ugM+' MEDALS!','win');setTimeout(()=>backP(),1200);}
-function backP(){phase='deal';win=0;hand=[];held=Array(5).fill(false);updH();renderFD();document.getElementById('pk-rd').innerHTML='';setStatus('DEAL TO BEGIN','idle');const _wb3=document.getElementById('pk-win-bar');if(_wb3)_wb3.style.display='none';document.getElementById('dbn').textContent='DEAL';setBB(true);bgmPlay('poker');show('spoker');}
+function backP(){phase='deal';win=0;hand=[];held=Array(5).fill(false);document.querySelector('.pt').style.display='';updPT();updH();renderFD();document.getElementById('pk-rd').innerHTML='';setStatus('DEAL TO BEGIN','idle');const _wb3=document.getElementById('pk-win-bar');if(_wb3)_wb3.style.display='none';document.getElementById('dbn').textContent='DEAL';setBB(true);bgmPlay('poker');show('spoker');}
 updPT();
 </script>
 <script>(function(){
