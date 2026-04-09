@@ -1187,6 +1187,31 @@ function autoHold(hand, r) {
   held=Array(5).fill(true);
 }
 
+
+// ── ミッション進捗追跡ユーティリティ ──
+var _qComboCount=0;
+function _missionUpdate(type,amount){
+  try{
+    var today=new Date().toDateString();
+    var md=JSON.parse(localStorage.getItem('hkg_missions')||'{}');
+    if(!md.date||md.date!==today||!md.missions)return;
+    var changed=false;
+    md.missions.forEach(function(m){
+      if(m.done)return;
+      if(m.type===type){
+        m.current=Math.min(m.target,(m.current||0)+amount);
+        if(m.current>=m.target)m.done=true;
+        changed=true;
+      } else if(m.type==='any_play'&&type==='any_play'){
+        m.current=Math.min(m.target,(m.current||0)+1);
+        if(m.current>=m.target)m.done=true;
+        changed=true;
+      }
+    });
+    if(changed)localStorage.setItem('hkg_missions',JSON.stringify(md));
+  }catch(e){}
+}
+
 function getPayout(p,b){
   if(b>=10)return p.jack; // MAX BET → 特大ジャックポット
   if(p.flat)return p.base; // NATURAL ROYAL FLUSHはBET1-9固定800
@@ -1687,6 +1712,9 @@ function doDraw(){
     document.getElementById('pk-rd').innerHTML='<div class="rn">'+r.n+'</div>';setStatus('WIN!','win');const __wb=document.getElementById('pk-win-bar');if(__wb){__wb.style.display='flex';const __wc=document.createElement('span');__wc.id='win-count';__wc.className='rw-anim pk-val';__wc.style.cssText='color:#00FF41;font-size:28px;text-shadow:0 0 10px rgba(0,255,65,.8)';__wc.textContent='0';__wb.innerHTML='<span class="pk-win-lbl">WIN</span>';__wb.appendChild(__wc);__wb.insertAdjacentHTML('beforeend','<span class="pk-win-lbl">MEDALS</span>');}else{document.getElementById('pk-rd').innerHTML+='<div class="rw">🪙 ＋<span id="win-count" class="rw-anim">0</span>枚！</div>';}
     if(m>=500)bgmPlay('jackpot');else if(m>=100)bgmPlay('bigwin');else bgmPlay('win');
     seWin(m);
+    _missionUpdate('poker_hand',1);
+    _missionUpdate('poker_win',m);
+    _missionUpdate('any_play',1);
     playMilestone(win);
     // 大役は画面フラッシュ
     if(m>=500){screenFlash('rgba(255,215,0,.4)',4,100);document.getElementById('spoker').classList.add('bigwin-fx');setTimeout(()=>document.getElementById('spoker').classList.remove('bigwin-fx'),2400);}
