@@ -346,7 +346,19 @@ body{display:block !important}
   pointer-events:none;
   z-index:0;
 }
-#ctrl{display:none!important}</style>
+#ctrl{display:none!important}
+.xp-popup{position:fixed;font-family:'Oswald',monospace;font-size:22px;font-weight:900;
+  color:#ffd700;text-shadow:0 0 15px rgba(255,215,0,.9);pointer-events:none;z-index:9999;
+  animation:xpFloat 1.5s ease-out forwards;white-space:nowrap}
+@keyframes xpFloat{
+  0%{opacity:1;transform:translateY(0) scale(1)}
+  40%{opacity:1;transform:translateY(-35px) scale(1.3)}
+  100%{opacity:0;transform:translateY(-90px) scale(0.8)}}
+.streak-xp-badge{position:fixed;top:54px;right:10px;background:rgba(255,100,0,.15);
+  border:1px solid rgba(255,120,0,.4);border-radius:8px;padding:3px 8px;font-size:10px;
+  color:#ff8c00;font-weight:700;z-index:100;display:none;font-family:'Oswald',sans-serif}
+
+</style>
 
 <script>
 (function(){
@@ -1161,6 +1173,28 @@ function addPokerXP(payId){
   }catch(e){}
 }
 
+
+// ── XPポップアップ演出 ──
+function showPokerXPPopup(xp, handName){
+  var el=document.createElement('div');
+  el.className='xp-popup';
+  el.textContent='+'+xp+' XP  '+handName;
+  el.style.cssText='position:fixed;top:38%;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none;font-size:22px;font-weight:900;color:#ffd700;text-shadow:0 0 15px rgba(255,215,0,.9);animation:xpFloat 1.5s ease-out forwards';
+  document.body.appendChild(el);
+  setTimeout(function(){el.remove();},1500);
+}
+function _showPokerStreakBadge(){
+  try{
+    var sk=JSON.parse(localStorage.getItem('hkg_streak')||'{}');
+    var days=sk.count||0;
+    if(days<3)return;
+    var mult=days>=30?'×1.5':days>=14?'×1.3':days>=7?'×1.2':'×1.1';
+    var el=document.getElementById('poker-streak-badge');
+    if(!el){el=document.createElement('div');el.id='poker-streak-badge';el.className='streak-xp-badge';document.body.appendChild(el);}
+    el.textContent='🔥'+days+'日 XP'+mult;el.style.display='block';
+  }catch(e){}
+}
+
 // ── 選択的HOLD（役に関係するカードのみ） ──
 function autoHold(hand, r) {
   held = Array(5).fill(false);
@@ -1727,6 +1761,8 @@ function doDraw(){
     seWin(m);
     _missionUpdate('poker_hand',1);
     addPokerXP(r.id);
+    var _xpMap={"nrf":"NATURAL ROYAL +200XP","fa5":"FIVE ACES +150XP","wrf":"WILD ROYAL +100XP","5ok":"5 OF A KIND +80XP","sf":"STR FLUSH +60XP","4ok":"FOUR OF A KIND +40XP","fh":"FULL HOUSE +25XP","fl":"FLUSH +20XP","st":"STRAIGHT +15XP","3ok":"3 OF A KIND +10XP"};
+    if(_xpMap[r.id]) showPokerXPPopup(({nrf:200,fa5:150,wrf:100,'5ok':80,sf:60,'4ok':40,fh:25,fl:20,st:15,'3ok':10}[r.id]||10), (_xpMap[r.id]||'+XP'));
     _missionUpdate('poker_win',m);
     _missionUpdate('any_play',1);
     playMilestone(win);
