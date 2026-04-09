@@ -221,6 +221,37 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .gacha-history-row{display:flex;flex-wrap:wrap;gap:4px}
 .gacha-hist-badge{font-size:9px;padding:2px 7px;border-radius:5px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(220,200,255,.6)}
 
+
+/* ── ストリークマイルストーン ── */
+.streak-milestone{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;
+  background:linear-gradient(135deg,rgba(20,5,60,.97),rgba(10,3,40,.97));
+  border:2px solid rgba(255,180,0,.6);border-radius:20px;padding:28px 32px;text-align:center;
+  box-shadow:0 0 60px rgba(255,180,0,.4),inset 0 0 40px rgba(255,140,0,.1);
+  animation:milestoneIn .4s cubic-bezier(0.175,0.885,0.32,1.275)}
+@keyframes milestoneIn{0%{transform:translate(-50%,-50%) scale(.5);opacity:0}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
+.ms-fire{font-size:64px;animation:msFire 0.6s ease-in-out infinite alternate}
+@keyframes msFire{0%{transform:scale(1) rotate(-5deg)}100%{transform:scale(1.15) rotate(5deg)}}
+.ms-days{font-family:'Zen Dots',monospace;font-size:48px;font-weight:900;color:#ffd700;
+  text-shadow:0 0 20px rgba(255,200,0,.8);line-height:1;margin:8px 0}
+.ms-label{font-size:14px;font-weight:700;color:#ff8c00;letter-spacing:.15em;margin-bottom:4px}
+.ms-reward{font-size:12px;color:rgba(255,200,100,.7);margin:8px 0 16px}
+.ms-close{padding:8px 24px;background:linear-gradient(135deg,#d97706,#b45309);border:none;
+  border-radius:10px;color:#fff;font-weight:900;font-size:13px;cursor:pointer;font-family:inherit}
+.ms-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998}
+/* ── レベルアップ通知 ── */
+.lvup-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+  background:linear-gradient(135deg,rgba(80,40,160,.97),rgba(40,20,100,.97));
+  border:2px solid rgba(160,100,255,.6);border-radius:16px;padding:20px 28px;text-align:center;
+  box-shadow:0 0 50px rgba(140,80,255,.5);z-index:9999;animation:lvupIn .5s cubic-bezier(0.175,0.885,0.32,1.275)}
+@keyframes lvupIn{0%{transform:translate(-50%,-50%) scale(.3) rotate(-10deg);opacity:0}100%{transform:translate(-50%,-50%) scale(1) rotate(0);opacity:1}}
+.lvup-star{font-size:48px;animation:lvupSpin 1s ease-in-out}
+@keyframes lvupSpin{0%{transform:rotate(-180deg) scale(0)}100%{transform:rotate(0) scale(1)}}
+.lvup-num{font-family:'Zen Dots',monospace;font-size:36px;color:#c084fc;font-weight:900;margin:6px 0}
+.lvup-name{font-size:15px;font-weight:900;color:#eef;margin-bottom:4px}
+.lvup-reward{font-size:11px;color:rgba(200,180,255,.6)}
+/* ── ガチャ天井表示 ── */
+.gacha-pity{font-size:9px;color:rgba(200,180,255,.4);text-align:center;padding:0 16px 8px}
+
 </style>
 </head>
 <body>
@@ -360,7 +391,7 @@ if(user){
   try{checkMissionCompleted();}catch(e){}
 try{initRetention();}catch(e){console.error('retention:',e);}
 }
-window.addEventListener('pageshow',function(){try{initRetention();}catch(e){};try{_renderShieldBadge();}catch(e){};try{loadLeague();}catch(e){};
+window.addEventListener('pageshow',function(){try{initRetention();}catch(e){};try{_renderShieldBadge();}catch(e){};try{checkLevelUp();}catch(e){};try{loadLeague();}catch(e){};
   try{var s=JSON.parse(localStorage.getItem('hkg_user')||'null');if(s&&user&&s.name===user.name){user=s;document.getElementById('mc').textContent=String(user.medals||0).padStart(5,'0');}}catch(e){}
 });
 var SBU='https://gtzfcoiowdnyjvwikxku.supabase.co';
@@ -466,6 +497,7 @@ function initRetention(){
   else if(sk.last===''){sk.count=1;sk.last=today;}
   else{sk.count=1;sk.last=today;} // リセット
   _saveStreak(sk);
+  try{checkStreakMilestone(sk.count);}catch(e){}
   // ストリーク表示
   var sb=document.getElementById('streak-badge');
   var sn=document.getElementById('streak-num');
@@ -822,7 +854,9 @@ function rollGacha(){
 }
 
 function showGachaResult(result,owned){
-  var isNew=!owned.includes(result.id);
+  var pity=_addGachaPity();
+if(result.rarity==="legendary"||result.rarity==="epic"){_resetGachaPity();}
+var isNew=!owned.includes(result.id);
   if(isNew){owned.push(result.id);_saveGachaOwned(owned);}
   var resEl=document.getElementById('gacha-result');
   if(!resEl)return;
@@ -867,6 +901,68 @@ function openGacha(){
   document.getElementById('gachaOverlay').style.display='flex';
 }
 function closeGacha(){document.getElementById('gachaOverlay').style.display='none';}
+
+
+// ══════ ストリークマイルストーン ══════
+const STREAK_MILESTONES={3:{emoji:'🔥',bonus:'XP×1.1！',stones:0},7:{emoji:'🔥🔥',bonus:'XP×1.2 & 💎×2！',stones:2},
+  14:{emoji:'🔥🔥🔥',bonus:'XP×1.3 & 💎×3！',stones:3},30:{emoji:'💫',bonus:'XP×1.5 & 💎×5！',stones:5},
+  60:{emoji:'💎',bonus:'XP×1.75 & 💎×10！',stones:10},100:{emoji:'👑',bonus:'XP×2.0 & 💎×20！',stones:20}};
+
+function checkStreakMilestone(count){
+  var key='hkg_ms_notified';
+  var notified=parseInt(localStorage.getItem(key)||'0');
+  if(count<=notified)return;
+  var ms=STREAK_MILESTONES[count];
+  if(!ms)return;
+  localStorage.setItem(key,count);
+  // 報酬付与
+  if(ms.stones>0)_addShields(0),_addStones(ms.stones);
+  showStreakMilestone(count,ms);
+}
+function showStreakMilestone(days,ms){
+  var ovEl=document.createElement('div');ovEl.className='ms-overlay';
+  var el=document.createElement('div');el.className='streak-milestone';
+  el.innerHTML='<div class="ms-fire">'+ms.emoji+'</div>'
+    +'<div class="ms-label">🎉 ストリーク達成！</div>'
+    +'<div class="ms-days">'+days+'日</div>'
+    +'<div class="ms-reward">報酬：'+ms.bonus+'</div>'
+    +'<button class="ms-close" onclick="this.closest('.streak-milestone').remove();document.querySelector('.ms-overlay').remove()">✨ 受取る！</button>';
+  document.body.appendChild(ovEl);document.body.appendChild(el);
+}
+
+// ══════ レベルアップ通知 ══════
+const XP_STEPS=[0,50,120,220,360,540,770,1060,1420,1860,2400,3050,3820,4720,5760,6960,8340,9920,11720,13760];
+const LV_NAMES=['見習い魔道師','初等魔道師','中等魔道師','上等魔道師','魔法学士','魔法修士','呪術師','魔導師','賢者','大魔導師','魔法博士','古代魔法士','天空の魔道師','魔界の賢者','神代魔道師','伝説の魔道師','時代の魔法士','世界の賢者','大魔王','創造神'];
+function checkLevelUp(){
+  var xp=parseInt(localStorage.getItem('hkg_total_xp')||'0');
+  var prevKey='hkg_last_lv';
+  var prevLv=parseInt(localStorage.getItem(prevKey)||'1');
+  var lv=1;
+  for(var i=XP_STEPS.length-1;i>=0;i--){if(xp>=XP_STEPS[i]){lv=i+1;break;}}
+  lv=Math.min(lv,20);
+  if(lv>prevLv){
+    localStorage.setItem(prevKey,lv);
+    showLevelUp(lv);
+    // シールドプレゼント
+    if(lv%5===0)_addShields(1);
+  }
+}
+function showLevelUp(lv){
+  var lvName=LV_NAMES[lv-1]||'創造神';
+  var el=document.createElement('div');el.className='lvup-toast';
+  el.innerHTML='<div class="lvup-star">🌟</div>'
+    +'<div style="font-size:11px;color:#a78bfa;letter-spacing:.15em;margin-bottom:4px">LEVEL UP!</div>'
+    +'<div class="lvup-num">Lv.'+lv+'</div>'
+    +'<div class="lvup-name">'+lvName+'</div>'
+    +(lv%5===0?'<div class="lvup-reward">🎁 護符の石+1 プレゼント！</div>':'<div class="lvup-reward">新しい魔力が解放された！</div>');
+  document.body.appendChild(el);
+  setTimeout(function(){el.style.transition='opacity .5s';el.style.opacity='0';setTimeout(function(){el.remove();},500);},3000);
+}
+
+// ══════ ガチャ天井カウンター ══════
+function _getGachaPity(){return parseInt(localStorage.getItem('hkg_gacha_pity')||'0');}
+function _addGachaPity(){var p=_getGachaPity()+1;localStorage.setItem('hkg_gacha_pity',p);return p;}
+function _resetGachaPity(){localStorage.setItem('hkg_gacha_pity',0);}
 
 async function doLogout(){var u=JSON.parse(localStorage.getItem('hkg_user')||'{}');if(u.name&&u.name!=='GUEST'&&u.medals!==undefined){var headers={'apikey':SBK,'Authorization':'Bearer '+SBK,'Content-Type':'application/json'};try{if(u.id){await fetch(SBU+'/rest/v1/game_users?id=eq.'+u.id,{method:'PATCH',headers,body:JSON.stringify({medals:u.medals})});}else{var rows=await fetch(SBU+'/rest/v1/game_users?name=eq.'+encodeURIComponent(u.name),{headers}).then(function(r){return r.json();});if(rows&&rows[0])await fetch(SBU+'/rest/v1/game_users?id=eq.'+rows[0].id,{method:'PATCH',headers,body:JSON.stringify({medals:u.medals})});}}catch(e){}}localStorage.removeItem('hkg_user');location.replace('index.html');}
 </script>
