@@ -772,6 +772,20 @@ function openProfile(){
   document.getElementById('prof-badge-row').innerHTML=badges.map(b=>
     '<span class="prof-badge'+(b.cond?' earned':'')+'">'+b.name+'</span>'
   ).join('');
+  // ガチャ称号を表示
+  var gachaSection=document.getElementById('prof-gacha-section');
+  if(gachaSection){
+    var owned=_getGachaOwned();
+    if(owned.length>0){
+      gachaSection.style.display='block';
+      gachaSection.innerHTML='<div class="prof-badges-ttl">📖 所持称号（'+owned.length+'個）</div><div class="prof-badge-row">'+
+        owned.map(function(id){var t=GACHA_TITLES.find(function(x){return x.id===id;});return t?'<span class="prof-badge earned" style="border-color:'+({legendary:"rgba(255,215,0,.5)",epic:"rgba(232,121,249,.4)",rare:"rgba(96,165,250,.4)",common:"rgba(255,255,255,.15)"}[t.rarity]||"")+'">'+(t.name||'')+'</span>':''}).join('')
+        +'</div>';
+    }else{
+      gachaSection.style.display='block';
+      gachaSection.innerHTML='<div class="prof-badges-ttl">📖 所持称号（0個）</div><div style="font-size:10px;color:rgba(200,180,255,.3);padding:4px 0">ガチャで称号を獲得しよう！</div>';
+    }
+  }
   document.getElementById('profOverlay').style.display='flex';
 }
 function closeProfModal(){document.getElementById('profOverlay').style.display='none';}
