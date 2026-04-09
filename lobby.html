@@ -187,6 +187,40 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .prof-footer{padding:12px 14px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:8px}
 .prof-footer button{flex:1;padding:9px;border-radius:9px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#ccc;cursor:pointer;font-size:11px;font-family:inherit}
 
+
+/* ── 称号ガチャ ── */
+.gacha-btn{position:fixed;bottom:80px;right:16px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#4f46e5);border:2px solid rgba(160,100,255,.6);color:#fff;font-size:22px;cursor:pointer;box-shadow:0 0 20px rgba(120,60,255,.5);z-index:200;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.gacha-btn:hover{transform:scale(1.1);box-shadow:0 0 30px rgba(120,60,255,.8)}
+.gacha-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:900;display:flex;align-items:center;justify-content:center;padding:16px;animation:fadeIn .2s}
+.gacha-modal{background:linear-gradient(160deg,rgba(20,8,60,.98),rgba(8,5,30,.98));border:2px solid rgba(180,100,255,.5);border-radius:22px;width:100%;max-width:380px;overflow:hidden;text-align:center}
+.gacha-hdr{padding:18px 16px 12px;background:linear-gradient(180deg,rgba(80,40,160,.4),transparent)}
+.gacha-hdr h2{font-size:16px;font-weight:900;color:#ffd700;letter-spacing:.15em;text-shadow:0 0 12px rgba(255,215,0,.6)}
+.gacha-hdr p{font-size:10px;color:rgba(200,180,255,.5);margin-top:4px}
+.gacha-cost{font-size:12px;color:#c084fc;margin-top:6px}
+.gacha-book{font-size:72px;margin:16px 0;animation:bookPulse 2s ease-in-out infinite}
+@keyframes bookPulse{0%,100%{transform:scale(1);filter:drop-shadow(0 0 10px rgba(180,100,255,.5))}50%{transform:scale(1.05);filter:drop-shadow(0 0 25px rgba(180,100,255,.9))}}
+.gacha-book.spin{animation:bookSpin 0.8s ease-in-out}
+@keyframes bookSpin{0%{transform:rotateY(0deg) scale(1)}50%{transform:rotateY(90deg) scale(0.8)}100%{transform:rotateY(0deg) scale(1)}}
+.gacha-result{min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;margin:0 16px}
+.gacha-rarity{font-size:11px;font-weight:900;letter-spacing:.2em;margin-bottom:6px}
+.gacha-rarity.legendary{color:#ffd700;text-shadow:0 0 12px rgba(255,215,0,.8);animation:rarityGlow 1s ease-in-out infinite alternate}
+.gacha-rarity.epic{color:#e879f9;text-shadow:0 0 10px rgba(232,121,249,.6)}
+.gacha-rarity.rare{color:#60a5fa;text-shadow:0 0 8px rgba(96,165,250,.5)}
+.gacha-rarity.common{color:rgba(200,200,220,.6)}
+@keyframes rarityGlow{0%{text-shadow:0 0 10px rgba(255,215,0,.5)}100%{text-shadow:0 0 25px rgba(255,215,0,1),0 0 40px rgba(255,180,0,.5)}}
+.gacha-title-name{font-size:18px;font-weight:900;color:#eef;margin-bottom:4px}
+.gacha-title-desc{font-size:10px;color:rgba(200,180,255,.5)}
+.gacha-title-already{font-size:10px;color:rgba(255,200,100,.5);margin-top:3px}
+.gacha-btns{display:flex;gap:8px;padding:12px 16px 16px}
+.gacha-btns button{flex:1;padding:10px;border-radius:10px;border:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:13px}
+.gacha-roll-btn{background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;box-shadow:0 0 15px rgba(120,60,255,.4)}
+.gacha-roll-btn:disabled{opacity:.4;cursor:default}
+.gacha-close-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15)!important;color:#aaa}
+.gacha-history{padding:0 16px 14px}
+.gacha-history-ttl{font-size:9px;color:rgba(200,180,255,.4);letter-spacing:.1em;margin-bottom:6px}
+.gacha-history-row{display:flex;flex-wrap:wrap;gap:4px}
+.gacha-hist-badge{font-size:9px;padding:2px 7px;border-radius:5px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(220,200,255,.6)}
+
 </style>
 </head>
 <body>
@@ -249,6 +283,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="foot">© 2025 百式ゲーム王国・メダルはゲーム間で共通<br><a href="admin.html">⚙ 管理</a></div>
 </div>
 <div class="toast" id="toast"></div>
+<button class="gacha-btn" onclick="openGacha()" title="秘術の書 - 称号ガチャ">📖</button>
+<div class="gacha-overlay" id="gachaOverlay" style="display:none" onclick="if(event.target===this)closeGacha()"><div class="gacha-modal"><div class="gacha-hdr"><h2>📖 秘術の書</h2><p>魔石を使って限定称号を召喚せよ</p><div class="gacha-cost" id="gacha-cost-txt">💎 0個（10個で1回）</div></div><div class="gacha-book" id="gacha-book">📖</div><div class="gacha-result" id="gacha-result"><div style="font-size:28px;color:rgba(200,180,255,.3)">本を開くと<br/>称号が現れる...</div></div><div class="gacha-btns"><button class="gacha-close-btn" onclick="closeGacha()">閉じる</button><button class="gacha-roll-btn" id="gacha-roll-btn" onclick="rollGacha()">✨ 召喚！（💎×10）</button></div><div class="gacha-history"><div class="gacha-history-ttl">🏅 所持称号</div><div class="gacha-history-row" id="gacha-history-row"></div></div></div></div>
 <div class="prof-overlay" id="profOverlay" style="display:none" onclick="if(event.target===this)closeProfModal()"><div class="prof-modal"><div class="prof-hdr"><button class="prof-close" onclick="closeProfModal()">×</button><div class="prof-av" id="prof-av">🧙</div><div class="prof-name" id="prof-name">---</div><div class="prof-lv" id="prof-lv">Lv.1 見習い魔道師</div><div class="prof-xp-wrap"><div class="prof-xp-fill" id="prof-xp-fill" style="width:0%"></div></div></div><div class="prof-stats"><div class="prof-stat"><div class="prof-stat-val" id="ps-medals">0</div><div class="prof-stat-lbl">🪙 メダル</div></div><div class="prof-stat"><div class="prof-stat-val" id="ps-streak">0</div><div class="prof-stat-lbl">🔥 連続ログイン日数</div></div><div class="prof-stat"><div class="prof-stat-val" id="ps-wxp">0</div><div class="prof-stat-lbl">⚡ 今週のXP</div></div><div class="prof-stat"><div class="prof-stat-val" id="ps-stones">0</div><div class="prof-stat-lbl">💎 魔石</div></div></div><div class="prof-badges"><div class="prof-badges-ttl">🏅 獲得称号</div><div class="prof-badge-row" id="prof-badge-row"></div></div><div class="prof-footer"><button onclick="closeProfModal()">閉じる</button><button onclick="closeProfModal();openCalendar()">📅 カレンダー</button></div></div></div>
 <div class="cal-overlay" id="calOverlay" style="display:none" onclick="if(event.target===this)closeCalendar()"><div class="cal-modal"><div class="cal-hd"><h2>📅 月間ログインカレンダー</h2><p id="cal-subtitle">今月のログイン日数を確認しよう</p></div><div class="cal-grid" id="cal-grid"></div><div class="cal-footer"><button class="cal-close-btn" onclick="closeCalendar()">閉じる</button><button class="cal-claim-btn" id="cal-claim-btn" onclick="claimTodayBonus()">✨ 本日の報酬を受取る</button></div></div></div>
 <script>
@@ -732,6 +768,105 @@ function addGlobalXP(xp){
   var cur=parseInt(localStorage.getItem('hkg_total_xp')||'0');
   localStorage.setItem('hkg_total_xp',cur+xp);
 }
+
+
+// ══════ 称号ガチャシステム ══════
+const GACHA_TITLES=[
+  // LEGENDARY (2%)
+  {id:'t_legend1',name:'🌟 時を超えし者',desc:'伝説の称号',rarity:'legendary',weight:2},
+  {id:'t_legend2',name:'🔱 創世の魔道師',desc:'最高位の称号',rarity:'legendary',weight:2},
+  {id:'t_legend3',name:'👑 魔王の後継者',desc:'闇に選ばれし者',rarity:'legendary',weight:2},
+  {id:'t_legend4',name:'✨ 宇宙の賢者',desc:'全知なる存在',rarity:'legendary',weight:2},
+  // EPIC (13%)
+  {id:'t_epic1',name:'🔥 炎帝',desc:'炎を操る覇者',rarity:'epic',weight:13},
+  {id:'t_epic2',name:'❄️ 絶零の術士',desc:'氷の意志',rarity:'epic',weight:13},
+  {id:'t_epic3',name:'⚡ 雷神の申し子',desc:'雷速の思考',rarity:'epic',weight:13},
+  {id:'t_epic4',name:'🌑 虚無の支配者',desc:'闇に溶ける者',rarity:'epic',weight:13},
+  {id:'t_epic5',name:'🌊 深淵の魔道師',desc:'海底に眠る知恵',rarity:'epic',weight:13},
+  // RARE (35%)
+  {id:'t_rare1',name:'📖 呪文書の守護者',desc:'知識の守人',rarity:'rare',weight:35},
+  {id:'t_rare2',name:'🗡️ 魔剣士',desc:'剣と魔法の使い手',rarity:'rare',weight:35},
+  {id:'t_rare3',name:'🦋 変化の使い手',desc:'幻術の達人',rarity:'rare',weight:35},
+  {id:'t_rare4',name:'🎯 一矢必中の賢者',desc:'狙いを外さぬ者',rarity:'rare',weight:35},
+  {id:'t_rare5',name:'🌙 月下の錬金術師',desc:'夜に輝く才能',rarity:'rare',weight:35},
+  {id:'t_rare6',name:'🐉 竜に愛された者',desc:'古龍の加護あり',rarity:'rare',weight:35},
+  // COMMON (50%)
+  {id:'t_com1',name:'⚗️ 初級錬金術師',desc:'魔法の入門者',rarity:'common',weight:50},
+  {id:'t_com2',name:'🎓 卒業見習い',desc:'学院の卒業生',rarity:'common',weight:50},
+  {id:'t_com3',name:'🔮 占術師',desc:'未来を覗く者',rarity:'common',weight:50},
+  {id:'t_com4',name:'🌿 薬草使い',desc:'自然の恵みを操る',rarity:'common',weight:50},
+  {id:'t_com5',name:'🎪 魔法の旅人',desc:'世界を巡る魔道師',rarity:'common',weight:50},
+];
+const GACHA_RARITY_LABEL={legendary:'✨ LEGENDARY',epic:'💜 EPIC',rare:'💙 RARE',common:'⬜ COMMON'};
+const GACHA_COST=10;
+
+function _getGachaOwned(){try{return JSON.parse(localStorage.getItem('hkg_gacha_owned')||'[]');}catch{return[];}}
+function _saveGachaOwned(arr){localStorage.setItem('hkg_gacha_owned',JSON.stringify(arr));}
+
+function rollGacha(){
+  var owned=_getGachaOwned();
+  var stones=_getStones();
+  if(stones<GACHA_COST){toast('💎 魔石が足りません！（'+GACHA_COST+'個必要）');return;}
+  // 重み付き抽選
+  var pool=[];
+  GACHA_TITLES.forEach(function(t){for(var i=0;i<t.weight;i++)pool.push(t);});
+  var result=pool[Math.floor(Math.random()*pool.length)];
+  // 魔石消費
+  localStorage.setItem('hkg_stones',stones-GACHA_COST);
+  document.getElementById('stones-num').textContent=stones-GACHA_COST;
+  if(stones-GACHA_COST<=0)document.getElementById('stones-badge').style.display='none';
+  // アニメーション
+  var book=document.getElementById('gacha-book');
+  if(book){book.classList.add('spin');setTimeout(function(){book.classList.remove('spin');showGachaResult(result,owned);},800);}
+  else showGachaResult(result,owned);
+}
+
+function showGachaResult(result,owned){
+  var isNew=!owned.includes(result.id);
+  if(isNew){owned.push(result.id);_saveGachaOwned(owned);}
+  var resEl=document.getElementById('gacha-result');
+  if(!resEl)return;
+  var rarityColors={legendary:'rgba(255,215,0,.15)',epic:'rgba(232,121,249,.1)',rare:'rgba(96,165,250,.08)',common:'rgba(255,255,255,.04)'};
+  resEl.style.background=rarityColors[result.rarity]||'transparent';
+  resEl.style.borderRadius='12px';
+  resEl.style.padding='12px';
+  resEl.innerHTML='<div class="gacha-rarity '+result.rarity+'">'+GACHA_RARITY_LABEL[result.rarity]+'</div>'
+    +'<div class="gacha-title-name">'+result.name+'</div>'
+    +'<div class="gacha-title-desc">'+result.desc+'</div>'
+    +(isNew?'<div style="margin-top:4px;font-size:11px;color:#4ade80;font-weight:700">🆕 NEW！</div>':'<div class="gacha-title-already">（所持済み）</div>');
+  // ガチャ履歴更新
+  renderGachaHistory();
+  // 残り魔石
+  var costEl=document.getElementById('gacha-cost-txt');
+  if(costEl)costEl.textContent='💎 '+_getStones()+'個（10個で1回）';
+  // ROLLボタン状態更新
+  var rollBtn=document.getElementById('gacha-roll-btn');
+  if(rollBtn)rollBtn.disabled=_getStones()<GACHA_COST;
+}
+
+function renderGachaHistory(){
+  var owned=_getGachaOwned();
+  var el=document.getElementById('gacha-history-row');
+  if(!el||!owned.length)return;
+  el.innerHTML=owned.map(function(id){
+    var t=GACHA_TITLES.find(function(x){return x.id===id;});
+    return t?'<span class="gacha-hist-badge">'+t.name+'</span>':'';
+  }).join('');
+}
+
+function openGacha(){
+  var stones=_getStones();
+  renderGachaHistory();
+  var costEl=document.getElementById('gacha-cost-txt');
+  if(costEl)costEl.textContent='💎 '+stones+'個（10個で1回）';
+  var rollBtn=document.getElementById('gacha-roll-btn');
+  if(rollBtn)rollBtn.disabled=stones<GACHA_COST;
+  // result欄をリセット
+  var resEl=document.getElementById('gacha-result');
+  if(resEl){resEl.style.background='';resEl.innerHTML='<div style="font-size:28px;color:rgba(200,180,255,.3)">本を開くと<br/>称号が現れる...</div>';}
+  document.getElementById('gachaOverlay').style.display='flex';
+}
+function closeGacha(){document.getElementById('gachaOverlay').style.display='none';}
 
 async function doLogout(){var u=JSON.parse(localStorage.getItem('hkg_user')||'{}');if(u.name&&u.name!=='GUEST'&&u.medals!==undefined){var headers={'apikey':SBK,'Authorization':'Bearer '+SBK,'Content-Type':'application/json'};try{if(u.id){await fetch(SBU+'/rest/v1/game_users?id=eq.'+u.id,{method:'PATCH',headers,body:JSON.stringify({medals:u.medals})});}else{var rows=await fetch(SBU+'/rest/v1/game_users?name=eq.'+encodeURIComponent(u.name),{headers}).then(function(r){return r.json();});if(rows&&rows[0])await fetch(SBU+'/rest/v1/game_users?id=eq.'+rows[0].id,{method:'PATCH',headers,body:JSON.stringify({medals:u.medals})});}}catch(e){}}localStorage.removeItem('hkg_user');location.replace('index.html');}
 </script>
