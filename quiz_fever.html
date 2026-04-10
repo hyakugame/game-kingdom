@@ -1537,8 +1537,19 @@ function buildQuestionsFromText(keyword, title, text, cnt, existingQ) {
     usedQ.add(qKey);
   }
 
-  // 最終フィルター：＿や意味不明な問題を除外
-  return qs.filter(q=>!q.q.includes('___')&&!q.q.includes('＿')&&q.q.length>=5).slice(0,cnt);
+  // ＿→何 に置換して問題を救済（除外しない）
+  return qs.map(q=>{
+    if(!q.q.includes('___')&&!q.q.includes('＿')) return q;
+    let fixed = q.q
+      .replace(/＿+/g,'何')
+      .replace(/___+/g,'何')
+      .replace(/の何は？/g,'は何？')
+      .replace(/何は？/g,'は何？')
+      .replace(/[、。！？s]+$/,'')
+      .slice(0,50);
+    if(!fixed.endsWith('？')) fixed += '？';
+    return {...q, q: fixed};
+  }).filter(q=>q.q.length>=5).slice(0,cnt);
 }
 function addFreestyleToBank(keyword, wikiTitle, category, questions, bankId) {
   const bank=loadBank();
