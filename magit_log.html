@@ -62,7 +62,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg)}
 .qbtn:active,.qbtn:hover{background:rgba(124,58,237,.4);border-color:#a78bfa;color:#fff}
 
 /* マギト誕生 */
-.magit-img{width:clamp(160px,45vw,240px);height:clamp(160px,45vw,240px);object-fit:contain;filter:drop-shadow(0 0 20px var(--mc,#a78bfa));animation:bounce 1.2s infinite alternate}
+.magit-img{width:clamp(160px,45vw,240px);height:clamp(160px,45vw,240px);object-fit:contain;background:transparent;filter:drop-shadow(0 0 20px var(--mc,#a78bfa));animation:bounce 1.2s infinite alternate}
 @keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-10px)}}
 .species-name{font-family:'DotGothic16',sans-serif;font-size:clamp(18px,5vw,26px);color:var(--mc,#a78bfa);text-shadow:2px 2px 0 #000,0 0 16px var(--mc,#a78bfa);letter-spacing:.1em}
 .species-desc{font-family:'DotGothic16',sans-serif;font-size:clamp(12px,3vw,15px);color:#c4b5fd;text-align:center;line-height:1.9;text-shadow:1px 1px 0 #000;max-width:380px;letter-spacing:.05em}
@@ -331,11 +331,10 @@ function showPrologueBtns(returning){
 function startChara(){show('s-chara');}
 function pick(key,val,el){
   chara[key]=val;
-  // ハイライト
-  el.closest('.choice-row,.screen').querySelectorAll('.cbtn').forEach(b=>{
-    if(b.onclick&&b.onclick.toString().includes("'"+val+"'")){b.classList.add('sel');}
-    else if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+val+"'")){b.classList.add('sel');}
-  });
+  // 同じ.choice-row内のsel解除→選択ボタンにsel追加
+  const row=el.closest('.choice-row');
+  if(row) row.querySelectorAll('.cbtn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
   // 髪型を性別に応じて切り替え
   if(key==='gender'){
     const row=document.getElementById('hair-row');
