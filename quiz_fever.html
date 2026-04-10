@@ -1556,9 +1556,33 @@ async function generateAI() {
     const usedArticles=new Set((bank[targetId]?.usedArticles)||[]);
     const existingQ=new Set((bank[targetId]?.questions||[]).map(q=>q.q));
 
-    setS('🔍 Wikipediaを検索中...','loading');
-    const searchData=await wikiGet({action:'opensearch',search:keyword,limit:10,namespace:0});
-    const allTitles=(searchData[1]||[]).filter(t=>!usedArticles.has(t));
+    setS('🔍 Wikipediaを多重検索中...','loading');
+    const titleSet=new Set();
+    // ①フルテキスト検索（最大50件）
+    try{
+      const sd=await wikiGet({action:'query',list:'search',srsearch:keyword,srlimit:50,srnamespace:0});
+      (sd?.query?.search||[]).forEach(r=>titleSet.add(r.title));
+    }catch(e){}
+    // ②opensearchで追加（別角度の結果）
+    try{
+      const od=await wikiGet({action:'opensearch',search:keyword,limit:20,namespace:0});
+      (od[1]||[]).forEach(t=>titleSet.add(t));
+    }catch(e){}
+    // ③最初の記事の関連リンクも取得（芋づる式）
+    if(titleSet.size>0){
+      try{
+        const mainTitle=[...titleSet][0];
+        const ld=await wikiGet({action:'query',titles:mainTitle,prop:'links',pllimit:100,plnamespace:0});
+        const pages=ld?.query?.pages||{};
+        Object.values(pages).forEach(p=>(p.links||[]).slice(0,80).forEach(l=>titleSet.add(l.title)));
+      }catch(e){}
+    }
+    // ④カテゴリ検索
+    try{
+      const cd=await wikiGet({action:'query',list:'categorymembers',cmtitle:'Category:'+keyword,cmlimit:50,cmnamespace:0});
+      (cd?.query?.categorymembers||[]).forEach(m=>titleSet.add(m.title));
+    }catch(e){}
+    const allTitles=[...titleSet].filter(t=>!usedArticles.has(t));
     if(!allTitles.length){
       setS('ℹ️ 使用可能な記事がなくなりました。別のキーワードで追加してください','');
       btn.disabled=false; btn.textContent='🔍 検索して追加！'; return;
