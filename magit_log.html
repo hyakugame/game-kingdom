@@ -307,17 +307,27 @@ const LINES=[
   'さあ、君だけの記録を綴ろう。',
   '失われた世界の記憶を取り戻すために。',
 ];
+// 行インデックス→音声番号マップ（空行はnull）
+const VO_MAP=[1,2,3,4,null,5,6,null,7,null,8,9,10,null,11,12];
+const VO_CACHE={};
+function getVO(n){
+  if(!n) return null;
+  const k='magit_vo_'+(n<10?'0'+n:n)+'.wav';
+  if(!VO_CACHE[k]){VO_CACHE[k]=new Audio('audio/'+k);VO_CACHE[k].volume=0.85;}
+  return VO_CACHE[k];
+}
 async function runPrologue(){
   const box=document.getElementById('prologue-box');
-  // 音声再生
-  try{ VO_01.play().catch(()=>{}); }catch(e){}
+  VO_MAP.forEach(n=>getVO(n));
   for(let i=0;i<LINES.length;i++){
     const sp=document.createElement('span');
     sp.className='pline px-text';
     sp.style.animationDelay=(i*.55)+'s';
     sp.textContent=LINES[i]||'　';
     box.appendChild(sp);
-    await sleep(560);
+    const vo=getVO(VO_MAP[i]);
+    if(vo){try{vo.currentTime=0;vo.play().catch(()=>{});}catch(e){}}
+    await sleep(600);
   }
   await sleep(1200);
   showPrologueBtns(false);
