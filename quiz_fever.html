@@ -1373,13 +1373,14 @@ async function buildQuestionsWithClaude(keyword, title, text, cnt, existingQ){
   var existingSet = existingQ || new Set();
   var prompt = '以下のWikipedia記事「'+title+'」から、クイズゲームの面白い4択問題を'+cnt+'問生成してください。\n\n'
     +'【ルール】\n'
-    +'- 年号・日付問題は10%以下にすること\n'
-    +'- 概念・特徴・理由・仕組み・比較に関する問題を多く作ること\n'
-    +'- 文章を校正して自然で正確な日本語にすること\n'
+    +'- 年号・放送年・発売日・話数など数字だけで答えられる問題は絶対に作らないこと\n'
+    +'- キャラの特徴・能力・関係性・背景など「内容を知っていないと答えられない」問題を作ること\n'
+    +'- 問題文は完全な文にすること（「〇〇の△△は？」形式）\n'
+    +'- 選択肢4つは全て同ジャンルの言葉にすること（全部人名、全部技名など）\n'
     +'- 難易度を設定: level 1=初級(誰でも答えられる) 2=中級 3=マニアック(詳しい人向け)\n'
     +'- 正解の位置(a)は0〜3でランダムにすること\n'
     +'- 不正解の選択肢も紛らわしくリアルにすること\n\n'
-    +'【記事本文】\n'+text.substring(0,3500)+'\n\n'
+    +'【記事本文（脚注・外部リンクは除く）】\n'+text.split('\n').filter(l=>{const t=l.trim();return t.length>=20&&!/^(脚注|注釈|出典|参考文献|外部リンク|関連項目|参照)/.test(t)&&!/^[\d\s\-・◆▼※]+$/.test(t);}).join('\n').substring(0,4000)+'\n\n'
     +'【出力】JSONのみ返すこと（説明・マークダウン不要）:\n'
     +'[{"q":"問題文","c":["答え","ダミー1","ダミー2","ダミー3"],"a":0,"level":1,"g":"🔍 '+keyword+'"}]';
   try{
@@ -1634,8 +1635,14 @@ async function generateAI() {
     }catch(e){}
     const allTitles=[...titleSet].filter(t=>!usedArticles.has(t));
     if(!allTitles.length){
-      setS('ℹ️ 使用可能な記事がなくなりました。別のキーワードで追加してください','');
-      btn.disabled=false; btn.textContent='🔍 検索して追加！'; return;
+      // 使用済みリセット→全記事を再利用
+      const resetBank=loadBank();
+      if(resetBank[targetId]) resetBank[targetId].usedArticles=[];
+      _bank=resetBank; saveBank();
+      usedArticles.clear();
+      allTitles=[...titleSet];
+      setS('🔄 記事をリセットして再生成します...','loading');
+      await new Promise(r=>setTimeout(r,800));
     }
 
     let allNewQs=[]; const processedArticles=[];
