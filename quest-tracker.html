@@ -1434,6 +1434,19 @@ function App() {
     if('setAppBadge' in navigator) navigator.setAppBadge(total).catch(()=>{});
   }, [quests]);
 
+  // URLパラメータからprefill読み取り（OCRウィジェット連携）
+  useEffect(() => {
+    const p = new URLSearchParams(location.search).get('prefill');
+    if(!p) return;
+    try {
+      const data = JSON.parse(decodeURIComponent(p));
+      if(data.service && SVC[data.service]) setSvc(data.service);
+      setPrefill(data);
+      setShowForm(true);
+      history.replaceState(null,'',location.pathname);
+    } catch(e){}
+  }, []);
+
   const reload = useCallback(async () => {
     try {
       const list = await loadQ();
