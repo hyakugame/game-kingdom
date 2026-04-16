@@ -336,6 +336,12 @@ function QuestCard({ q, me, onUpdate, onDelete, onCopy }) {
             <span style={{fontSize:12,fontWeight:800,color:"#22c55e",
               textShadow:"0 0 10px #22c55e"}}>✓ 達成！</span>
           )}
+          <div style={{display:"flex",flexDirection:"column",gap:2,marginLeft:2}}>
+            <button onClick={()=>onMove&&onMove(q.id,-1)} disabled={questIdx===0}
+              style={{background:"none",border:"none",color:questIdx===0?"#1e293b":"#64748b",fontSize:11,cursor:questIdx===0?"default":"pointer",padding:"1px 2px",lineHeight:1}}>▲</button>
+            <button onClick={()=>onMove&&onMove(q.id,1)} disabled={questIdx===questCount-1}
+              style={{background:"none",border:"none",color:questIdx===questCount-1?"#1e293b":"#64748b",fontSize:11,cursor:questIdx===questCount-1?"default":"pointer",padding:"1px 2px",lineHeight:1}}>▼</button>
+          </div>
           {me===q.owner && !achieved && (
             <><button onClick={() => onCopy && onCopy(q)} style={{background:"none",border:"none",color:"#64748b",fontSize:13,cursor:"pointer",padding:"0 3px"}} title="複製">📋</button>
             <button onClick={() => onDelete(q.id)} style={{
@@ -1672,9 +1678,13 @@ function App() {
         </div>
       ) : (
         <div style={{padding:"10px 12px",display:"flex",flexDirection:"column",gap:10}}>
-          {quests.map(q => (
+          {[...quests].sort((a,b)=>{
+            const da=(a.date||'')+(a.startTime||'');
+            const db=(b.date||'')+(b.startTime||'');
+            return da.localeCompare(db);
+          }).map((q,qi) => (
             <QuestCard key={q.id} q={q} me={me}
-              onUpdate={handleUpdate} onDelete={handleDelete} onCopy={handleCopy}/>
+              onUpdate={handleUpdate} onDelete={handleDelete} onCopy={handleCopy} onMove={handleMove} questIdx={qi} questCount={quests.length}/>
           ))}
         </div>
       )}
