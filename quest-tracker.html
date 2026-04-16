@@ -905,186 +905,110 @@ function UEForm({ onAdd, prefill }) {
 ══════════════════════════════════════ */
 function CounterPanel({ quests, onUpdate }) {
   const [open, setOpen] = useState(false);
+  const activeQuests = quests.filter(q => (q.done||0) < q.goal);
 
-  // サービスごとのカウンター設定
-  const counterDefs = {
-    rocket:   ["完了","拒否"],
-    demae:    ["完了"],
-    ubereats: ["完了"],
-  };
-
-    const activeQuests = quests.filter(q => q.done < q.goal);
+  // 確定報酬計算
+  const confirmedReward = quests.reduce((sum, q) => {
+    const done = q.done || 0;
+    const steps = [...(q.bonuses||[])].sort((a,b)=>a.count-b.count);
+    const earned = [...steps].reverse().find(s => done >= s.count);
+    return sum + (earned ? earned.reward : 0);
+  }, 0);
+  const totalDone = quests.reduce((s,q)=>s+(q.done||0),0);
 
   return (
-    <div style={{
-      position:"fixed", bottom:20, right:16, zIndex:50,
-      display:"flex", alignItems:"flex-end",
-    }}>
+    <div style={{position:"fixed", bottom:20, right:16, zIndex:50, display:"flex", alignItems:"flex-end"}}>
       {open && (
-        <div style={{
-          background: CARD,
-          borderRadius: 14,
-          border: `1px solid ${BDR}`,
-          marginRight: 8,
-          width: "min(240px, calc(100vw - 84px))",
-          boxSizing: "border-box",
-          boxShadow: "0 8px 40px rgba(0,0,0,.8)",
-          maxHeight: "75vh",
-          overflowY: "auto",
-        }}>
-          <div style={{
-            padding:"12px 14px 8px",
-            fontSize:12, fontWeight:700, color:MUTED,
-            borderBottom:`1px solid ${BDR}`,
-            position:"sticky", top:0, background:CARD,
-          }}>
-            📊 クイックカウンター
+        <div style={{background:CARD, borderRadius:14, border:`1px solid ${BDR}`,
+          marginRight:8, width:"min(240px, calc(100vw - 84px))", boxSizing:"border-box",
+          boxShadow:"0 8px 40px rgba(0,0,0,.8)", maxHeight:"75vh", overflowY:"auto"}}>
+          <div style={{padding:"12px 14px 8px", fontSize:12, fontWeight:700, color:MUTED,
+            borderBottom:`1px solid ${BDR}`, position:"sticky", top:0, background:CARD,
+            display:"flex", justifyContent:"space-between", alignItems:"center"}}>
+            <span>📊 クイックカウンター</span>
+            <span style={{color:"#22c55e", fontWeight:900, fontSize:13}}>
+              ¥{confirmedReward.toLocaleString()} 確定
+            </span>
           </div>
-
           {activeQuests.length === 0 ? (
-            <div style={{padding:16, fontSize:12, color:MUTED, textAlign:"center"}}>
-              クエストを登録してください
-            </div>
-          ) : (
-            activeQuests.map(q => {
-              const svc      = SVC[q.service] || SVC.rocket;
-              const done     = q.done || 0;
-              const rejected = q.rejected || 0;
-              const received = q.received || 0;
-              const total    = done + rejected;
-              const compRate = total > 0 ? Math.round(done/total*100) : 100;
-              const left     = Math.max(0, q.goal - done);
-              const isRocket = q.service === "rocket";
-
-              return (
-                <div key={q.id} style={{
-                  padding:"10px 14px",
-                  borderBottom:`1px solid ${BDR}`,
-                }}>
-                  {/* ヘッダー */}
-                  <div style={{
-                    display:"flex", justifyContent:"space-between",
-                    alignItems:"center", marginBottom:8,
-                  }}>
-                    <span style={{
-                      color:svc.color, fontSize:12, fontWeight:800,
-                      textShadow:`0 0 8px ${svc.color}60`,
-                    }}>
-                      {svc.icon} {svc.label}
-                    </span>
-                    <span style={{fontSize:10, color:MUTED}}>
-                      残り<b style={{color:BLUE}}>{left}</b>件
-                    </span>
-                  </div>
-
-                  {/* 受注カウンター */}
-                  <div style={{marginBottom:6}}>
-                    <div style={{fontSize:10,color:MUTED,marginBottom:4}}>受注</div>
-                    <div style={{display:"flex",alignItems:"center",gap:6}}>
-                      <button onClick={() => onUpdate(q.id,"received",-1)} style={minusBtn}>－</button>
-                      <div style={{
-                        flex:1, textAlign:"center", fontSize:22, fontWeight:900,
-                        color:BLUE, textShadow:`0 0 10px ${BLUE}70`,
-                      }}>{received}</div>
-                      <button onClick={() => onUpdate(q.id,"received",1)} style={{...plusBtn,background:BLUE}}>＋</button>
-                    </div>
-                  </div>
-
-                  {/* 完了カウンター */}
-                  <div style={{marginBottom:6}}>
-                    <div style={{fontSize:10,color:MUTED,marginBottom:4}}>完了</div>
-                    <div style={{display:"flex",alignItems:"center",gap:6}}>
-                      <button onClick={() => onUpdate(q.id,"done",-1)} style={minusBtn}>－</button>
-                      <div style={{
-                        flex:1, textAlign:"center", fontSize:22, fontWeight:900,
-                        color:"#22c55e", textShadow:"0 0 10px #22c55e70",
-                      }}>{done}</div>
-                      <button onClick={() => onUpdate(q.id,"done",1)} style={{...plusBtn,background:"#22c55e"}}>＋</button>
-                    </div>
-                  </div>
-
-                  {/* 拒否カウンター（ロケットナウのみ） */}
-                  {isRocket && (
-                    <div style={{marginBottom:6}}>
-                      <div style={{fontSize:10,color:MUTED,marginBottom:4}}>拒否</div>
-                      <div style={{display:"flex",alignItems:"center",gap:6}}>
-                        <button onClick={() => onUpdate(q.id,"rejected",-1)} style={minusBtn}>－</button>
-                        <div style={{
-                          flex:1, textAlign:"center", fontSize:22, fontWeight:900,
-                          color:"#fb923c", textShadow:"0 0 10px #fb923c70",
-                        }}>{rejected}</div>
-                        <button onClick={() => onUpdate(q.id,"rejected",1)} style={{...plusBtn,background:"#7c2d12",color:"#fb923c"}}>＋</button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* 完了率（ロケットナウのみ） */}
-                  {isRocket && q.completionRate && (
-                    <div style={{
-                      marginTop:6,
-                      background:"#060a10",
-                      borderRadius:8, padding:"6px 10px",
-                    }}>
-                      <div style={{
-                        display:"flex",
-                        justifyContent:"space-between",
-                        alignItems:"center",
-                      }}>
-                        <span style={{fontSize:10,color:MUTED}}>
-                          完了率 (目標{q.completionRate}%↑)
-                        </span>
-                        <span style={{
-                          fontSize:16, fontWeight:900,
-                          color: compRate>=parseInt(q.completionRate) ? "#22c55e" : "#ef4444",
-                          textShadow: compRate>=parseInt(q.completionRate)
-                            ? "0 0 10px #22c55e"
-                            : "0 0 10px #ef4444",
-                        }}>
-                          {compRate}%
-                        </span>
-                      </div>
-                      <div style={{
-                        marginTop:4,height:3,background:"#1e293b",borderRadius:4,
-                      }}>
-                        <div style={{
-                          height:"100%",
-                          width:`${Math.min(100,compRate)}%`,
-                          borderRadius:4,
-                          background: compRate>=parseInt(q.completionRate) ? "#22c55e" : "#ef4444",
-                          boxShadow: compRate>=parseInt(q.completionRate)
-                            ? "0 0 6px #22c55e" : "0 0 6px #ef4444",
-                          transition:"width 0.3s",
-                        }}/>
-                      </div>
-                      <div style={{
-                        fontSize:9,color:MUTED,marginTop:4,textAlign:"right",
-                      }}>
-                        {done}件完了 / {rejected}件拒否 = {total}件中
-                      </div>
-                    </div>
-                  )}
+            <div style={{padding:16, fontSize:12, color:MUTED, textAlign:"center"}}>クエストを登録してください</div>
+          ) : activeQuests.map(q => {
+            const svc=SVC[q.service]||SVC.rocket;
+            const done=q.done||0, rejected=q.rejected||0, received=q.received||0;
+            const total=done+rejected;
+            const compRate=total>0?Math.round(done/total*100):100;
+            const left=Math.max(0,q.goal-done);
+            const isRocket=q.service==="rocket";
+            const steps=[...(q.bonuses||[])].sort((a,b)=>a.count-b.count);
+            const earned=[...steps].reverse().find(s=>done>=s.count);
+            const qReward=earned?earned.reward:0;
+            return (
+              <div key={q.id} style={{padding:"10px 14px", borderBottom:`1px solid ${BDR}`}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+                  <span style={{color:svc.color,fontSize:12,fontWeight:800,textShadow:`0 0 8px ${svc.color}60`}}>{svc.icon} {svc.label}</span>
+                  <span style={{fontSize:11,color:"#22c55e",fontWeight:700}}>¥{qReward.toLocaleString()} / 残{left}件</span>
                 </div>
-              );
-            })
-          )}
+                <div style={{marginBottom:6}}>
+                  <div style={{fontSize:10,color:MUTED,marginBottom:4}}>受注</div>
+                  <div style={{display:"flex",alignItems:"center",gap:6}}>
+                    <button onClick={()=>onUpdate(q.id,"received",-1)} style={minusBtn}>－</button>
+                    <div style={{flex:1,textAlign:"center",fontSize:22,fontWeight:900,color:BLUE,textShadow:`0 0 10px ${BLUE}70`}}>{received}</div>
+                    <button onClick={()=>onUpdate(q.id,"received",1)} style={{...plusBtn,background:BLUE}}>＋</button>
+                  </div>
+                </div>
+                <div style={{marginBottom:6}}>
+                  <div style={{fontSize:10,color:MUTED,marginBottom:4}}>完了</div>
+                  <div style={{display:"flex",alignItems:"center",gap:6}}>
+                    <button onClick={()=>onUpdate(q.id,"done",-1)} style={minusBtn}>－</button>
+                    <div style={{flex:1,textAlign:"center",fontSize:22,fontWeight:900,color:"#22c55e",textShadow:"0 0 10px #22c55e70"}}>{done}</div>
+                    <button onClick={()=>onUpdate(q.id,"done",1)} style={{...plusBtn,background:"#22c55e"}}>＋</button>
+                  </div>
+                </div>
+                {isRocket && (
+                  <div style={{marginBottom:6}}>
+                    <div style={{fontSize:10,color:MUTED,marginBottom:4}}>拒否</div>
+                    <div style={{display:"flex",alignItems:"center",gap:6}}>
+                      <button onClick={()=>onUpdate(q.id,"rejected",-1)} style={minusBtn}>－</button>
+                      <div style={{flex:1,textAlign:"center",fontSize:22,fontWeight:900,color:"#fb923c",textShadow:"0 0 10px #fb923c70"}}>{rejected}</div>
+                      <button onClick={()=>onUpdate(q.id,"rejected",1)} style={{...plusBtn,background:"#7c2d12",color:"#fb923c"}}>＋</button>
+                    </div>
+                  </div>
+                )}
+                {isRocket && q.completionRate && (
+                  <div style={{marginTop:6,background:"#060a10",borderRadius:8,padding:"6px 10px"}}>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                      <span style={{fontSize:10,color:MUTED}}>完了率(目標{q.completionRate}%↑)</span>
+                      <span style={{fontSize:16,fontWeight:900,color:compRate>=parseInt(q.completionRate)?"#22c55e":"#ef4444"}}>{compRate}%</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
-
-      {/* トグルボタン */}
-      <button onClick={() => setOpen(!open)} style={{
-        background: open
-          ? "#1e293b"
-          : "linear-gradient(135deg,#1d4ed8,#6d28d9)",
-        border:"none", color:"#fff", borderRadius:14,
-        width:50, height:50, cursor:"pointer", flexShrink:0,
-        display:"flex", alignItems:"center", justifyContent:"center",
-        fontSize: open ? 16 : 20, fontWeight:700,
-        boxShadow: open
-          ? "none"
-          : "0 4px 20px #3b82f660, 0 0 30px #6d28d940",
-      }}>
-        {open ? "→" : "←"}
-      </button>
+      {/* ミニバー / トグルボタン */}
+      <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:4}}>
+        {!open && confirmedReward > 0 && (
+          <div onClick={()=>setOpen(true)} style={{
+            background:"#0f1520",border:`1px solid ${BDR}`,borderRadius:10,
+            padding:"4px 10px",cursor:"pointer",
+            display:"flex",flexDirection:"column",alignItems:"flex-end",gap:1,
+          }}>
+            <div style={{fontSize:13,fontWeight:900,color:"#22c55e",lineHeight:1}}>¥{confirmedReward.toLocaleString()}</div>
+            <div style={{fontSize:10,color:MUTED,lineHeight:1}}>完了{totalDone}件</div>
+          </div>
+        )}
+        <button onClick={()=>setOpen(!open)} style={{
+          background:open?"#1e293b":"linear-gradient(135deg,#1d4ed8,#6d28d9)",
+          border:"none",color:"#fff",borderRadius:14,width:50,height:50,
+          cursor:"pointer",flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center",
+          fontSize:open?16:20,fontWeight:700,
+          boxShadow:open?"none":"0 4px 20px #3b82f660, 0 0 30px #6d28d940",
+        }}>
+          {open?"→":"←"}
+        </button>
+      </div>
     </div>
   );
 }
