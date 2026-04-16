@@ -30,9 +30,9 @@ const { useState, useEffect, useCallback, useRef } = React;
    定数・カラー
 ══════════════════════════════════════ */
 const SVC = {
+  ubereats: { label:"Uber Eats",   icon:"🐸", color:"#22c55e", dark:"#031a07" },
   rocket:   { label:"ロケットナウ", icon:"🚀", color:"#ff6b35", dark:"#1a0a03" },
   demae:    { label:"出前館",       icon:"🥫", color:"#ef4444", dark:"#1a0303" },
-  ubereats: { label:"Uber Eats",   icon:"🐸", color:"#22c55e", dark:"#031a07" },
 };
 const BG    = "#080c14";
 const CARD  = "#0f1520";
@@ -146,25 +146,42 @@ function DeadlineBadge({ time, label, firstOrderDone }) {
 /* ══════════════════════════════════════
    終了時刻バッジ
 ══════════════════════════════════════ */
-function EndBadge({ endTime }) {
-  const min    = useCountdown(endTime);
+function EndBadge({ endTime, startTime }) {
+  const minToEnd   = useCountdown(endTime);
+  const minToStart = useCountdown(startTime);
   if(!endTime) return null;
-  const over   = min < 0;
-  const urgent = !over && min <= 15;
-  const warn   = !over && min <= 30;
+
+  // 開始前
+  if(startTime && minToStart > 0) {
+    const d = Math.floor(minToStart / 1440);
+    const h = Math.floor((minToStart % 1440) / 60);
+    const m = minToStart % 60;
+    const label = d >= 1 ? `${d}日${h}h後` : h >= 1 ? `${h}h${m}m後` : `${m}分後`;
+    return (
+      <div style={{textAlign:"center",background:"#0a0f1a",border:"1px solid #1e293b",
+        borderRadius:8,padding:"8px 6px",minWidth:0}}>
+        <div style={{fontSize:10,color:MUTED,lineHeight:1,whiteSpace:"nowrap"}}>開始まで</div>
+        <div style={{fontSize:12,fontWeight:900,color:"#64748b",whiteSpace:"nowrap",marginTop:2}}>{label}</div>
+        <div style={{fontSize:9,color:"#374151",marginTop:3,whiteSpace:"nowrap"}}>{startTime}〜</div>
+      </div>
+    );
+  }
+
+  // 開始後
+  const over   = minToEnd < 0;
+  const urgent = !over && minToEnd <= 15;
+  const warn   = !over && minToEnd <= 30;
   const col = over ? "#ef4444" : urgent ? "#fb923c" : warn ? "#fbbf24" : "#34d399";
+  const abs = Math.abs(minToEnd);
+  const dh = Math.floor(abs / 60); const dm = abs % 60;
+  const timeLabel = over
+    ? (dh >= 1 ? `⚠️${dh}h${dm}m超` : `⚠️${abs}分超`)
+    : (dh >= 1 ? `残${dh}h${dm}m` : `残${abs}分`);
   return (
-    <div style={{
-      textAlign: "center",
-      background: `${col}18`,
-      border: `1px solid ${col}`,
-      borderRadius: 8,
-      padding: "8px 6px",
-      boxShadow: `0 0 10px ${col}40`,
-      minWidth: 0,
-    }}>
-      <div style={{fontSize:13,fontWeight:900,color:col,lineHeight:1,whiteSpace:"nowrap"}}>
-        {over ? `⚠️${Math.abs(min)}分超過` : `終了まで${min}分`}
+    <div style={{textAlign:"center",background:`${col}18`,border:`1px solid ${col}`,
+      borderRadius:8,padding:"8px 6px",boxShadow:`0 0 10px ${col}40`,minWidth:0}}>
+      <div style={{fontSize:12,fontWeight:900,color:col,lineHeight:1,whiteSpace:"nowrap"}}>
+        {timeLabel}
       </div>
       <div style={{fontSize:9,color:MUTED,marginTop:3,whiteSpace:"nowrap"}}>終了 {endTime}</div>
     </div>
@@ -342,12 +359,12 @@ function QuestCard({ q, me, onUpdate, onDelete, onCopy, onMove, questIdx, questC
           )}
           <div style={{display:"flex",flexDirection:"column",gap:2,marginLeft:2}}>
             <button onClick={()=>onMove&&onMove(q.id,-1)} disabled={questIdx==null||questIdx===0}
-              style={{background:"none",border:"none",color:(questIdx==null||questIdx===0)?"#1e293b":"#64748b",fontSize:11,cursor:(questIdx==null||questIdx===0)?"default":"pointer",padding:"1px 2px",lineHeight:1}}>▲</button>
+              style={{background:"none",border:"none",color:(questIdx==null||questIdx===0)?"#1e293b":"#94a3b8",fontSize:18,cursor:(questIdx==null||questIdx===0)?"default":"pointer",padding:"2px 4px",lineHeight:1}}>▲</button>
             <button onClick={()=>onMove&&onMove(q.id,1)} disabled={questIdx==null||questIdx===questCount-1}
-              style={{background:"none",border:"none",color:(questIdx==null||questIdx===questCount-1)?"#1e293b":"#64748b",fontSize:11,cursor:(questIdx==null||questIdx===questCount-1)?"default":"pointer",padding:"1px 2px",lineHeight:1}}>▼</button>
+              style={{background:"none",border:"none",color:(questIdx==null||questIdx===questCount-1)?"#1e293b":"#94a3b8",fontSize:18,cursor:(questIdx==null||questIdx===questCount-1)?"default":"pointer",padding:"2px 4px",lineHeight:1}}>▼</button>
           </div>
           {me===q.owner && !achieved && (
-            <><button onClick={() => onCopy && onCopy(q)} style={{background:"none",border:"none",color:"#64748b",fontSize:13,cursor:"pointer",padding:"0 3px"}} title="複製">📋</button>
+            <><button onClick={() => onCopy && onCopy(q)} style={{background:"none",border:"none",color:"#64748b",fontSize:18,cursor:"pointer",padding:"2px 4px"}} title="複製">📋</button>
             <button onClick={() => onDelete(q.id)} style={{
               background:"none",border:"none",color:"#475569",
               fontSize:16,cursor:"pointer",padding:"0 4px",
@@ -441,7 +458,7 @@ function QuestCard({ q, me, onUpdate, onDelete, onCopy, onMove, questIdx, questC
 
         {/* 終了まで */}
         <div style={{flexShrink:0,width:76}}>
-          <EndBadge endTime={q.endTime}/>
+          <EndBadge endTime={q.endTime} startTime={q.startTime}/>
         </div>
       </div>
 
@@ -1166,6 +1183,29 @@ function CounterPanel({ quests, onUpdate }) {
     ubereats: ["完了"],
   };
 
+  function ScrollTopBtn() {
+  const [vis, setVis] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setVis(window.scrollY > 200);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  if(!vis) return null;
+  return (
+    <button
+      onClick={() => window.scrollTo({top:0, behavior:'smooth'})}
+      style={{
+        position:'fixed', bottom:84, left:16, zIndex:60,
+        background:'#1e293b', border:'1px solid #334155',
+        borderRadius:24, width:44, height:44,
+        color:'#94a3b8', fontSize:20, cursor:'pointer',
+        display:'flex', alignItems:'center', justifyContent:'center',
+        boxShadow:'0 4px 16px rgba(0,0,0,.6)',
+      }}
+    >↑</button>
+  );
+}
+
   const activeQuests = quests.filter(q => q.done < q.goal);
 
   return (
@@ -1366,7 +1406,7 @@ function App() {
   const [showForm,setShowForm]= useState(false);
   const [showPhoto,setShowPhoto]=useState(false);
   const [showSettings,setShowSettings]=useState(false);
-  const [svc,     setSvc]     = useState("rocket");
+  const [svc,     setSvc]     = useState("ubereats");
   const [enabledSvc, setEnabledSvc] = useState(() => {
     try { return {...{rocket:true,demae:true,ubereats:true}, ...JSON.parse(localStorage.getItem("qt_services")||"{}")}; }
     catch { return {rocket:true,demae:true,ubereats:true}; }
@@ -1432,7 +1472,10 @@ function App() {
     await persist(quests.map(q => {
       if(q.id !== id) return q;
       const cur = q[field] || 0;
-      const max = field==="done" ? q.goal : 999;
+      const _steps = [...(q.bonuses||[])].sort((a,b)=>a.count-b.count);
+      const _cur = q.done || 0;
+      const _nextStep = _steps.find(s => s.count > _cur);
+      const max = field==="done" ? (_nextStep ? _nextStep.count : q.goal) : 999;
       return {...q, [field]: Math.max(0,Math.min(max,cur+delta)),
         updatedAt: new Date().toISOString()};
     }));
@@ -1690,7 +1733,7 @@ function App() {
         <div style={{textAlign:"center",padding:"60px 20px",color:MUTED}}>
           読み込み中...
         </div>
-      ) : quests.length===0 ? (
+      ) : showForm ? null : quests.length===0 ? (
         <div style={{textAlign:"center",padding:"60px 20px",color:MUTED,lineHeight:2}}>
           <div style={{fontSize:36,marginBottom:10}}>📋</div>
           クエストがまだありません。<br/>「＋ 追加」から登録してください。
@@ -1712,6 +1755,7 @@ function App() {
         🌐 みんなで共有中
       </div>
       <CounterPanel quests={quests} onUpdate={handleUpdate}/>
+      <ScrollTopBtn/>
     </div>
   );
 }
