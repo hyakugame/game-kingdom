@@ -400,7 +400,7 @@ function QuestCard({ q, me, onUpdate, onDelete, onCopy, onMove, questIdx, questC
             {achieved ? "✓" : done}
           </div>
           <div style={{fontSize:10,color:MUTED,marginTop:4}}>
-            {achieved ? "達成" : "/" + nextGoal + "件"}
+            {achieved ? "達成" : "/" + goal + "件"}
           </div>
           {stepLabel && !achieved && (
             <div style={{
@@ -514,7 +514,7 @@ function QuestCard({ q, me, onUpdate, onDelete, onCopy, onMove, questIdx, questC
       )}
 
       {/* ─ 報酬パネル ─ */}
-      {q.bonusExtra && (
+      {(q.bonusExtra || (q.bonuses && q.bonuses.length > 1)) && (
         <div style={{padding:"10px 14px 4px"}}>
           <RewardPanel q={q}/>
         </div>
@@ -1385,6 +1385,11 @@ function App() {
   };
   const [prefill, setPrefill] = useState(null);
   const [lastUp,  setLastUp]  = useState(null);
+
+  useEffect(() => {
+    const total = quests.reduce((s,q)=>s+(q.done||0),0);
+    if('setAppBadge' in navigator) navigator.setAppBadge(total).catch(()=>{});
+  }, [quests]);
 
   const reload = useCallback(async () => {
     try {
