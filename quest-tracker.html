@@ -51,8 +51,11 @@ const todayStr = () => new Date().toISOString().slice(0,10);
 function remMin(t) {
   if(!t) return 9999;
   const [h,m] = t.split(":").map(Number);
+  if(isNaN(h)||isNaN(m)) return 9999;
   const e = new Date(); e.setHours(h,m,0,0);
-  return Math.floor((e - Date.now()) / 60000);
+  let diff = Math.floor((e - Date.now()) / 60000);
+  if(diff < -720) diff += 1440;
+  return diff;
 }
 function fmtDate(iso) {
   if(!iso) return "";
@@ -145,6 +148,7 @@ function DeadlineBadge({ time, label, firstOrderDone }) {
 ══════════════════════════════════════ */
 function EndBadge({ endTime }) {
   const min    = useCountdown(endTime);
+  if(!endTime) return null;
   const over   = min < 0;
   const urgent = !over && min <= 15;
   const warn   = !over && min <= 30;
@@ -354,8 +358,8 @@ function QuestCard({ q, me, onUpdate, onDelete, onCopy, onMove, questIdx, questC
 
       {/* ─ 日付・時間 ─ */}
       <div style={{
-        padding: "0 14px 8px",
-        fontSize: 11, color: MUTED,
+        padding: "0 14px 10px",
+        fontSize: 14, color: MUTED,
         whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
       }}>
         {q.date && (
