@@ -415,7 +415,7 @@ function QuestCard({ q, me, onUpdate, onDelete, onCopy, onEdit, onMove, questIdx
               : left<=2 ? "0 0 24px #ef4444"
               : `0 0 24px ${BLUE}`,
           }}>
-            {achieved ? "✓" : done - prevCount}
+            {achieved ? "✓" : Math.max(0, done - prevCount)}
           </div>
           <div style={{fontSize:10,color:MUTED,marginTop:4}}>
             {achieved ? "達成" : "/" + (nextGoal-prevCount) + "件"}
@@ -1458,9 +1458,9 @@ function App() {
   };
 
   const handleAdd = async (data) => {
-    if(data._editId) {
-      const {_editId, ...rest} = data;
-      await persist(quests.map(q => q.id===_editId ? {...q,...rest,updatedAt:new Date().toISOString()} : q));
+    const _editId = prefill?._editId;
+    if(_editId) {
+      await persist(quests.map(q => q.id===_editId ? {...q,...data,updatedAt:new Date().toISOString()} : q));
       setShowForm(false); setPrefill(null); return;
     }
     const q = {
@@ -1479,8 +1479,11 @@ function App() {
       const _steps = [...(q.bonuses||[])].sort((a,b)=>a.count-b.count);
       const _cur = q.done || 0;
       const _nextStep = _steps.find(s => s.count > _cur);
+      const _prevStep2 = [..._steps].reverse().find(s=>s.count<=_cur);
+      const _prevMin = _prevStep2 ? _prevStep2.count : 0;
       const max = field==="done" ? (_nextStep ? _nextStep.count : q.goal) : 999;
-      return {...q, [field]: Math.max(0,Math.min(max,cur+delta)),
+      const min = field==="done" ? _prevMin : 0;
+      return {...q, [field]: Math.max(min,Math.min(max,cur+delta)),
         updatedAt: new Date().toISOString()};
     }));
   };
