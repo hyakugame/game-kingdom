@@ -1429,6 +1429,16 @@ function App() {
     }));
   };
 
+  const handleMove = async (id, dir) => {
+    const idx = quests.findIndex(q => q.id === id);
+    if(idx < 0) return;
+    const target = idx + dir;
+    if(target < 0 || target >= quests.length) return;
+    const next = [...quests];
+    [next[idx], next[target]] = [next[target], next[idx]];
+    await persist(next);
+  };
+
   const handleCopy = (src) => {
     if(SVC[src.service]) setSvc(src.service);
     const p = {
