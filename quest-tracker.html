@@ -918,8 +918,8 @@ function CounterPanel({ quests, onUpdate }) {
   const confirmedReward = quests.reduce((sum, q) => {
     const done = q.done || 0;
     const steps = [...(q.bonuses||[])].sort((a,b)=>a.count-b.count);
-    const earned = [...steps].reverse().find(s => done >= s.count);
-    return sum + (earned ? earned.reward : 0);
+    const stepEarned = steps.filter(s => done >= s.count).reduce((s,b)=>s+b.reward,0);
+    return sum + stepEarned;
   }, 0);
   const totalDone = quests.reduce((s,q)=>s+(q.done||0),0);
 
