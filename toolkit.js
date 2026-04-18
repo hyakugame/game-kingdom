@@ -41,12 +41,13 @@
 
   // ===== STYLES =====
   const css = `
-    #qtkit-headbtn{display:inline-flex;align-items:center;gap:3px;padding:5px 9px;
+    #qtkit-fab{position:fixed;left:14px;display:inline-flex;align-items:center;gap:5px;
+      bottom:calc(76px + env(safe-area-inset-bottom, 0px));padding:9px 14px;
       background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;
-      border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;
-      box-shadow:0 2px 6px rgba(99,102,241,.35);transition:transform .1s,opacity .15s;
-      line-height:1;letter-spacing:.02em}
-    #qtkit-headbtn:active{transform:scale(.95);opacity:.9}
+      border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;
+      box-shadow:0 4px 14px rgba(99,102,241,.45);z-index:9998;line-height:1;letter-spacing:.02em;
+      transition:transform .1s,opacity .15s}
+    #qtkit-fab:active{transform:scale(.95);opacity:.9}
     #qtkit-modal{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;display:none;
       align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
     #qtkit-modal.open{display:flex}
@@ -138,18 +139,10 @@
     const style = h('style', { text: css });
     document.head.appendChild(style);
 
-    // Header button injection (replaces old fixed FAB)
-    function injectHeadBtn(){
-      if (document.getElementById('qtkit-headbtn')) return;
-      const gear = Array.from(document.querySelectorAll('button')).find(b => (b.textContent||'').trim() === '⚙️');
-      if (!gear || !gear.parentElement) return;
-      const b = h('button', { id: 'qtkit-headbtn', text: '🛠 ツール', title: 'クイックツール' });
-      b.addEventListener('click', open);
-      gear.insertAdjacentElement('afterend', b);
-    }
-    injectHeadBtn();
-    // Re-inject if React re-renders the header
-    setInterval(injectHeadBtn, 1000);
+    // Bottom-left pill FAB (positioned above day/night button)
+    const fab = h('button', { id: 'qtkit-fab', text: '🛠 ツール', title: 'クイックツール' });
+    fab.addEventListener('click', open);
+    document.body.appendChild(fab);
 
     // Modal skeleton
     const modal = h('div', { id: 'qtkit-modal' });
@@ -167,7 +160,7 @@
       { k: 'otsuri', e: '💰', l: 'おつり' },
       { k: 'tmpl', e: '📋', l: '置き配' },
       { k: 'offer', e: '🎯', l: '判定' },
-      { k: 'week', e: '📊', l: '週次' }
+      { k: 'week', e: '📊', l: 'サマリー' }
     ];
     tabDefs.forEach((t, i) => {
       const btn = h('button', { 'class': 'qtkit-tab' + (i === 0 ? ' active' : ''), 'data-tab': t.k }, [
