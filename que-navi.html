@@ -1646,7 +1646,7 @@ function App() {
       ):[...quests].filter(q=>activeTab==='history'?(q.done||0)>=q.goal:(q.done||0)<q.goal).sort((a,b)=>{
             const da=(a.date||'')+(a.startTime||'');
             const db=(b.date||'')+(b.startTime||'');
-            return da.localeCompare(db);
+            return activeTab==='history'?db.localeCompare(da):da.localeCompare(db);
           }).map((q,qi) => (
             <QuestCard key={q.id} q={q} me={me}
               onUpdate={handleUpdate} onDelete={handleDelete} onCopy={handleCopy} onEdit={handleEdit} onMove={handleMove} questIdx={qi} questCount={quests.length}/>
