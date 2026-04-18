@@ -1603,6 +1603,13 @@ function App() {
           <button onClick={()=>setActiveTab('active')} style={{flex:1,padding:'10px 0',background:'transparent',border:'none',color:activeTab==='active'?'#fff':'#94a3b8',borderBottom:activeTab==='active'?'2px solid #3b82f6':'2px solid transparent',fontSize:14,fontWeight:600,cursor:'pointer'}}>稼働中 ({quests.filter(q=>(q.done||0)<q.goal).length})</button>
           <button onClick={()=>setActiveTab('history')} style={{flex:1,padding:'10px 0',background:'transparent',border:'none',color:activeTab==='history'?'#fff':'#94a3b8',borderBottom:activeTab==='history'?'2px solid #3b82f6':'2px solid transparent',fontSize:14,fontWeight:600,cursor:'pointer'}}>履歴 ({quests.filter(q=>(q.done||0)>=q.goal).length})</button><button onClick={()=>setActiveTab('summary')} style={{flex:1,padding:'10px 0',background:'transparent',border:'none',color:activeTab==='summary'?'#fff':'#94a3b8',borderBottom:activeTab==='summary'?'2px solid #3b82f6':'2px solid transparent',fontSize:14,fontWeight:600,cursor:'pointer'}}>集計 ({quests.length})</button>
         </div>
+        {activeTab!=='summary'&&quests.filter(q=>activeTab==='history'?(q.done||0)>=q.goal:(q.done||0)<q.goal).length===0&&(
+          <div style={{textAlign:'center',padding:'60px 16px',color:'#64748b'}}>
+            <div style={{fontSize:48,opacity:0.25,marginBottom:12}}>📋</div>
+            <div style={{fontSize:15,fontWeight:600,color:'#94a3b8',marginBottom:6}}>{activeTab==='history'?'まだ達成したクエストがありません':'稼働中のクエストがありません'}</div>
+            <div style={{fontSize:12,color:'#64748b'}}>{activeTab==='history'?'達成すると自動的にここに表示されます':'右上の「＋ 追加」から登録してください'}</div>
+          </div>
+        )}
         {activeTab==='summary'?(
         <div style={{padding:'40px 16px',textAlign:'center',color:'#94a3b8'}}>
           <div style={{fontSize:48,opacity:0.3,marginBottom:12}}>📊</div>
