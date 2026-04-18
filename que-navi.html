@@ -1851,7 +1851,19 @@ function App() {
                       {ocrState.parsed.startTime&&<><div style={{color:'#94a3b8'}}>時間帯</div><div style={{color:'#fff',fontWeight:600}}>{ocrState.parsed.startTime} 〜 {ocrState.parsed.endTime}</div></>}
                       {ocrState.parsed.rewards&&ocrState.parsed.rewards.length>0&&<><div style={{color:'#94a3b8'}}>金額</div><div style={{color:'#10b981',fontWeight:700}}>{ocrState.parsed.rewards.map(r=>'¥'+r.toLocaleString()).join(' / ')}</div></>}
                     </div>
-                    <div style={{fontSize:11,color:'#64748b',marginTop:10,paddingTop:8,borderTop:'1px solid #1f2838'}}>※ この情報を参考に「＋ 追加」から手動で登録してください（自動入力は次バージョン予定）</div>
+                    <button onClick={()=>{
+                      const p=ocrState.parsed||{};
+                      if(p.service&&SVC[p.service])setSvc(p.service);
+                      const pf={_ocrAutoFill:true};
+                      if(p.startTime)pf.startTime=p.startTime;
+                      if(p.endTime)pf.endTime=p.endTime;
+                      if(p.goalCount!=null)pf.goal=p.goalCount;
+                      if(p.rewards&&p.rewards.length>0)pf.bonusBase=p.rewards[0];
+                      if(p.rewards&&p.rewards.length>1)pf.bonusExtra=p.rewards[p.rewards.length-1]-p.rewards[0];
+                      setPrefill(pf);
+                      setShowOcr(false);
+                      setShowForm(true);
+                    }} style={{display:'block',width:'100%',marginTop:12,padding:'12px 14px',background:'#10b981',border:'none',color:'#fff',borderRadius:8,fontSize:14,fontWeight:800,cursor:'pointer',boxShadow:'0 2px 8px rgba(16,185,129,.25)'}}>🚀 このデータで新規追加</button><div style={{fontSize:11,color:'#64748b',marginTop:10,paddingTop:8,borderTop:'1px solid #1f2838'}}>※ ボタンで追加フォームが開き内容が自動入力されます</div>
                   </div>
                 )}
                 <button onClick={()=>{navigator.clipboard.writeText(ocrState.text);alert('クリップボードにコピーしました');}} style={{marginTop:10,background:'#3b82f6',border:'none',color:'#fff',padding:'8px 14px',borderRadius:7,fontSize:13,fontWeight:600,cursor:'pointer'}}>📋 テキストコピー</button>
