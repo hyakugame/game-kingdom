@@ -1642,7 +1642,27 @@ function App() {
               </div>);
             });
           })()}
-        </div>
+        
+          {quests.length>0&&(
+            <div style={{marginTop:20}}>
+              <div style={{fontSize:11,color:'#94a3b8',fontWeight:600,marginBottom:10,letterSpacing:'.05em',padding:'0 4px'}}>サービス別</div>
+              {Object.entries(SVC).map(([sid,s])=>{
+                const svq=quests.filter(q=>q.service===sid);
+                if(svq.length===0) return null;
+                const done=svq.filter(q=>(q.done||0)>=q.goal).length;
+                const total=svq.length;
+                const rate=total>0?Math.round(done/total*100):0;
+                return (<div key={sid} style={{marginBottom:8,padding:'12px 14px',background:'#121826',border:'1px solid #1f2838',borderRadius:10,display:'flex',alignItems:'center',gap:12}}>
+                  <span style={{fontSize:22,width:28,textAlign:'center'}}>{s.icon}</span>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontSize:13,color:'#e7ecf3',fontWeight:600}}>{s.label}</div>
+                    <div style={{fontSize:11,color:'#94a3b8',marginTop:2}}>{done}/{total}件</div>
+                  </div>
+                  <div style={{fontSize:14,color:rate>=50?'#10b981':(rate>0?'#f59e0b':'#64748b'),fontWeight:700}}>{rate}%</div>
+                </div>);
+              })}
+            </div>
+          )}</div>
       ):[...quests].filter(q=>activeTab==='history'?(q.done||0)>=q.goal:(q.done||0)<q.goal).sort((a,b)=>{
             const da=(a.date||'')+(a.startTime||'');
             const db=(b.date||'')+(b.startTime||'');
