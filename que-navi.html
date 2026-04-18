@@ -1096,7 +1096,7 @@ function CounterPanel({ quests, onUpdate }) {
           fontSize:open?16:20,fontWeight:700,
           boxShadow:open?"none":"0 4px 20px #3b82f660, 0 0 30px #3b82f640",
         }}>
-          {open?"→":"←"}
+          {open?"→":"📊 カウンター"}
         </button>
       </div>
     </div>
@@ -1362,12 +1362,7 @@ function App() {
             fontSize:17,fontWeight:700,
             maxWidth:70,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",
           }}>{me}</span>
-          <button onClick={()=>{setSpinning(true);reload().finally(()=>setTimeout(()=>setSpinning(false),600));}} style={{
-            background:"#1e293b",border:"none",color:spinning?"#4FC3F7":MUTED,
-            borderRadius:7,padding:"5px 8px",cursor:"pointer",fontSize:17,flexShrink:0,
-            display:"inline-flex",alignItems:"center",justifyContent:"center",
-            transition:"color .2s",
-          }}><span style={{display:"inline-block",animation:spinning?"spin .6s linear infinite":"none"}}>↻</span></button>
+          
           <button onClick={() => setShowSettings(true)} style={{
             background:"#1e293b",border:"none",color:MUTED,
             borderRadius:7,padding:"5px 8px",cursor:"pointer",fontSize:17,flexShrink:0,
