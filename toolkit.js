@@ -579,6 +579,27 @@
 
   // ===== PANE ⚙️: 設定 (アラート閾値) =====
   function renderSetting(){
+    // CSS一度だけ注入
+    if (!document.getElementById('qtk-setting-css-injected')) {
+      const st = document.createElement('style');
+      st.id = 'qtk-setting-css-injected';
+      st.textContent = `
+        .qtkit-setting { padding: 8px 4px; }
+        .qtkit-setting h3 { font-size: 15px; margin: 0 0 6px; color: #fff; font-weight: 700; }
+        .qtkit-setting .qtkit-note { font-size: 11px; color: #94a3b8; margin: 0 0 14px; line-height: 1.5; }
+        .qtkit-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #2a2f44; font-size: 13px; color: #e6e8ef; }
+        .qtkit-row input[type="number"] { width: 80px; padding: 6px 8px; border-radius: 6px; border: 1px solid #2b3549; background: #0a0e1a; color: #fff; font-size: 14px; text-align: right; }
+        .qtkit-row input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: #3b82f6; }
+        .qtkit-save-btn { margin-top: 16px; width: 100%; padding: 12px; background: #3b82f6; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
+        .qtkit-save-btn:hover { background: #2563eb; }
+        body.light-mode .qtkit-row { border-bottom-color: #e2e8f0; color: #0f172a; }
+        body.light-mode .qtkit-row input[type="number"] { background: #fff; border-color: #cbd5e1; color: #0f172a; }
+        body.light-mode .qtkit-setting h3 { color: #0f172a; }
+        body.light-mode .qtkit-setting .qtkit-note { color: #64748b; }
+      `;
+      document.head.appendChild(st);
+    }
+
     const panel = document.querySelector('.qtkit-panel-body');
     if (!panel) return;
     let th = { minYenPerHour: 1500, minYenPerMin: 25, enabled: false, vibrate: true, sound: false };
