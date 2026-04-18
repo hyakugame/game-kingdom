@@ -10,9 +10,9 @@ cs.textContent=
 +"@keyframes qfly{0%{opacity:1}100%{transform:translate(var(--px),var(--py)) rotate(var(--pr));opacity:0}}"
 +"#qstatBar{position:fixed;left:0;right:0;z-index:6500;background:rgba(8,15,28,0.97);border-bottom:1px solid rgba(100,200,120,0.25);padding:7px 12px;display:flex;gap:8px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;box-shadow:0 2px 10px rgba(0,0,0,0.5)}"
 +"#qstatBar::-webkit-scrollbar{display:none}"
-+"#qstatBar span{background:rgba(255,255,255,0.07);border-radius:6px;padding:5px 10px;border:1px solid rgba(255,255,255,0.1);font-size:13px;font-weight:600;color:#b0ccd8;letter-spacing:.01em;display:inline-flex;align-items:center;gap:4px}"
++"#qstatBar span{background:rgba(255,255,255,0.07);border-radius:6px;padding:5px 10px;border:1px solid rgba(255,255,255,0.1);font-size:13px;font-weight:600;color:#b0ccd8;display:inline-flex;align-items:center;gap:4px}"
 +"#qstatBar b{color:#FFD700}"
-+"#qDayNightBtn{position:fixed!important;bottom:90px!important;right:14px!important;z-index:8500!important;width:48px!important;height:48px!important;border-radius:50%!important;background:rgba(15,25,45,0.95)!important;border:1px solid rgba(255,255,255,0.2)!important;color:#fff!important;font-size:1.4rem!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 3px 12px rgba(0,0,0,0.4)!important}"
++"#qDayNightBtn{position:fixed!important;bottom:20px!important;left:14px!important;z-index:8500!important;width:48px!important;height:48px!important;border-radius:50%!important;background:rgba(15,25,45,0.95)!important;border:1px solid rgba(255,255,255,0.2)!important;color:#fff!important;font-size:1.4rem!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 3px 12px rgba(0,0,0,0.4)!important}"
 +".qfov{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:qffade 4s forwards}"
 +".qftx{font-size:2.6rem;font-weight:900;color:#FFD700;text-shadow:0 0 20px #FFD700,0 0 50px #FF8C00;font-family:monospace;letter-spacing:.08em;text-align:center;line-height:1.6;animation:qfpop .5s cubic-bezier(.34,1.56,.64,1) forwards}"
 +".qpt{position:fixed;width:10px;height:10px;border-radius:2px;pointer-events:none;z-index:9998;animation:qfly var(--dur) ease-out forwards}";
@@ -31,12 +31,9 @@ Array.from(document.querySelectorAll("*")).forEach(function(el){
 if(el===sb||el===btn||sb.contains(el)||btn.contains(el))return;
 var s=getComputedStyle(el);
 if(s.position!=="fixed"&&s.position!=="sticky")return;
-var r=el.getBoundingClientRect();
-if(r.top<10&&r.height>20&&r.height<200&&r.width>100){
-if(r.bottom>best)best=r.bottom;
-}})
-;return best||62;
-}
+var rc=el.getBoundingClientRect();
+if(rc.top<10&&rc.height>20&&rc.height<200&&rc.width>100){if(rc.bottom>best)best=rc.bottom;}
+});return best||62;}
 function posBar(){
 var hh=getHdrH();
 sb.style.top=hh+"px";
@@ -53,7 +50,10 @@ var qs=JSON.parse(raw);var now=new Date(),td=0,tr=0,aa=[],el=null;
 qs.forEach(function(q){
 var dn=q.done||0;td+=dn;
 var sp=[].concat(q.bonuses||[]).sort(function(a,b){return a.count-b.count;});
-tr+=sp.filter(function(s){return dn>=s.count;}).reduce(function(s,b){return s+b.reward;},0);
+var stepR=sp.filter(function(s){return dn>=s.count;}).reduce(function(s,b){return s+b.reward;},0);
+var allDone=sp.length>0&&dn>=(sp[sp.length-1]||{count:999}).count;
+var bExtra=allDone?parseInt(q.bonusExtra||0):0;
+tr+=stepR+bExtra;
 var lg=q.deliveryLog||[];
 for(var i=1;i<lg.length;i++){var df=(new Date(lg[i].at)-new Date(lg[i-1].at))/60000;if(df>1&&df<90)aa.push(df);}
 if(q.startedAt){var st=new Date(q.startedAt);if(!el||st<el)el=st;}
@@ -62,11 +62,11 @@ var eh=el?(now-el)/3600000:0;
 var hy=eh>0.1?Math.round(tr/eh):0;
 var av=aa.length>0?Math.round(aa.reduce(function(a,b){return a+b;},0)/aa.length):0;
 var html=""
-+"<span>★ "+td+"件</span>"
-+"<span>￥"+tr.toLocaleString()+"</span>"
-+(eh>0.1?"<span>⏱ "+fmt(Math.round(eh*60))+"</span>":"")
-+(hy>0?"<span>💴 ￥"+hy.toLocaleString()+"/h</span>":"")
-+(av>0?"<span>⏰ "+av+"分/件</span>":"");
++"<span>★ <b>"+td+"件</b></span>"
++"<span>￥<b>"+tr.toLocaleString()+"</b></span>"
++(eh>0.1?"<span>⏱ <b>"+fmt(Math.round(eh*60))+"</b></span>":"")
++(hy>0?"<span>💴 <b>￥"+hy.toLocaleString()+"/h</b></span>":"")
++(av>0?"<span>⏰ <b>"+av+"分/件</b></span>":"");
 if(sb.innerHTML!==html){sb.innerHTML=html;posBar();}
 }catch(e){}
 busy=false;}
