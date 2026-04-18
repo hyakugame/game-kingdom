@@ -1600,10 +1600,18 @@ function App() {
       ) : (
         <div style={{padding:"10px 12px",display:"flex",flexDirection:"column",gap:10}}>
           <div style={{display:'flex',borderBottom:'1px solid #1f2838',marginBottom:10}}>
-          <button onClick={()=>setActiveTab('active')} style={{flex:1,padding:'10px 0',background:'transparent',border:'none',color:activeTab==='active'?'#fff':'#94a3b8',borderBottom:activeTab==='active'?'2px solid #3b82f6':'2px solid transparent',fontSize:14,fontWeight:600,cursor:'pointer'}}>稼働中</button>
-          <button onClick={()=>setActiveTab('history')} style={{flex:1,padding:'10px 0',background:'transparent',border:'none',color:activeTab==='history'?'#fff':'#94a3b8',borderBottom:activeTab==='history'?'2px solid #3b82f6':'2px solid transparent',fontSize:14,fontWeight:600,cursor:'pointer'}}>履歴</button>
+          <button onClick={()=>setActiveTab('active')} style={{flex:1,padding:'10px 0',background:'transparent',border:'none',color:activeTab==='active'?'#fff':'#94a3b8',borderBottom:activeTab==='active'?'2px solid #3b82f6':'2px solid transparent',fontSize:14,fontWeight:600,cursor:'pointer'}}>稼働中 ({quests.filter(q=>(q.done||0)<q.goal).length})</button>
+          <button onClick={()=>setActiveTab('history')} style={{flex:1,padding:'10px 0',background:'transparent',border:'none',color:activeTab==='history'?'#fff':'#94a3b8',borderBottom:activeTab==='history'?'2px solid #3b82f6':'2px solid transparent',fontSize:14,fontWeight:600,cursor:'pointer'}}>履歴 ({quests.filter(q=>(q.done||0)>=q.goal).length})</button><button onClick={()=>setActiveTab('summary')} style={{flex:1,padding:'10px 0',background:'transparent',border:'none',color:activeTab==='summary'?'#fff':'#94a3b8',borderBottom:activeTab==='summary'?'2px solid #3b82f6':'2px solid transparent',fontSize:14,fontWeight:600,cursor:'pointer'}}>集計 ({quests.length})</button>
         </div>
-        {[...quests].filter(q=>activeTab==='history'?(q.done||0)>=q.goal:(q.done||0)<q.goal).sort((a,b)=>{
+        {activeTab==='summary'?(
+        <div style={{padding:'40px 16px',textAlign:'center',color:'#94a3b8'}}>
+          <div style={{fontSize:48,opacity:0.3,marginBottom:12}}>📊</div>
+          <div style={{fontSize:18,fontWeight:700,color:'#fff',marginBottom:8}}>集計</div>
+          <div style={{fontSize:15,marginBottom:6}}>達成 {quests.filter(q=>(q.done||0)>=q.goal).length} 件 / 全 {quests.length} 件</div>
+          <div style={{fontSize:13,color:'#64748b',marginBottom:20}}>達成率 {quests.length>0?Math.round(quests.filter(q=>(q.done||0)>=q.goal).length/quests.length*100):0}%</div>
+          <div style={{fontSize:12,color:'#64748b',marginTop:20,padding:'12px 16px',background:'#121826',border:'1px solid #1f2838',borderRadius:8,maxWidth:280,margin:'20px auto 0'}}>週/月別の詳細集計は開発中</div>
+        </div>
+      ):[...quests].filter(q=>activeTab==='history'?(q.done||0)>=q.goal:(q.done||0)<q.goal).sort((a,b)=>{
             const da=(a.date||'')+(a.startTime||'');
             const db=(b.date||'')+(b.startTime||'');
             return da.localeCompare(db);
