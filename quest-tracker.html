@@ -1267,7 +1267,7 @@ function App() {
             fontSize:11,fontWeight:700,
             maxWidth:70,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",
           }}>{me}</span>
-          <button onClick={reload} style={{
+          <button onClick={()=>{reload();}} style={{
             background:"#1e293b",border:"none",color:MUTED,
             borderRadius:7,padding:"5px 8px",cursor:"pointer",fontSize:13,flexShrink:0,
           }}>↻</button>
