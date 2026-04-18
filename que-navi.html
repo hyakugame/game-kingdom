@@ -24,73 +24,50 @@
   @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}</style>
 
   <style id="polish-styles">
-    :root {
-      --sat: env(safe-area-inset-top, 0px);
-      --sar: env(safe-area-inset-right, 0px);
-      --sab: env(safe-area-inset-bottom, 0px);
-      --sal: env(safe-area-inset-left, 0px);
-    }
-    body { 
-      padding-top: var(--sat);
-      padding-bottom: var(--sab);
-    }
-    /* ☀️/🌙 テーマトグルボタン - 左下、🛠ツールの上 */
-    html body #qDayNightBtn {
-      position: fixed !important;
-      left: calc(14px + var(--sal)) !important;
-      right: auto !important;
-      bottom: calc(130px + var(--sab)) !important;
-      top: auto !important;
-      width: 44px !important;
-      height: 44px !important;
-      min-width: 44px !important;
-      min-height: 44px !important;
-      max-width: 44px !important;
-      max-height: 44px !important;
-      border-radius: 50% !important;
-      border: 1px solid #2b3549 !important;
-      background: #121826 !important;
-      color: #fff !important;
-      font-size: 22px !important;
-      cursor: pointer !important;
-      z-index: 45 !important;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      line-height: 1 !important;
-    }
-    html body.light-mode #qDayNightBtn {
-      background: #fff !important;
-      color: #1e293b !important;
-      border-color: #cbd5e1 !important;
-    }
-    /* ライトモード */
-    body.light-mode {
-      background: #f8fafc !important;
-    }
-    body.light-mode #root {
-      background: #f8fafc !important;
-    }
-    body.light-mode [style*="background:#0a0e1a"],
-    body.light-mode [style*="background: #0a0e1a"],
-    body.light-mode [style*="background: rgb(10, 14, 26)"] { background: #f8fafc !important; }
-    body.light-mode [style*="background:#121826"],
-    body.light-mode [style*="background: #121826"] { background: #fff !important; border-color: #e2e8f0 !important; }
-    body.light-mode [style*="background:#1f2838"] { background: #f1f5f9 !important; }
+    :root { --sat:env(safe-area-inset-top,0px); --sar:env(safe-area-inset-right,0px); --sab:env(safe-area-inset-bottom,0px); --sal:env(safe-area-inset-left,0px); }
+    body { padding-top:var(--sat); padding-bottom:var(--sab); }
+    button, a, label { -webkit-tap-highlight-color: transparent; }
+    
+    /* ☀️/🌙 ボタン */
+    html body #qDayNightBtn { position:fixed!important; left:calc(14px + var(--sal))!important; right:auto!important; bottom:calc(130px + var(--sab))!important; top:auto!important; width:44px!important; height:44px!important; min-width:44px!important; min-height:44px!important; max-width:44px!important; max-height:44px!important; border-radius:50%!important; border:1px solid #2b3549!important; background:#121826!important; color:#fff!important; font-size:22px!important; cursor:pointer!important; z-index:45!important; box-shadow:0 4px 12px rgba(0,0,0,.4)!important; display:flex!important; align-items:center!important; justify-content:center!important; padding:0!important; margin:0!important; line-height:1!important; }
+    html body.light-mode #qDayNightBtn { background:#fff!important; color:#1e293b!important; border-color:#cbd5e1!important; }
+    
+    /* ライトモード徹底カバレッジ - JS による style 属性値はブラウザによってrgb()に変換されるのでCSS両対応 */
+    html body.light-mode { background:#f8fafc!important; color:#0f172a!important; }
+    html body.light-mode #root, html body.light-mode #root > div { background:#f8fafc!important; color:#0f172a!important; }
+    
+    /* 背景色 inline 上書き (#0a0e1a / rgb(10,14,26)) */
+    body.light-mode [style*="#0a0e1a"],
+    body.light-mode [style*="rgb(10, 14, 26)"] { background:#f8fafc!important; color:#0f172a!important; }
+    
+    /* カード (#121826 / rgb(18,24,38)) */
+    body.light-mode [style*="#121826"],
+    body.light-mode [style*="rgb(18, 24, 38)"] { background:#fff!important; color:#0f172a!important; border-color:#e2e8f0!important; }
+    
+    /* 境界線 (#1f2838 / #2b3549) */
+    body.light-mode [style*="#1f2838"],
+    body.light-mode [style*="rgb(31, 40, 56)"] { background:#f1f5f9!important; border-color:#e2e8f0!important; }
+    body.light-mode [style*="#2b3549"],
+    body.light-mode [style*="rgb(43, 53, 73)"] { border-color:#cbd5e1!important; }
+    
+    /* テキスト色 */
     body.light-mode [style*="color:#fff"],
     body.light-mode [style*="color: #fff"],
-    body.light-mode [style*="color: rgb(255, 255, 255)"] { color: #0f172a !important; }
-    body.light-mode [style*="color:#e7ecf3"] { color: #1e293b !important; }
-    body.light-mode [style*="color:#94a3b8"] { color: #64748b !important; }
-    body.light-mode [style*="color:#64748b"] { color: #94a3b8 !important; }
-    body.light-mode [style*="border:1px solid #1f2838"],
-    body.light-mode [style*="border:1px solid #2b3549"] { border-color: #e2e8f0 !important; }
-    body.light-mode [style*="borderBottom:1px solid #1f2838"] { border-bottom-color: #e2e8f0 !important; }
-    /* tap highlight */
-    button, a, label { -webkit-tap-highlight-color: transparent; }
+    body.light-mode [style*="color: rgb(255, 255, 255)"] { color:#0f172a!important; }
+    body.light-mode [style*="color:#e7ecf3"],
+    body.light-mode [style*="color: rgb(231, 236, 243)"] { color:#1e293b!important; }
+    body.light-mode [style*="color:#94a3b8"],
+    body.light-mode [style*="color: rgb(148, 163, 184)"] { color:#475569!important; }
+    body.light-mode [style*="color:#64748b"],
+    body.light-mode [style*="color: rgb(100, 116, 139)"] { color:#64748b!important; }
+    
+    /* borderBottom 等複合プロパティ対応 */
+    body.light-mode [style*="solid #1f2838"] { border-color:#e2e8f0!important; }
+    body.light-mode [style*="solid #2b3549"] { border-color:#cbd5e1!important; }
+    
+    /* qBar もライトモード対応 */
+    body.light-mode #qBar { background:rgba(255,255,255,.98)!important; color:#0f172a!important; border-bottom-color:#e2e8f0!important; }
+    body.light-mode #qBar * { color:#0f172a!important; }
   </style>
 </head>
 <body>
@@ -1017,13 +994,13 @@ function CounterPanel({ quests, onUpdate }) {
       <div onClick={()=>setShowSummary(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.85)",zIndex:9000,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
         <div onClick={e=>e.stopPropagation()} style={{background:"#0d1520",border:"1px solid #1e3a4a",borderRadius:16,padding:20,width:"100%",maxWidth:480,maxHeight:"80vh",overflowY:"auto"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
-            <div style={{fontSize:17,fontWeight:700,color:"#fff"}}>📊 今日のサマリー</div>
-            <button onClick={()=>setShowSummary(false)} style={{background:"none",border:"none",color:"#888",fontSize:20,cursor:"pointer"}}>×</button>
+            <div style={{fontSize:12,fontWeight:700,color:"#fff"}}>📊 今日のサマリー</div>
+            <button onClick={()=>setShowSummary(false)} style={{background:"none",border:"none",color:"#888",fontSize:11,cursor:"pointer"}}>×</button>
           </div>
           {/* 時間帯グラフ */}
           {hours.length > 0 && (
             <div style={{marginBottom:20}}>
-              <div style={{fontSize:13,color:"#8ab4c8",marginBottom:8}}>🕑 時間帯別配達件数</div>
+              <div style={{fontSize:11,color:"#8ab4c8",marginBottom:8}}>🕑 時間帯別配達件数</div>
               <div style={{display:"flex",alignItems:"flex-end",gap:6,height:80,padding:"0 4px"}}>
                 {hours.map(h => (
                   <div key={h} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
@@ -1036,7 +1013,7 @@ function CounterPanel({ quests, onUpdate }) {
             </div>
           )}
           {/* クエスト報酬サマリー */}
-          <div style={{fontSize:13,color:"#8ab4c8",marginBottom:10}}>🏆 クエスト報酬内訳</div>
+          <div style={{fontSize:11,color:"#8ab4c8",marginBottom:10}}>🏆 クエスト報酬内訳</div>
           {quests.map((q,i) => {
             const done = q.done||0;
             const steps = [...(q.bonuses||[])].sort((a,b)=>a.count-b.count);
@@ -1051,14 +1028,14 @@ function CounterPanel({ quests, onUpdate }) {
             return (
               <div key={i} style={{background:"rgba(255,255,255,0.05)",borderRadius:10,padding:12,marginBottom:8,borderLeft:"3px solid "+col}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
-                  <div style={{fontSize:14,fontWeight:700,color:"#fff"}}>{q.service}</div>
-                  <div style={{fontSize:16,fontWeight:900,color:total>0?"#FFD700":"#64748b"}}>¥{total.toLocaleString()}</div>
+                  <div style={{fontSize:11,fontWeight:700,color:"#fff"}}>{q.service}</div>
+                  <div style={{fontSize:12,fontWeight:900,color:total>0?"#FFD700":"#64748b"}}>¥{total.toLocaleString()}</div>
                 </div>
                 <div style={{display:"flex",alignItems:"center",gap:8}}>
                   <div style={{flex:1,height:6,background:"rgba(255,255,255,0.1)",borderRadius:3}}>
                     <div style={{width:pct+"%",height:"100%",background:col,borderRadius:3,transition:"width .3s"}}></div>
                   </div>
-                  <div style={{fontSize:13,color:"#94a3b8",whiteSpace:"nowrap"}}>{done}/{goal}件 {pct}%</div>
+                  <div style={{fontSize:11,color:"#94a3b8",whiteSpace:"nowrap"}}>{done}/{goal}件 {pct}%</div>
                 </div>
                 {bExtra>0&&<div style={{fontSize:12,color:"#FF8C00",marginTop:4}}>⭐ 達成ボーナス +¥{bExtra.toLocaleString()}</div>}
               </div>
@@ -1066,8 +1043,8 @@ function CounterPanel({ quests, onUpdate }) {
           })}
           {/* 合計 */}
           <div style={{borderTop:"1px solid #1e3a4a",paddingTop:12,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <div style={{fontSize:14,color:"#8ab4c8"}}>合計確定報酬</div>
-            <div style={{fontSize:20,fontWeight:900,color:"#FFD700"}}>¥{confirmedReward.toLocaleString()}</div>
+            <div style={{fontSize:11,color:"#8ab4c8"}}>合計確定報酬</div>
+            <div style={{fontSize:11,fontWeight:900,color:"#FFD700"}}>¥{confirmedReward.toLocaleString()}</div>
           </div>
         </div>
       </div>
@@ -1080,16 +1057,16 @@ function CounterPanel({ quests, onUpdate }) {
         <div style={{background:CARD, borderRadius:14, border:`1px solid ${BDR}`,
           marginRight:8, width:"min(240px, calc(100vw - 84px))", boxSizing:"border-box",
           boxShadow:"0 8px 40px rgba(0,0,0,.8)", maxHeight:"75vh", overflowY:"auto"}}>
-          <div style={{padding:"12px 14px 8px", fontSize:17, fontWeight:700, color:MUTED,
+          <div style={{padding:"8px 10px 6px", fontSize:12, fontWeight:700, color:MUTED,
             borderBottom:`1px solid ${BDR}`, position:"sticky", top:0, background:CARD,
             display:"flex", justifyContent:"space-between", alignItems:"center"}}>
             <span>📊 クイックカウンター</span>
-            <span style={{color:"#22c55e", fontWeight:900, fontSize:17}}>
+            <span style={{color:"#22c55e", fontWeight:900, fontSize:12}}>
               ¥{confirmedReward.toLocaleString()} 確定
             </span>
           </div>
           {activeQuests.length === 0 ? (
-            <div style={{padding:16, fontSize:17, color:MUTED, textAlign:"center"}}>クエストを登録してください</div>
+            <div style={{padding:16, fontSize:12, color:MUTED, textAlign:"center"}}>クエストを登録してください</div>
           ) : activeQuests.map(q => {
             const svc=SVC[q.service]||SVC.rocket;
             const done=q.done||0, rejected=q.rejected||0, received=q.received||0;
@@ -1101,33 +1078,33 @@ function CounterPanel({ quests, onUpdate }) {
             const earned=[...steps].reverse().find(s=>done>=s.count);
             const qReward=earned?earned.reward:0;
             return (
-              <div key={q.id} style={{padding:"10px 14px", borderBottom:`1px solid ${BDR}`}}>
+              <div key={q.id} style={{padding:"7px 10px", borderBottom:`1px solid ${BDR}`}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
-                  <span style={{color:svc.color,fontSize:17,fontWeight:800,textShadow:`0 0 8px ${svc.color}60`}}>{svc.icon} {svc.label}</span>
-                  <span style={{fontSize:17,color:"#22c55e",fontWeight:700}}>¥{qReward.toLocaleString()} / 残{left}件</span>
+                  <span style={{color:svc.color,fontSize:12,fontWeight:800,textShadow:`0 0 8px ${svc.color}60`}}>{svc.icon} {svc.label}</span>
+                  <span style={{fontSize:12,color:"#22c55e",fontWeight:700}}>¥{qReward.toLocaleString()} / 残{left}件</span>
                 </div>
                 <div style={{marginBottom:6}}>
-                  <div style={{fontSize:17,color:MUTED,marginBottom:4}}>受注</div>
+                  <div style={{fontSize:12,color:MUTED,marginBottom:4}}>受注</div>
                   <div style={{display:"flex",alignItems:"center",gap:6}}>
                     <button onClick={()=>onUpdate(q.id,"received",-1)} style={minusBtn}>－</button>
-                    <div style={{flex:1,textAlign:"center",fontSize:22,fontWeight:900,color:BLUE,textShadow:`0 0 10px ${BLUE}70`}}>{received}</div>
+                    <div style={{flex:1,textAlign:"center",fontSize:15,fontWeight:900,color:BLUE,textShadow:`0 0 10px ${BLUE}70`}}>{received}</div>
                     <button onClick={()=>onUpdate(q.id,"received",1)} style={{...plusBtn,background:BLUE}}>＋</button>
                   </div>
                 </div>
                 <div style={{marginBottom:6}}>
-                  <div style={{fontSize:17,color:MUTED,marginBottom:4}}>完了</div>
+                  <div style={{fontSize:12,color:MUTED,marginBottom:4}}>完了</div>
                   <div style={{display:"flex",alignItems:"center",gap:6}}>
                     <button onClick={()=>onUpdate(q.id,"done",-1)} style={minusBtn}>－</button>
-                    <div style={{flex:1,textAlign:"center",fontSize:22,fontWeight:900,color:"#22c55e",textShadow:"0 0 10px #22c55e70"}}>{done}</div>
+                    <div style={{flex:1,textAlign:"center",fontSize:15,fontWeight:900,color:"#22c55e",textShadow:"0 0 10px #22c55e70"}}>{done}</div>
                     <button onClick={()=>onUpdate(q.id,"done",1)} style={{...plusBtn,background:"#22c55e"}}>＋</button>
                   </div>
                 </div>
                 {isRocket && (
                   <div style={{marginBottom:6}}>
-                    <div style={{fontSize:17,color:MUTED,marginBottom:4}}>拒否</div>
+                    <div style={{fontSize:12,color:MUTED,marginBottom:4}}>拒否</div>
                     <div style={{display:"flex",alignItems:"center",gap:6}}>
                       <button onClick={()=>onUpdate(q.id,"rejected",-1)} style={minusBtn}>－</button>
-                      <div style={{flex:1,textAlign:"center",fontSize:22,fontWeight:900,color:"#fb923c",textShadow:"0 0 10px #fb923c70"}}>{rejected}</div>
+                      <div style={{flex:1,textAlign:"center",fontSize:15,fontWeight:900,color:"#fb923c",textShadow:"0 0 10px #fb923c70"}}>{rejected}</div>
                       <button onClick={()=>onUpdate(q.id,"rejected",1)} style={{...plusBtn,background:"#7c2d12",color:"#fb923c"}}>＋</button>
                     </div>
                   </div>
@@ -1135,8 +1112,8 @@ function CounterPanel({ quests, onUpdate }) {
                 {isRocket && q.completionRate && (
                   <div style={{marginTop:6,background:"#060a10",borderRadius:8,padding:"6px 10px"}}>
                     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                      <span style={{fontSize:17,color:MUTED}}>完了率(目標{q.completionRate}%↑)</span>
-                      <span style={{fontSize:17,fontWeight:900,color:compRate>=parseInt(q.completionRate)?"#22c55e":"#ef4444"}}>{compRate}%</span>
+                      <span style={{fontSize:12,color:MUTED}}>完了率(目標{q.completionRate}%↑)</span>
+                      <span style={{fontSize:12,fontWeight:900,color:compRate>=parseInt(q.completionRate)?"#22c55e":"#ef4444"}}>{compRate}%</span>
                     </div>
                   </div>
                 )}
@@ -1153,8 +1130,8 @@ function CounterPanel({ quests, onUpdate }) {
             padding:"4px 10px",cursor:"pointer",
             display:"flex",flexDirection:"column",alignItems:"flex-end",gap:1,
           }}>
-            <div style={{fontSize:17,fontWeight:900,color:"#22c55e",lineHeight:1}}>¥{confirmedReward.toLocaleString()}</div>
-            <div style={{fontSize:17,color:MUTED,lineHeight:1}}>完了{totalDone}件</div>
+            <div style={{fontSize:12,fontWeight:900,color:"#22c55e",lineHeight:1}}>¥{confirmedReward.toLocaleString()}</div>
+            <div style={{fontSize:12,color:MUTED,lineHeight:1}}>完了{totalDone}件</div>
           </div>
         )}
         <button onClick={()=>setShowSummary(true)} title="サマリー" style={{background:"rgba(15,25,45,0.95)",border:"1px solid rgba(255,255,255,0.15)",color:"#FFD700",borderRadius:12,width:44,height:44,fontSize:"1.1rem",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 3px 12px rgba(0,0,0,0.4)",marginRight:8,flexShrink:0}}>📈</button>
@@ -1175,13 +1152,13 @@ function CounterPanel({ quests, onUpdate }) {
 
 const minusBtn = {
   background:"#1e293b", border:"none", color:"#fff",
-  borderRadius:7, width:34, height:34, fontSize:18,
+  borderRadius:7, width:34, height:34, fontSize:11,
   cursor:"pointer", flexShrink:0,
   display:"flex", alignItems:"center", justifyContent:"center",
 };
 const plusBtn = {
   border:"none", color:"#fff",
-  borderRadius:7, width:34, height:34, fontSize:18,
+  borderRadius:7, width:34, height:34, fontSize:11,
   cursor:"pointer", flexShrink:0,
   display:"flex", alignItems:"center", justifyContent:"center",
 };
