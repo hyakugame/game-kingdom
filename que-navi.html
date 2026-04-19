@@ -1230,34 +1230,52 @@ function App() {
   const [ocrState,setOcrState]=useState({status:'idle',text:'',progress:0});
   
   const parseOcrText=(text)=>{
-    if(!text)return {};
-    const t=text.replace(/\s+/g,' ');
-    const out={raw:text};
-    // サービス判定
-    if(/Uber\s*Eats|ウーバー/i.test(t))out.service='ubereats';
-    else if(/ロケット|Rocket\s*Now/i.test(t))out.service='rocket';
-    else if(/出前館|でまえかん/i.test(t))out.service='demae';
-    // 件数目標 (最大件数 件)
-    const countMatches=[...t.matchAll(/(\d+)\s*[件配]/g)].map(m=>parseInt(m[1])).filter(n=>n>0&&n<100);
-    if(countMatches.length>0){
-      out.goalCount=Math.max(...countMatches);
-      out.allCounts=[...new Set(countMatches)].sort((a,b)=>a-b);
-    }
-    // 金額 (¥数字 または 数字円)
-    const yenMatches=[...t.matchAll(/[¥￥]\s*(\d[\d,]*)|(\d[\d,]*)\s*円/g)]
-      .map(m=>parseInt((m[1]||m[2]).replace(/,/g,''))).filter(n=>n>=100&&n<=100000);
-    if(yenMatches.length>0){
-      out.rewards=[...new Set(yenMatches)].sort((a,b)=>a-b);
-      out.totalReward=yenMatches.reduce((s,n)=>s+n,0);
-    }
-    // 時間帯 (HH:MM ~ HH:MM)
-    const timeMatch=t.match(/(\d{1,2}):(\d{2})\s*[-〜~～]\s*(\d{1,2}):(\d{2})/);
-    if(timeMatch){
-      out.startTime=timeMatch[1].padStart(2,'0')+':'+timeMatch[2];
-      out.endTime=timeMatch[3].padStart(2,'0')+':'+timeMatch[4];
-    }
-    return out;
-  };
+      if(!text)return {};
+      const t=text.replace(/\s+/g,' ');
+      const raw=text;
+      const out={raw};
+      // Service detection
+      if(/Uber\s*Eats|ウーバー(イーツ)?|ウーバ/i.test(t))out.service='ubereats';
+      else if(/ロケット\s*ナウ|Rocket\s*Now|ロケナウ/i.test(t))out.service='rocket';
+      else if(/出前館|でまえかん|出前\s*館/i.test(t))out.service='demae';
+      else if(/\d+\s*回\s*の\s*乗車|回の乗車/.test(t))out.service='ubereats';
+      else if(/ミッション詳細|配達完了率|初回受諾必要|件達成時|残り\s*\d+\s*件/.test(t))out.service='rocket';
+      else if(/対象エリア|対象時間帯|配達件数|都道府県\s*エリア/.test(t))out.service='demae';
+      // Count extraction
+      const countMatches=[...t.matchAll(/(\d+)\s*[件配回]/g)].map(m=>parseInt(m[1])).filter(n=>n>0&&n<100);
+      if(countMatches.length>0){
+        out.goalCount=Math.max(...countMatches);
+        out.allCounts=[...new Set(countMatches)].sort((a,b)=>a-b);
+      }
+      // Money extraction
+      const yenMatches=[...t.matchAll(/[+＋]?\s*[¥￥]\s*(\d[\d,]*)|(\d[\d,]*)\s*円/g)].map(m=>parseInt((m[1]||m[2]).replace(/,/g,''))).filter(n=>n>=100&&n<=200000);
+      if(yenMatches.length>0){
+        out.rewards=[...new Set(yenMatches)].sort((a,b)=>a-b);
+        out.totalReward=Math.max(...yenMatches);
+      }
+      // Time extraction
+      const timeMatch1=t.match(/(\d{1,2}):(\d{2})(?::\d{2})?\s*[-〜~～–][\s\S]{0,30}?(\d{1,2}):(\d{2})/);
+      if(timeMatch1){
+        out.startTime=timeMatch1[1].padStart(2,'0')+':'+timeMatch1[2];
+        out.endTime=timeMatch1[3].padStart(2,'0')+':'+timeMatch1[4];
+      }
+      if(!out.startTime){
+        const jp=t.match(/午(前|後)\s*(\d{1,2})\s*時\s*(\d{1,2})?\s*分?/);
+        if(jp){
+          let h=parseInt(jp[2]);
+          if(jp[1]==='後'&&h<12)h+=12;
+          out.startTime=String(h).padStart(2,'0')+':'+(jp[3]?jp[3].padStart(2,'0'):'00');
+        }
+      }
+      // Date extraction
+      const dateJP=t.match(/(\d{1,2})\s*月\s*(\d{1,2})\s*日/);
+      const dateSlash=t.match(/(\d{1,2})\/(\d{1,2})(?!\d)/);
+      const dateDot=t.match(/(\d{2})\.(\d{2})/);
+      if(dateJP)out.date=dateJP[1].padStart(2,'0')+'/'+dateJP[2].padStart(2,'0');
+      else if(dateSlash)out.date=dateSlash[1].padStart(2,'0')+'/'+dateSlash[2].padStart(2,'0');
+      else if(dateDot)out.date=dateDot[1]+'/'+dateDot[2];
+      return out;
+    };
   
     // OCR (Tesseract.js dynamic load)
   const runOcrOnFile=async(file)=>{
