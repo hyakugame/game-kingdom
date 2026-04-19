@@ -577,6 +577,180 @@
   }
   NS.open = open;
   NS.close = close;
+  
+  // ===== 統一UIデザイントークン =====
+  if (!document.getElementById('qtk-unified-ui')) {
+    const unifiedStyle = document.createElement('style');
+    unifiedStyle.id = 'qtk-unified-ui';
+    unifiedStyle.textContent = `
+      /* ========== 全タブ共通デザイン統一 ========== */
+      /* パディング 16px、要素間 12px、見出し 14px/700、入力 40px高さ、ボタン 40px/700 */
+      
+      #qtkit-body { padding: 16px !important; }
+      .qtkit-pane { 
+        display: flex !important; 
+        flex-direction: column !important; 
+        gap: 12px !important;
+      }
+      
+      /* 見出し h3 */
+      .qtkit-pane h3, .qtkit-setting-wrap h3 {
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        margin: 0 !important;
+        color: #e6e8ef !important;
+      }
+      body.light-mode .qtkit-pane h3, body.light-mode .qtkit-setting-wrap h3 { color: #0f172a !important; }
+      
+      /* 説明 */
+      .qtkit-pane p, .qtkit-note, .qtkit-setting-wrap .note {
+        font-size: 11px !important;
+        color: #94a3b8 !important;
+        margin: 0 !important;
+        line-height: 1.5 !important;
+      }
+      body.light-mode .qtkit-pane p, body.light-mode .qtkit-note { color: #64748b !important; }
+      
+      /* ラベル */
+      .qtkit-label {
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        color: #cbd5e1 !important;
+        margin-bottom: 4px !important;
+      }
+      body.light-mode .qtkit-label { color: #475569 !important; }
+      
+      /* 入力欄 統一 (text / number / select / textarea) */
+      .qtkit-input, .qtkit-pane input[type="text"], .qtkit-pane input[type="number"], 
+      .qtkit-pane select, .qtkit-pane textarea {
+        height: 40px !important;
+        padding: 0 12px !important;
+        border-radius: 10px !important;
+        border: 1px solid #2b3549 !important;
+        background: #0a0e1a !important;
+        color: #fff !important;
+        font-size: 14px !important;
+        font-family: inherit !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        outline: none !important;
+        transition: border-color .15s !important;
+      }
+      .qtkit-input:focus, .qtkit-pane input:focus, .qtkit-pane select:focus, .qtkit-pane textarea:focus {
+        border-color: #3b82f6 !important;
+      }
+      .qtkit-pane textarea { 
+        height: auto !important; 
+        min-height: 80px !important; 
+        padding: 10px 12px !important; 
+        line-height: 1.5 !important;
+      }
+      body.light-mode .qtkit-pane input, body.light-mode .qtkit-pane select, body.light-mode .qtkit-pane textarea,
+      body.light-mode .qtkit-input {
+        background: #fff !important;
+        color: #0f172a !important;
+        border-color: #cbd5e1 !important;
+      }
+      
+      /* 主要ボタン (primary) */
+      .qtkit-pane button, .qtkit-btn, .qtkit-save-btn, .qtkit-setting-wrap .save-btn {
+        height: 40px !important;
+        padding: 0 16px !important;
+        border-radius: 10px !important;
+        border: 1px solid transparent !important;
+        background: #3b82f6 !important;
+        color: #fff !important;
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        font-family: inherit !important;
+        cursor: pointer !important;
+        transition: all .15s !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+      }
+      .qtkit-pane button:hover, .qtkit-btn:hover, .qtkit-save-btn:hover { background: #2563eb !important; }
+      
+      /* ghost (副) ボタン */
+      .qtkit-pane button.ghost, .qtkit-btn.ghost {
+        background: transparent !important;
+        color: #e6e8ef !important;
+        border-color: #2b3549 !important;
+      }
+      body.light-mode .qtkit-pane button.ghost, body.light-mode .qtkit-btn.ghost {
+        color: #0f172a !important;
+        border-color: #cbd5e1 !important;
+      }
+      .qtkit-pane button.ghost:hover { background: rgba(255,255,255,.05) !important; }
+      body.light-mode .qtkit-pane button.ghost:hover { background: rgba(0,0,0,.03) !important; }
+      
+      /* 結果表示 */
+      .qtkit-result {
+        padding: 12px !important;
+        border-radius: 10px !important;
+        background: #0a0e1a !important;
+        border: 1px solid #2b3549 !important;
+        font-size: 13px !important;
+      }
+      body.light-mode .qtkit-result {
+        background: #f1f5f9 !important;
+        border-color: #cbd5e1 !important;
+        color: #0f172a !important;
+      }
+      
+      /* row (設定) */
+      .qtkit-row {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 10px 0 !important;
+        border-bottom: 1px solid #2a2f44 !important;
+        font-size: 13px !important;
+      }
+      body.light-mode .qtkit-row { border-bottom-color: #e2e8f0 !important; }
+      
+      /* テンプレート項目 (置き配タブ) */
+      .qtkit-tmpl-item {
+        padding: 12px !important;
+        border-radius: 10px !important;
+        background: #0a0e1a !important;
+        border: 1px solid #2b3549 !important;
+        margin-bottom: 8px !important;
+      }
+      body.light-mode .qtkit-tmpl-item {
+        background: #f8fafc !important;
+        border-color: #cbd5e1 !important;
+      }
+      .qtkit-tmpl-text {
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+        color: #e6e8ef !important;
+        margin-bottom: 8px !important;
+      }
+      body.light-mode .qtkit-tmpl-text { color: #0f172a !important; }
+      .qtkit-tmpl-copy {
+        height: 32px !important;
+        padding: 0 12px !important;
+        border-radius: 8px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+      }
+      
+      /* サービスチップ (判定結果) */
+      .qtkit-svc-chip {
+        display: inline-flex !important;
+        align-items: center !important;
+        padding: 4px 10px !important;
+        border-radius: 12px !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        color: #fff !important;
+      }
+    `;
+    document.head.appendChild(unifiedStyle);
+  }
+  
   console.log('[qtKit] v1 loaded');
 
   // ===== PANE ⚙️: 設定 (アラート閾値) =====
