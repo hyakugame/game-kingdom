@@ -587,11 +587,12 @@
       /* パディング 16px、要素間 12px、見出し 14px/700、入力 40px高さ、ボタン 40px/700 */
       
       #qtkit-body { padding: 16px !important; }
-      .qtkit-pane { 
+      .qtkit-pane.active { 
         display: flex !important; 
         flex-direction: column !important; 
         gap: 12px !important;
       }
+      .qtkit-pane:not(.active) { display: none !important; }
       
       /* 見出し h3 */
       .qtkit-pane h3, .qtkit-setting-wrap h3 {
