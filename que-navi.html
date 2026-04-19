@@ -1248,13 +1248,13 @@ function App() {
         out.allCounts=[...new Set(countMatches)].sort((a,b)=>a-b);
       }
       // Money extraction
-      const yenMatches=[...t.matchAll(/[+＋]?\s*[¥￥]\s*(\d[\d,]*)|(\d[\d,]*)\s*円/g)].map(m=>parseInt((m[1]||m[2]).replace(/,/g,''))).filter(n=>n>=100&&n<=200000);
+      const yenMatches=[...t.matchAll(/[+＋]?\s*[¥￥\\]\s*(\d[\d,.]*)|(\d[\d,.]*)\s*円/g)].map(m=>parseInt((m[1]||m[2]).replace(/[,.]/g,''))).filter(n=>n>=100&&n<=200000);
       if(yenMatches.length>0){
         out.rewards=[...new Set(yenMatches)].sort((a,b)=>a-b);
         out.totalReward=Math.max(...yenMatches);
       }
       // Time extraction
-      const timeMatch1=t.match(/(\d{1,2}):(\d{2})(?::\d{2})?\s*[-〜~～–][\s\S]{0,30}?(\d{1,2}):(\d{2})/);
+      const timeMatch1=t.match(/(\d{1,2}):(\d{2})(?::\d{2})?\s*[-〜~～–…][\s\S]{0,30}?(\d{1,2}):(\d{2})/);
       if(timeMatch1){
         out.startTime=timeMatch1[1].padStart(2,'0')+':'+timeMatch1[2];
         out.endTime=timeMatch1[3].padStart(2,'0')+':'+timeMatch1[4];
